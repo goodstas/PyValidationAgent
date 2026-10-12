@@ -190,6 +190,8 @@ def resolve_in_root(root: Path, rel: str) -> Path:
     rel = rel.replace("\\", "/").strip()
     if rel.startswith("/") or re.match(r"^[A-Za-z]:", rel):
         raise WorkspaceError(f"Absolute paths are not allowed: {rel}")
+    if ".." in rel.split("/"):
+        raise WorkspaceError(f"Parent-directory segments are not allowed: {rel}")
     root = Path(root).resolve()
     candidate = (root / rel).resolve()
     if not _within(candidate, root):

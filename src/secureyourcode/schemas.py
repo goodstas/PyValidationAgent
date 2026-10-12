@@ -181,6 +181,9 @@ class ReviewerReport(BaseModel):
     new_candidates_accepted: int = 0
     rejected_items: list[str] = Field(default_factory=list)
     canary_echoed: bool = False
+    model_visible_tools: list[str] = Field(default_factory=list)
+    hidden_builtin_tools: list[str] = Field(default_factory=list)
+    attempts: int = 0
 
 
 class EvaluatorBatchReport(BaseModel):
