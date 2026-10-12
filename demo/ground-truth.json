@@ -1,0 +1,176 @@
+{
+  "fixture_fingerprint": "4f9f53fc8c50cef328b9ae00c6db369c8796d529d0102d251ce6ca9270feb08c",
+  "scoring_version": "v2.3.1",
+  "entries": [
+    {
+      "id": "S1",
+      "label": "positive",
+      "rule_id": "CA3001",
+      "category": "Security",
+      "file": "Controllers/CustomerSearchController.cs",
+      "start_line": 18,
+      "end_line": 25,
+      "rationale": "Query-string 'name' is concatenated into DbCommand.CommandText in the same action (SQL injection)."
+    },
+    {
+      "id": "S2",
+      "label": "positive",
+      "rule_id": "CA3003",
+      "category": "Security",
+      "file": "Controllers/DocumentsController.cs",
+      "start_line": 16,
+      "end_line": 21,
+      "rationale": "Query-string 'file' is combined into a path passed to File.ReadAllText without validation (path traversal)."
+    },
+    {
+      "id": "S3",
+      "label": "positive",
+      "rule_id": "CA3006",
+      "category": "Security",
+      "file": "Controllers/DiagnosticsController.cs",
+      "start_line": 19,
+      "end_line": 24,
+      "rationale": "Query-string 'tool' becomes ProcessStartInfo.FileName (command injection; DemoShop only queues it and never starts it)."
+    },
+    {
+      "id": "S4",
+      "label": "positive",
+      "rule_id": "CA5350",
+      "category": "Security",
+      "file": "Services/LegacyHasher.cs",
+      "start_line": 8,
+      "end_line": 13,
+      "rationale": "Password fingerprint uses SHA1, a weak algorithm, without salt or a password KDF."
+    },
+    {
+      "id": "S5",
+      "label": "positive",
+      "rule_id": "CA5394",
+      "category": "Security",
+      "file": "Services/TokenService.cs",
+      "start_line": 7,
+      "end_line": 12,
+      "rationale": "Password-reset token is derived from System.Random (predictable) instead of a CSPRNG."
+    },
+    {
+      "id": "P1",
+      "label": "positive",
+      "rule_id": "PERF001",
+      "category": "CPU & Amplification",
+      "file": "Services/OrderSummaryService.cs",
+      "start_line": 14,
+      "end_line": 24,
+      "rationale": "Repository lookup per order inside foreach (N+1 call amplification)."
+    },
+    {
+      "id": "P2",
+      "label": "positive",
+      "rule_id": "PERF003",
+      "category": "Concurrency",
+      "file": "Services/NotificationService.cs",
+      "start_line": 33,
+      "end_line": 36,
+      "rationale": "Task.WhenAll starts one send per recipient with no fan-out limit."
+    },
+    {
+      "id": "P3",
+      "label": "positive",
+      "rule_id": "PERF004",
+      "category": "Memory & Allocation",
+      "file": "Services/ReportCache.cs",
+      "start_line": 5,
+      "end_line": 20,
+      "rationale": "Static Dictionary grows with every distinct key from /reports/{key} and is never trimmed."
+    },
+    {
+      "id": "N1",
+      "label": "negative",
+      "rule_id": "CA3001",
+      "category": "Security",
+      "file": "Controllers/CustomerSearchController.cs",
+      "start_line": 28,
+      "end_line": 39,
+      "rationale": "Parameterised SQL: user input only flows into a DbParameter value."
+    },
+    {
+      "id": "N2",
+      "label": "negative",
+      "rule_id": "CA3003",
+      "category": "Security",
+      "file": "Controllers/DocumentsController.cs",
+      "start_line": 24,
+      "end_line": 33,
+      "rationale": "Strict allowlist: the user key only selects one of two fixed paths; unknown keys return 404."
+    },
+    {
+      "id": "N3",
+      "label": "negative",
+      "rule_id": "CA3006",
+      "category": "Security",
+      "file": "Controllers/DiagnosticsController.cs",
+      "start_line": 27,
+      "end_line": 31,
+      "rationale": "Fixed command 'dotnet --info'; no user input."
+    },
+    {
+      "id": "N4",
+      "label": "negative",
+      "rule_id": "CA5350",
+      "category": "Security",
+      "file": "Services/LegacyHasher.cs",
+      "start_line": 15,
+      "end_line": 20,
+      "rationale": "SHA256 document fingerprint."
+    },
+    {
+      "id": "N5",
+      "label": "negative",
+      "rule_id": "CA5394",
+      "category": "Security",
+      "file": "Services/TokenService.cs",
+      "start_line": 14,
+      "end_line": 18,
+      "rationale": "Session token uses RandomNumberGenerator (CSPRNG)."
+    },
+    {
+      "id": "N6",
+      "label": "negative",
+      "rule_id": "CA5394",
+      "category": "Security",
+      "file": "Services/BannerColorPicker.cs",
+      "start_line": 7,
+      "end_line": 11,
+      "rationale": "Benign UI use of Random.Shared to pick a banner colour; not security-relevant (false-positive challenge)."
+    },
+    {
+      "id": "N7",
+      "label": "negative",
+      "rule_id": "PERF001",
+      "category": "CPU & Amplification",
+      "file": "Services/OrderSummaryService.cs",
+      "start_line": 26,
+      "end_line": 38,
+      "rationale": "Customers are loaded once in a batch before the loop."
+    },
+    {
+      "id": "N8",
+      "label": "negative",
+      "rule_id": "PERF003",
+      "category": "Concurrency",
+      "file": "Services/NotificationService.cs",
+      "start_line": 38,
+      "end_line": 44,
+      "rationale": "Sequential bounded batches of 25 via Chunk inside foreach."
+    },
+    {
+      "id": "N9",
+      "label": "negative",
+      "rule_id": "PERF004",
+      "category": "Memory & Allocation",
+      "file": "Services/SessionStore.cs",
+      "start_line": 7,
+      "end_line": 17,
+      "rationale": "Static ConcurrentDictionary entries are removed via TryRemove when a session ends."
+    }
+  ]
+}
