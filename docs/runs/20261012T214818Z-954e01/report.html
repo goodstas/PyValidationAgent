@@ -1,0 +1,251 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>SecureYourCode report 20261012T214818Z-954e01</title><style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;padding:24px;max-width:1100px;margin-inline:auto;color:#1f2937;background:#fff;line-height:1.45}
+h1{font-size:1.5rem;margin:0 0 4px}h2{font-size:1.2rem;margin:28px 0 8px;border-bottom:1px solid #e5e7eb;padding-bottom:4px}h3{font-size:1.05rem;margin:18px 0 6px}
+.muted{color:#6b7280}.banner{padding:10px 14px;border-radius:6px;margin:10px 0;font-weight:600}
+.banner.complete{background:#dcfce7;border:1px solid #16a34a}.banner.partial{background:#fef3c7;border:1px solid #f59e0b}.banner.failed{background:#fee2e2;border:1px solid #ef4444}
+table{border-collapse:collapse;width:100%;margin:6px 0}th,td{border:1px solid #e5e7eb;padding:6px 8px;text-align:left;vertical-align:top;overflow-wrap:anywhere}
+th{background:#f9fafb}.badge{display:inline-block;padding:1px 8px;border-radius:10px;font-size:.8rem;font-weight:600;color:#fff;margin-right:4px}
+.e0{background:#6b7280}.e1{background:#2563eb}.label{display:inline-block;padding:1px 8px;border-radius:10px;font-size:.8rem;border:1px solid #9ca3af;margin-right:4px}
+.high{border-color:#dc2626;color:#991b1b}.medium{border-color:#d97706;color:#92400e}.low{border-color:#9ca3af;color:#374151}
+details.finding{border:1px solid #e5e7eb;border-radius:6px;margin:8px 0;padding:6px 10px}details.finding>summary{cursor:pointer}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 12px;margin:8px 0}dt{font-weight:600;color:#374151}dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+pre{background:#f3f4f6;padding:6px 8px;border-radius:4px;overflow-x:auto;margin:0;white-space:pre-wrap}code{background:#f3f4f6;padding:0 4px;border-radius:4px;word-break:break-all}
+@media (max-width:640px){body{padding:12px}dl{grid-template-columns:1fr}}</style></head><body>
+<h1>SecureYourCode security &amp; performance report</h1><div class="muted">Run <code>20261012T214818Z-954e01</code> · scoring v2.3.1</div>
+<div class="banner partial">Run status: partial — SecurityReviewer did not return a valid structured review: model unavailable: GOOGLE_CLOUD_PROJECT is not configured.; PerformanceReviewer did not return a valid structured review: model unavailable: GOOGLE_CLOUD_PROJECT is not configured.; Security evaluator batch failed: GOOGLE_CLOUD_PROJECT is not configured.; Performance evaluator batch failed: GOOGLE_CLOUD_PROJECT is not configured.; some candidates are unreviewed</div>
+
+<h2>Run</h2><table>
+<tr><th>Run status</th><td>partial</td></tr>
+<tr><th>Status reasons</th><td><ul><li>SecurityReviewer did not return a valid structured review: model unavailable: GOOGLE_CLOUD_PROJECT is not configured.</li><li>PerformanceReviewer did not return a valid structured review: model unavailable: GOOGLE_CLOUD_PROJECT is not configured.</li><li>Security evaluator batch failed: GOOGLE_CLOUD_PROJECT is not configured.</li><li>Performance evaluator batch failed: GOOGLE_CLOUD_PROJECT is not configured.</li><li>some candidates are unreviewed</li></ul></td></tr>
+<tr><th>Triggered via</th><td>cli</td></tr>
+<tr><th>Started / finished</th><td>2026-10-12T21:48:18Z / 2026-10-12T21:48:28Z</td></tr>
+<tr><th>Phase timings (s)</th><td>stage: 0.0 · graph: 0.0 · roslyn: 8.0 · review: 1.1 · evaluate: 0.0</td></tr>
+<tr><th>Graph status</th><td>cached</td></tr>
+<tr><th>Graphify MCP</th><td>available (host calls: 1)</td></tr>
+<tr><th>Gemini model</th><td>gemini-3.5-flash @ global (Vertex AI)</td></tr>
+</table>
+
+<h2>Provenance</h2><table>
+<tr><th>Repository</th><td>DemoShop</td></tr>
+<tr><th>Git commit / dirty</th><td>1a198075841c98e38d423f509909ec654c2b347b / no</td></tr>
+<tr><th>Source fingerprint</th><td><code>4f9f53fc8c50cef328b9ae00c6db369c8796d529d0102d251ce6ca9270feb08c</code></td></tr>
+<tr><th>Graph built from fingerprint</th><td><code>4f9f53fc8c50cef328b9ae00c6db369c8796d529d0102d251ce6ca9270feb08c</code></td></tr>
+<tr><th>Security rules (Microsoft)</th><td>CA3001, CA3003, CA3006, CA5350, CA5394</td></tr>
+<tr><th>Performance rules (custom)</th><td>PERF001, PERF003, PERF004 · analyzer SecureYourCode.PerformanceAnalyzer 2.3.1 (sha256 2bc3413c4961)</td></tr>
+<tr><th>Rules emitted by this build</th><td>CA3001, CA3003, CA3006, CA5350, CA5394, PERF001, PERF003, PERF004</td></tr>
+<tr><th>Tool versions</th><td>app 2.3.1 · graphifyy 0.9.87 · .NET SDK 10.0.112</td></tr>
+<tr><th>Scoring rubric</th><td>v2.3.1</td></tr>
+</table>
+
+<h2>Token usage</h2><table><tr><th>Session</th><th>Model calls</th><th>Input tokens</th><th>Output tokens</th><th>Coverage</th></tr>
+<tr><td>SecurityReviewer</td><td>not reported</td><td>not reported</td><td>not reported</td><td>not reported</td></tr><tr><td>PerformanceReviewer</td><td>not reported</td><td>not reported</td><td>not reported</td><td>not reported</td></tr><tr><td>Evaluator</td><td>not reported</td><td>not reported</td><td>not reported</td><td>not reported</td></tr><tr><td>total</td><td>not reported</td><td>not reported</td><td>not reported</td><td>not reported</td></tr>
+</table>
+
+<h2>Reviewers</h2><table><tr><th>Reviewer</th><th>Status</th><th>Graphify</th><th>Source tool calls</th><th>Denied tool requests</th><th>Accepted</th><th>Notes</th></tr>
+<tr><td>SecurityReviewer</td><td>failed</td><td>available, 0 calls</td><td>0</td><td>0</td><td>0 enrichments, 0 new</td><td>model unavailable: GOOGLE_CLOUD_PROJECT is not configured.</td></tr><tr><td>PerformanceReviewer</td><td>failed</td><td>available, 0 calls</td><td>0</td><td>0</td><td>0 enrichments, 0 new</td><td>model unavailable: GOOGLE_CLOUD_PROJECT is not configured.</td></tr>
+</table>
+<p class="muted">Host Graphify MCP query: <code>get_neighbors({&#39;node_id&#39;: &#39;csharp_namespace:a0ea5d4792c5461c&#39;})</code> — first node of Services/BannerColorPicker.cs (baseline 345af301d4a1, CA5394) — ok, 921 bytes.</p>
+
+
+
+<h2>Security <span class="muted">(0 kept)</span></h2>
+<p class="muted">No kept findings in this category.</p><h2>Memory &amp; Allocation <span class="muted">(0 kept)</span></h2>
+<p class="muted">No kept findings in this category.</p><h2>CPU &amp; Amplification <span class="muted">(0 kept)</span></h2>
+<p class="muted">No kept findings in this category.</p><h2>Concurrency <span class="muted">(0 kept)</span></h2>
+<p class="muted">No kept findings in this category.</p>
+
+<h2>Downgraded candidates <span class="muted">(0)</span></h2>
+<p class="muted">No candidates were downgraded by the evaluator.</p>
+
+<h2>Rejected candidates <span class="muted">(0)</span></h2>
+<details><summary>Show rejected candidates</summary><p class="muted">The evaluator rejected no candidates.</p></details>
+
+<h2>Unreviewed / budget skipped <span class="muted">(10)</span></h2>
+<details class="finding" id="candidate-c7166c49343b"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label">not assessed</span> <code>CA3001</code> Controllers/CustomerSearchController.cs:23</summary><dl>
+<dt>Finding ID</dt><dd>c7166c49343b</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF)</dd>
+<dt>Location</dt><dd>Controllers/CustomerSearchController.cs:23</dd>
+<dt>Analyzer message</dt><dd>Potential SQL injection vulnerability was found where &#39;string DbCommand.CommandText&#39; in method &#39;IActionResult CustomerSearchController.Search()&#39; may be tainted by user-controlled data from &#39;IQueryCollection HttpRequest.Query&#39; in method &#39;IActionResult CustomerSearchController.Search()&#39;.</dd>
+<dt>Source excerpt</dt><dd><pre>        command.CommandText = &#34;SELECT Id, Name FROM Customers WHERE Name LIKE &#39;%&#34; + name + &#34;%&#39;&#34;;</pre></dd>
+<dt>Mechanism</dt><dd>not provided</dd>
+<dt>Reachability / trigger</dt><dd>not provided</dd>
+
+<dt>Alternatives / counterevidence</dt><dd>not provided</dd>
+<dt>Refutation</dt><dd>not assessed</dd>
+
+
+
+<dt>Evaluator decision</dt><dd>unreviewed — evaluator unavailable: GOOGLE_CLOUD_PROJECT is not configured.</dd>
+
+<dt>Suggested fix</dt><dd>not provided</dd>
+</dl></details><details class="finding" id="candidate-d85bfb4080bd"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label">not assessed</span> <code>CA3006</code> Controllers/DiagnosticsController.cs:22</summary><dl>
+<dt>Finding ID</dt><dd>d85bfb4080bd</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF)</dd>
+<dt>Location</dt><dd>Controllers/DiagnosticsController.cs:22</dd>
+<dt>Analyzer message</dt><dd>Potential process command injection vulnerability was found where &#39;string ProcessStartInfo.FileName&#39; in method &#39;IActionResult DiagnosticsController.RunTool()&#39; may be tainted by user-controlled data from &#39;IQueryCollection HttpRequest.Query&#39; in method &#39;IActionResult DiagnosticsController.RunTool()&#39;.</dd>
+<dt>Source excerpt</dt><dd><pre>        var startInfo = new ProcessStartInfo { FileName = tool, UseShellExecute = false };</pre></dd>
+<dt>Mechanism</dt><dd>not provided</dd>
+<dt>Reachability / trigger</dt><dd>not provided</dd>
+
+<dt>Alternatives / counterevidence</dt><dd>not provided</dd>
+<dt>Refutation</dt><dd>not assessed</dd>
+
+
+
+<dt>Evaluator decision</dt><dd>unreviewed — evaluator unavailable: GOOGLE_CLOUD_PROJECT is not configured.</dd>
+
+<dt>Suggested fix</dt><dd>not provided</dd>
+</dl></details><details class="finding" id="candidate-89d59e9c699d"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label">not assessed</span> <code>CA3003</code> Controllers/DocumentsController.cs:20</summary><dl>
+<dt>Finding ID</dt><dd>89d59e9c699d</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF)</dd>
+<dt>Location</dt><dd>Controllers/DocumentsController.cs:20</dd>
+<dt>Analyzer message</dt><dd>Potential file path injection vulnerability was found where &#39;string File.ReadAllText(string path)&#39; in method &#39;IActionResult DocumentsController.Export()&#39; may be tainted by user-controlled data from &#39;IQueryCollection HttpRequest.Query&#39; in method &#39;IActionResult DocumentsController.Export()&#39;.</dd>
+<dt>Source excerpt</dt><dd><pre>        return Content(System.IO.File.ReadAllText(path));</pre></dd>
+<dt>Mechanism</dt><dd>not provided</dd>
+<dt>Reachability / trigger</dt><dd>not provided</dd>
+
+<dt>Alternatives / counterevidence</dt><dd>not provided</dd>
+<dt>Refutation</dt><dd>not assessed</dd>
+
+
+
+<dt>Evaluator decision</dt><dd>unreviewed — evaluator unavailable: GOOGLE_CLOUD_PROJECT is not configured.</dd>
+
+<dt>Suggested fix</dt><dd>not provided</dd>
+</dl></details><details class="finding" id="candidate-d1bcb1b1feab"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label">not assessed</span> <code>CA3003</code> Controllers/DocumentsController.cs:32</summary><dl>
+<dt>Finding ID</dt><dd>d1bcb1b1feab</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF)</dd>
+<dt>Location</dt><dd>Controllers/DocumentsController.cs:32</dd>
+<dt>Analyzer message</dt><dd>Potential file path injection vulnerability was found where &#39;string File.ReadAllText(string path)&#39; in method &#39;IActionResult DocumentsController.Published()&#39; may be tainted by user-controlled data from &#39;IQueryCollection HttpRequest.Query&#39; in method &#39;IActionResult DocumentsController.Published()&#39;.</dd>
+<dt>Source excerpt</dt><dd><pre>        return Content(System.IO.File.ReadAllText(path));</pre></dd>
+<dt>Mechanism</dt><dd>not provided</dd>
+<dt>Reachability / trigger</dt><dd>not provided</dd>
+
+<dt>Alternatives / counterevidence</dt><dd>not provided</dd>
+<dt>Refutation</dt><dd>not assessed</dd>
+
+
+
+<dt>Evaluator decision</dt><dd>unreviewed — evaluator unavailable: GOOGLE_CLOUD_PROJECT is not configured.</dd>
+
+<dt>Suggested fix</dt><dd>not provided</dd>
+</dl></details><details class="finding" id="candidate-345af301d4a1"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label">not assessed</span> <code>CA5394</code> Services/BannerColorPicker.cs:9</summary><dl>
+<dt>Finding ID</dt><dd>345af301d4a1</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF)</dd>
+<dt>Location</dt><dd>Services/BannerColorPicker.cs:9</dd>
+<dt>Analyzer message</dt><dd>Random is an insecure random number generator. Use cryptographically secure random number generators when randomness is required for security.</dd>
+<dt>Source excerpt</dt><dd><pre>        int index = Random.Shared.Next(Palette.Length);</pre></dd>
+<dt>Mechanism</dt><dd>not provided</dd>
+<dt>Reachability / trigger</dt><dd>not provided</dd>
+
+<dt>Alternatives / counterevidence</dt><dd>not provided</dd>
+<dt>Refutation</dt><dd>not assessed</dd>
+
+
+
+<dt>Evaluator decision</dt><dd>unreviewed — evaluator unavailable: GOOGLE_CLOUD_PROJECT is not configured.</dd>
+
+<dt>Suggested fix</dt><dd>not provided</dd>
+</dl></details><details class="finding" id="candidate-6c9ce709e2dc"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label">not assessed</span> <code>CA5350</code> Services/LegacyHasher.cs:10</summary><dl>
+<dt>Finding ID</dt><dd>6c9ce709e2dc</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF)</dd>
+<dt>Location</dt><dd>Services/LegacyHasher.cs:10</dd>
+<dt>Analyzer message</dt><dd>FingerprintPassword uses a weak cryptographic algorithm SHA1</dd>
+<dt>Source excerpt</dt><dd><pre>        using var sha1 = SHA1.Create();</pre></dd>
+<dt>Mechanism</dt><dd>not provided</dd>
+<dt>Reachability / trigger</dt><dd>not provided</dd>
+
+<dt>Alternatives / counterevidence</dt><dd>not provided</dd>
+<dt>Refutation</dt><dd>not assessed</dd>
+
+
+
+<dt>Evaluator decision</dt><dd>unreviewed — evaluator unavailable: GOOGLE_CLOUD_PROJECT is not configured.</dd>
+
+<dt>Suggested fix</dt><dd>not provided</dd>
+</dl></details><details class="finding" id="candidate-84ae562af560"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label">not assessed</span> <code>PERF003</code> Services/NotificationService.cs:35</summary><dl>
+<dt>Finding ID</dt><dd>84ae562af560</dd>
+<dt>Category</dt><dd>Concurrency (Performance evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF)</dd>
+<dt>Location</dt><dd>Services/NotificationService.cs:35</dd>
+<dt>Analyzer message</dt><dd>Task.WhenAll creates potentially input-sized concurrency: review fan-out limits</dd>
+<dt>Source excerpt</dt><dd><pre>        return Task.WhenAll(recipients.Select(recipient =&gt; _sender.SendAsync(recipient, message)));</pre></dd>
+<dt>Mechanism</dt><dd>not provided</dd>
+<dt>Reachability / trigger</dt><dd>not provided</dd>
+
+<dt>Alternatives / counterevidence</dt><dd>not provided</dd>
+<dt>Refutation</dt><dd>not assessed</dd>
+
+
+
+<dt>Evaluator decision</dt><dd>unreviewed — evaluator unavailable: GOOGLE_CLOUD_PROJECT is not configured.</dd>
+
+<dt>Suggested fix</dt><dd>not provided</dd>
+</dl></details><details class="finding" id="candidate-8bbf464e2af2"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label">not assessed</span> <code>PERF001</code> Services/OrderSummaryService.cs:19</summary><dl>
+<dt>Finding ID</dt><dd>8bbf464e2af2</dd>
+<dt>Category</dt><dd>CPU &amp; Amplification (Performance evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF)</dd>
+<dt>Location</dt><dd>Services/OrderSummaryService.cs:19</dd>
+<dt>Analyzer message</dt><dd>&#39;GetByIdAsync&#39; is invoked inside a loop: potential database/repository call amplification</dd>
+<dt>Source excerpt</dt><dd><pre>            var customer = await _customers.GetByIdAsync(order.CustomerId);</pre></dd>
+<dt>Mechanism</dt><dd>not provided</dd>
+<dt>Reachability / trigger</dt><dd>not provided</dd>
+
+<dt>Alternatives / counterevidence</dt><dd>not provided</dd>
+<dt>Refutation</dt><dd>not assessed</dd>
+
+
+
+<dt>Evaluator decision</dt><dd>unreviewed — evaluator unavailable: GOOGLE_CLOUD_PROJECT is not configured.</dd>
+
+<dt>Suggested fix</dt><dd>not provided</dd>
+</dl></details><details class="finding" id="candidate-88e78f74bd8e"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label">not assessed</span> <code>PERF004</code> Services/ReportCache.cs:15</summary><dl>
+<dt>Finding ID</dt><dd>88e78f74bd8e</dd>
+<dt>Category</dt><dd>Memory &amp; Allocation (Performance evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF)</dd>
+<dt>Location</dt><dd>Services/ReportCache.cs:15</dd>
+<dt>Analyzer message</dt><dd>Static collection &#39;Reports&#39; grows without observed removal/clear in &#39;ReportCache&#39;: potential memory retention</dd>
+<dt>Source excerpt</dt><dd><pre>                Reports.Add(key, report);</pre></dd>
+<dt>Mechanism</dt><dd>not provided</dd>
+<dt>Reachability / trigger</dt><dd>not provided</dd>
+
+<dt>Alternatives / counterevidence</dt><dd>not provided</dd>
+<dt>Refutation</dt><dd>not assessed</dd>
+
+
+
+<dt>Evaluator decision</dt><dd>unreviewed — evaluator unavailable: GOOGLE_CLOUD_PROJECT is not configured.</dd>
+
+<dt>Suggested fix</dt><dd>not provided</dd>
+</dl></details><details class="finding" id="candidate-9b1f65a206d1"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label">not assessed</span> <code>CA5394</code> Services/TokenService.cs:10</summary><dl>
+<dt>Finding ID</dt><dd>9b1f65a206d1</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF)</dd>
+<dt>Location</dt><dd>Services/TokenService.cs:10</dd>
+<dt>Analyzer message</dt><dd>Random is an insecure random number generator. Use cryptographically secure random number generators when randomness is required for security.</dd>
+<dt>Source excerpt</dt><dd><pre>        int value = random.Next();</pre></dd>
+<dt>Mechanism</dt><dd>not provided</dd>
+<dt>Reachability / trigger</dt><dd>not provided</dd>
+
+<dt>Alternatives / counterevidence</dt><dd>not provided</dd>
+<dt>Refutation</dt><dd>not assessed</dd>
+
+
+
+<dt>Evaluator decision</dt><dd>unreviewed — evaluator unavailable: GOOGLE_CLOUD_PROJECT is not configured.</dd>
+
+<dt>Suggested fix</dt><dd>not provided</dd>
+</dl></details>
+
+<h2>Notes and limitations</h2><ul>
+<li>Gemini/Vertex unavailable: GOOGLE_CLOUD_PROJECT is not configured.</li>
+
+
+<li>E0 = AI-only source-grounded hypothesis; E1 = actual Roslyn diagnostic from fingerprint-consistent SARIF. No E2 runtime verification is performed by this MVP.</li>
+<li>Scores are manual-investigation priorities computed by host Python from evaluator fields; they are not probabilities. Graphify edges are navigation aids, not proof.</li>
+</ul></body></html>

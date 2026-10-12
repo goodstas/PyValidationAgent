@@ -1,0 +1,23 @@
+# Local single-container demo. Requires SERVICE_TOKEN (32+ chars), GOOGLE_CLOUD_PROJECT and GEMINI_MODEL in the
+# shell environment or .env, and Application Default Credentials at ADC_FILE (read-only mount).
+#   export ADC_FILE="$HOME/.config/gcloud/application_default_credentials.json"
+#   docker compose up --build
+services:
+  secureyourcode:
+    build: .
+    image: secureyourcode:v2.3.1
+    ports:
+      - "127.0.0.1:8000:8000"        # loopback only; use an SSH tunnel for remote access
+    environment:
+      REPO_ROOT: /workspace/repo
+      STATE_DIR: /data
+      GOOGLE_GENAI_USE_VERTEXAI: "true"
+      GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT:?set GOOGLE_CLOUD_PROJECT}
+      GOOGLE_CLOUD_LOCATION: ${GOOGLE_CLOUD_LOCATION:-global}
+      GEMINI_MODEL: ${GEMINI_MODEL:?set GEMINI_MODEL}
+      SERVICE_TOKEN: ${SERVICE_TOKEN:?set SERVICE_TOKEN (32+ random characters)}
+      GOOGLE_APPLICATION_CREDENTIALS: /run/secrets/adc.json
+    volumes:
+      - ./demo/DemoShop:/workspace/repo:ro
+      - ${STATE_HOST_DIR:-./.secureyourcode-state}:/data
+      - ${ADC_FILE:?set ADC_FILE to your ADC json}:/run/secrets/adc.json:ro

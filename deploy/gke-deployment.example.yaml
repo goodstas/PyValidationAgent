@@ -1,0 +1,90 @@
+# SecureYourCode v2.3.1 — single-replica GKE EXAMPLE (template; NOT verified by deployment).
+# Replace every REPLACE_* value. DEMO_REPO_URL is a conspicuous placeholder: no public DemoShop repository is
+# assumed to exist. Publish your own copy of demo/DemoShop to a public Git URL first (see deploy/compute-engine.md).
+# Access: kubectl port-forward svc/secureyourcode 8000:8000  (no ingress).
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: secureyourcode
+  annotations:
+    # Workload Identity Federation for GKE: bind this KSA to a principal allowed to call Vertex AI
+    # (roles/aiplatform.user on REPLACE_PROJECT_ID). Classic WI alternative shown commented:
+    # iam.gke.io/gcp-service-account: REPLACE_GSA@REPLACE_PROJECT_ID.iam.gserviceaccount.com
+    {}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secureyourcode-token
+type: Opaque
+stringData:
+  SERVICE_TOKEN: REPLACE_WITH_LONG_RANDOM_TOKEN   # app refuses to start with this placeholder; use 32+ random chars
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secureyourcode
+spec:
+  replicas: 1                      # exactly one: one scan at a time per STATE_DIR (file lock), no queue
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels: {app: secureyourcode}
+  template:
+    metadata:
+      labels: {app: secureyourcode}
+    spec:
+      serviceAccountName: secureyourcode
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1654
+        runAsGroup: 1654
+        fsGroup: 1654
+      initContainers:
+        - name: fetch-demo-repo
+          image: alpine/git:2.47.2
+          args: ["clone", "--depth", "1", "$(DEMO_REPO_URL)", "/repo/DemoShop"]
+          env:
+            - {name: HOME, value: /tmp}   # runs as the pod-level non-root UID
+            - name: DEMO_REPO_URL
+              value: "https://REPLACE_WITH_YOUR_PUBLIC_GIT_HOST/REPLACE_OWNER/DemoShop.git"
+          volumeMounts:
+            - {name: repo, mountPath: /repo}
+      containers:
+        - name: secureyourcode
+          image: REPLACE_REGION-docker.pkg.dev/REPLACE_PROJECT_ID/REPLACE_REPO/secureyourcode:v2.3.1
+          args: ["serve", "--host", "0.0.0.0", "--port", "8000"]
+          ports:
+            - {containerPort: 8000, name: http}
+          env:
+            - {name: REPO_ROOT, value: /workspace/repo/DemoShop}
+            - {name: STATE_DIR, value: /data}
+            - {name: GOOGLE_GENAI_USE_VERTEXAI, value: "true"}
+            - {name: GOOGLE_CLOUD_PROJECT, value: REPLACE_PROJECT_ID}
+            - {name: GOOGLE_CLOUD_LOCATION, value: global}
+            - {name: GEMINI_MODEL, value: REPLACE_VERIFIED_MODEL_ID}
+            - name: SERVICE_TOKEN
+              valueFrom: {secretKeyRef: {name: secureyourcode-token, key: SERVICE_TOKEN}}
+          volumeMounts:
+            - {name: repo, mountPath: /workspace/repo, readOnly: true}
+            - {name: data, mountPath: /data}
+          readinessProbe:
+            httpGet: {path: /healthz, port: http}
+          resources:
+            requests: {cpu: "1", memory: 2Gi}
+            limits: {memory: 4Gi}
+      volumes:
+        - name: repo
+          emptyDir: {}
+        - name: data
+          emptyDir: {}              # throwaway reports; replace with a PVC (ReadWriteOnce) to keep runs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: secureyourcode
+spec:
+  type: ClusterIP
+  selector: {app: secureyourcode}
+  ports:
+    - {name: http, port: 8000, targetPort: http}

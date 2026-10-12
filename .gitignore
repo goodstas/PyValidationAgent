@@ -13,3 +13,4 @@ graphify-out/
 dist/
 build/
 .secureyourcode-state/
+demo_metrics.json

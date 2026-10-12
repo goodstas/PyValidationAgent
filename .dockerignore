@@ -1,0 +1,15 @@
+.git
+.env
+.env.*
+!.env.example
+.venv
+**/bin
+**/obj
+**/__pycache__
+.pytest_cache
+demo/
+docs/
+deploy/
+tests/
+*.sarif
+graphify-out/

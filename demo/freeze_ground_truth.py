@@ -1,0 +1,23 @@
+"""Re-freeze demo/ground-truth.json (fixture fingerprint) after an intentional, documented fixture change.
+
+Usage: uv run python demo/freeze_ground_truth.py
+Record every re-freeze and its reason in docs/compatibility.md. Never edit labels to improve measured scores.
+"""
+
+import json
+import sys
+import tempfile
+from pathlib import Path
+
+from secureyourcode.demo_eval import freeze_ground_truth
+from secureyourcode.schemas import SCORING_VERSION
+
+here = Path(__file__).resolve().parent
+truth_path = here / "ground-truth.json"
+entries = json.loads(truth_path.read_text(encoding="utf-8"))["entries"]
+with tempfile.TemporaryDirectory() as tmp:
+    entries_file = Path(tmp) / "entries.json"
+    entries_file.write_text(json.dumps(entries), encoding="utf-8")
+    truth = freeze_ground_truth(entries_file, here / "DemoShop", truth_path, SCORING_VERSION)
+print(truth.fixture_fingerprint)
+sys.exit(0)

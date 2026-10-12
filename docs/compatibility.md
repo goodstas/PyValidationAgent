@@ -142,3 +142,110 @@ tool calling and structured output gates are **blocked** until an operator suppl
 ### 7. Custom PERF analyzer (PASS)
 
 `dotnet test roslyn/SecureYourCode.PerformanceAnalyzer.Tests -c Release` → `Passed: 15, Failed: 0`.
+
+## M1 — staging, fingerprints, graph, lock, MCP session (PASS)
+
+* Fingerprint: one helper (`workspace.compute_fingerprint`): sorted canonical forward-slash paths + LF-normalised
+  content of `.cs/.csproj/.sln/.slnx/.json` files, excluding `.git, bin, obj, .vs, graphify-out, ...` and secret-like
+  files. Frozen fixture fingerprint: `4f9f53fc8c50cef328b9ae00c6db369c8796d529d0102d251ce6ca9270feb08c`.
+* Stable snapshot `STATE_DIR/workspaces/<repo_hash>/source` (unchanged files are not rewritten, deletions synced);
+  Graphify output/cache `STATE_DIR/graphs/<repo_hash>/graphify-out`; disposable Roslyn copy `STATE_DIR/builds/<scan_id>`
+  (deleted after the build; SARIF kept as `runs/<id>/roslyn.sarif`).
+* Graph statuses observed for real: `built` (first), `cached` (same fingerprint + graphifyy version), `updated`
+  (edited copy; scans `20261012T214218Z-a5f44f` → `20261012T214230Z-5b10ed`, fingerprint `4f9f53fc…` → `090998e6…`,
+  96 → 98 nodes). Deleted-file and renamed-method cases: `tests/test_graph_refresh.py`.
+* Host Graphify MCP query: tool **`get_neighbors`** with `node_id`, deterministic target per plan §6; result capped at
+  8 KiB. In the DemoShop scans the target is `csharp_namespace:a0ea5d4792c5461c` (the lexically first node whose
+  `source_file` is `Services/BannerColorPicker.cs`, the file of the lowest `candidate_id` 345af301d4a1), 921 bytes.
+  Count: exactly 1 host call per scan.
+* Lock: `filelock` 4.1.1 `FileLock(STATE_DIR/scan.lock, thread_local=True)`, non-blocking acquire in the request
+  handler on the event-loop thread; released in the worker's `finally` on the same loop thread. Separate `FileLock`
+  instances use separate fds (flock), so a second service instance sees the lock as held
+  (`test_lock_is_exclusive_and_released`). Two consecutive scans succeed (`test_full_pipeline_with_fake_model_two_consecutive_scans`).
+
+## M2 — Roslyn (PASS)
+
+* `dotnet test roslyn/SecureYourCode.PerformanceAnalyzer.Tests -c Release` → **15 passed** (PERF001 ×6, PERF003 ×4 incl.
+  `.Chunk(n).Select` positive and sequential-batch negative, PERF004 ×5 incl. List indexer-assignment negative).
+  Also executed inside `docker build` (SDK 10.0.103) → 15 passed.
+* Real DemoShop build (`dotnet restore` + `dotnet build -t:Rebuild --no-restore -nodeReuse:false`, scratch
+  `.editorconfig` root=true enabling the 8 IDs, isolating `Directory.Build.props` with
+  `ErrorLog=<abs>.sarif,version=2.1` and `UseSharedCompilation=false`, `Directory.Build.targets` adding the analyzer DLL,
+  `global.json` copied into the scratch root): SARIF 2.1.0, **all 8 IDs emitted**, 10 candidates:
+  CA3001 CustomerSearchController.cs:23, CA3003 DocumentsController.cs:20 and :32, CA3006 DiagnosticsController.cs:22,
+  CA5350 LegacyHasher.cs:10, CA5394 TokenService.cs:10 and BannerColorPicker.cs:9, PERF001 OrderSummaryService.cs:19,
+  PERF003 NotificationService.cs:35, PERF004 ReportCache.cs:15. Build ≈ 8 s warm.
+* Same result inside Docker with SDK 10.0.103 and `--network none` (offline restore works; zero PackageReferences).
+* Detection boundaries: PERF001 ignores query expressions / Select lambdas and calls in lambdas or local functions
+  declared in loops; PERF003 does no interprocedural size analysis; PERF004 only sees growth/removal inside the
+  field's containing type and ignores static properties / DI singletons.
+
+## M3/M4 — reviewers and evaluator (implemented; LIVE GATE BLOCKED)
+
+* `create_deep_agent(model, tools, system_prompt=<prompts/*.md>, middleware=[ToolGuardMiddleware, ModelCallLimitMiddleware(run_limit=16, exit_behavior="end")], subagents=None, response_format=ToolStrategy(ReviewerOutput), name=...)`
+  after `register_harness_profile("<provider>:<model>", HarnessProfile(excluded_tools={ls, read_file, write_file, edit_file, delete, glob, grep, execute, write_todos, task}, general_purpose_subagent=GeneralPurposeSubagentProfile(enabled=False)))`.
+* Observed with a recording test model: bound tools = `read_source, search_source, get_neighbors, get_node, graph_stats, query_graph, shortest_path` + the `ReviewerOutput` structured-output tool; no `task`. A scripted call
+  to `write_file` was refused by the guard and recorded (`denied_tool_calls: ["write_file"]`).
+* Evaluator: `ChatGoogleGenerativeAI.with_structured_output(EvaluatorBatch, include_raw=True)`, one call per domain
+  (≤2), one retry; Python validates citations against the snapshot and computes the v2.3.1 rubric.
+* **Not executed live**: no Gemini call (tool calling, structured output, reviewer behaviour, canary resistance) could be
+  made; every real scan records `GOOGLE_CLOUD_PROJECT is not configured` or `DefaultCredentialsError` and is `partial`.
+
+## M5/M6 — reports and entry points (PASS offline)
+
+* `uv run pytest -q` → **47 passed** (≈80 s; uses real dotnet, Graphify CLI + MCP and uvicorn; model and evaluator are
+  test-only fakes in `tests/fakes.py`).
+* HTML escaping test with `<script>alert(1)</script>` in excerpt/mechanism/rationale and an attribute-breaking ID;
+  CSP meta present; no external resources; no E2/benchmark/cost/critic fields.
+* Real REST + MCP against `secureyourcode serve` (host) and the Docker image, using `scripts/smoke_client.py`
+  (official MCP SDK `streamable_http_client` + `ClientSession`): `POST /scans` 202 in ~0.00 s, second POST 429
+  `{"error":"busy"}`, report while running 409, unauthenticated 401, `/mcp/mcp` 404; MCP `initialize` → tools
+  `[scan_repository, get_scan_status, get_scan_report]` → `scan_repository` returned a `scan_id` in 0.01 s →
+  `get_scan_report` while running `{"error":"not_ready"}` → final report fetched.
+* Windows: **not executed** (no Windows host). By code inspection, uvicorn 0.54 `asyncio_loop_factory` returns
+  `ProactorEventLoop` on win32 unless reload/workers are used; `serve` hard-codes `reload=False, workers=1`; dotnet and
+  Graphify extraction run via `subprocess.run` in a worker thread.
+
+## M7 — Docker (PASS without a live model)
+
+```bash
+docker build --secret id=extra_ca,src=/root/.ccr/ca-bundle.crt -t secureyourcode:v2.3.1 .   # sandbox proxy CA, build-time only
+docker run --rm --network none -v "$PWD/demo/DemoShop:/workspace/repo:ro" -v /tmp/claude-0/docker-state2:/data \
+  -e GEMINI_MODEL=gemini-3.5-flash secureyourcode:v2.3.1 scan --repo /workspace/repo --wait
+```
+Image 2.09 GB, base `mcr.microsoft.com/dotnet/sdk:10.0.103-noble` (the `10.0` tag is SDK 10.0.401, outside the pinned
+band), runs as `app` (UID 1654); writing into the `:ro` repo mount fails (`Read-only file system`); host repo hashes
+unchanged. Scan `20261012T214759Z-c9e156`: partial (no project/ADC), graph built, MCP available, 8/8 rules, wall 17.9 s.
+Container `serve` + REST/MCP smoke: scans `20261012T214109Z-5eaaea` (REST) and `20261012T214122Z-22dced` (MCP).
+Not verified: ADC inside the container, Compute Engine, GKE (templates only).
+
+## Real scan IDs (all `partial` — no Vertex credentials)
+
+| Scan | Trigger | Environment | Graph | Host MCP queries | Rules | Timings (s) |
+|---|---|---|---|---|---|---|
+| 20261012T212619Z-3c39a9 | CLI | host | built | 1 | 8/8 | stage 0.02 graph 0.56 roslyn 7.66 review 3.02 report 0.35 |
+| 20261012T214019Z-d06543 | CLI | Docker, `--network none` | built | 1 | 8/8 | graph 1.7 roslyn 7.98 review 2.75 |
+| 20261012T214109Z-5eaaea | REST | Docker serve | cached | 1 | 8/8 | roslyn 8.13 review 1.98 |
+| 20261012T214122Z-22dced | MCP | Docker serve | cached | 1 | 8/8 | roslyn 8.46 review 1.92 |
+| 20261012T214151Z-44b4d0 | REST | host serve | built | 1 | 8/8 | — |
+| 20261012T214202Z-cba70c | MCP | host serve | cached | 1 | 8/8 | — |
+| 20261012T214218Z-a5f44f | CLI | host, temp copy | built | 1 | 8/8 | — |
+| 20261012T214230Z-5b10ed | CLI | host, edited temp copy | updated | 1 | 8/8 | — |
+| 20261012T214759Z-c9e156 | CLI | Docker (final image), `--network none` | built | 1 | 8/8 | stage 0.01 graph 1.94 roslyn 8.47 review 2.71 report 0.19 |
+| 20261012T214818Z-954e01 | CLI | host (final code) — archived in `docs/runs/` | cached | 1 | 8/8 | stage 0.02 graph 0.01 roslyn 7.98 review 1.14 report 0.21 |
+
+`report.json` `run.phase_timings` omits the `report` phase (the report cannot time its own publication);
+`status.json` and the CLI output include it.
+
+## Fixture / ground-truth change log
+
+* 2026-10-12: frozen at M2 end, fingerprint `4f9f53fc…`. No later changes.
+
+## Unmet / blocked gates
+
+1. **Vertex Gemini live gate — BLOCKED**: no ADC and no `GOOGLE_CLOUD_PROJECT` in the sandbox. Unverified: real
+   `gemini-3.5-flash` availability, tool calling and structured output through Deep Agents, evaluator output quality,
+   prompt-injection behaviour of a live model, token usage, live demo precision/recall. Therefore **no scan is
+   `complete`** and `demo-evaluate` has no valid input.
+2. **Windows** non-Docker run and Windows REST no-reload smoke test — not executed (Linux sandbox only).
+3. **Container ADC** and GCP deployments (Compute Engine, GKE) — not executed; examples only.
