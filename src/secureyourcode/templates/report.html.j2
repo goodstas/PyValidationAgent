@@ -21,7 +21,7 @@ pre{background:#f3f4f6;padding:6px 8px;border-radius:4px;overflow-x:auto;margin:
 <tr><th>Phase timings (s)</th><td>{% for k, v in r.run.phase_timings.items() %}{{ k }}: {{ '%.1f' | format(v) }}{% if not loop.last %} · {% endif %}{% endfor %}</td></tr>
 <tr><th>Graph status</th><td>{{ r.graph.status or 'not run' }}</td></tr>
 <tr><th>Graphify MCP</th><td>{{ r.graph.mcp_status or 'not run' }} (host calls: {{ r.graph.host_calls }})</td></tr>
-<tr><th>Gemini model</th><td>{{ r.run.model or 'not configured' }}{% if r.run.model_location %} @ {{ r.run.model_location }}{% endif %} (Vertex AI)</td></tr>
+<tr><th>Model</th><td>{{ r.run.model or 'not configured' }}{% if r.run.model_location %} @ {{ r.run.model_location }}{% endif %}{% if r.run.model_provider %} ({{ r.run.model_provider }}){% endif %}</td></tr>
 </table>
 
 <h2>Provenance</h2><table>

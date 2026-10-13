@@ -239,6 +239,7 @@ class RunInfo(BaseModel):
     phase_timings: dict[str, float] = Field(default_factory=dict)
     model: str | None = None
     model_location: str | None = None
+    model_provider: str | None = None
 
 
 class Provenance(BaseModel):

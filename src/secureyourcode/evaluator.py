@@ -284,8 +284,13 @@ def mark_unreviewed(f: Finding, reason: str) -> None:
 StructuredInvoker = Callable[[list[BaseMessage]], Awaitable[tuple[EvaluatorBatch | None, dict | None, str | None]]]
 
 
-def make_vertex_invoker(model: Any) -> StructuredInvoker:
-    structured = model.with_structured_output(EvaluatorBatch, include_raw=True)
+def make_structured_invoker(model: Any) -> StructuredInvoker:
+    """Batched evaluator call with provider-native structured output where the provider rejects forced tool use."""
+    from .agents import is_anthropic_model
+
+    # langchain-anthropic's default `function_calling` method forces tool_choice, a 400 on Claude Sonnet 5.5/Opus 5.5.
+    kwargs = {"method": "json_schema"} if is_anthropic_model(model) else {}
+    structured = model.with_structured_output(EvaluatorBatch, include_raw=True, **kwargs)
 
     async def invoke(messages: list[BaseMessage]) -> tuple[EvaluatorBatch | None, dict | None, str | None]:
         out = await structured.ainvoke(messages)
@@ -296,6 +301,9 @@ def make_vertex_invoker(model: Any) -> StructuredInvoker:
         return (parsed if isinstance(parsed, EvaluatorBatch) else None), (dict(usage) if usage else None), (str(err) if err else None)
 
     return invoke
+
+
+make_vertex_invoker = make_structured_invoker  # backwards-compatible name
 
 
 def _context(snapshot: Path, f: Finding) -> str:

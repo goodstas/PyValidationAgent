@@ -21,7 +21,7 @@ from filelock import FileLock, Timeout
 from . import __version__
 from .agents import ReviewerRun, build_chat_model, canary_followed, run_reviewer
 from .config import ConfigError, Settings, validate_state_dir
-from .evaluator import consolidate, evaluate, make_vertex_invoker
+from .evaluator import consolidate, evaluate, make_structured_invoker
 from .graphify_runner import GraphBuildResult, GraphSession, build_or_update_graph, choose_host_target, graphify_version, snapshot_graph
 from .reporting import publish_report
 from .roslyn_runner import PERF_RULE_IDS, SECURITY_RULE_IDS, SELECTED_RULE_IDS, RoslynResult, child_env, run_roslyn
@@ -137,7 +137,7 @@ class ScanService:
         self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=4, thread_name_prefix="syc-scan")
         # Production uses real Vertex Gemini. Tests inject fakes here; there is no production flag for fakes.
         self._model_factory = model_factory or (lambda: build_chat_model(settings))
-        self._invoker_factory = invoker_factory or make_vertex_invoker
+        self._invoker_factory = invoker_factory or make_structured_invoker
 
     # ------------------------------------------------------------------ lock + registry
 
@@ -522,11 +522,11 @@ class ScanService:
         ]
         notes = list(ctx.notes)
         if ctx.model_error:
-            notes.append(f"Gemini/Vertex unavailable: {ctx.model_error}")
+            notes.append(f"Model provider ({s.model_provider}) unavailable: {ctx.model_error}")
         return Report(
             run=RunInfo(
                 scan_id=ctx.scan_id, status=status, status_reasons=reasons, trigger=ctx.trigger, started_at=ctx.started_at,
-                finished_at=utcnow(), phase_timings=ctx.timings, model=s.gemini_model, model_location=s.google_cloud_location,
+                finished_at=utcnow(), phase_timings=ctx.timings, model=s.model_id, model_location=s.model_location, model_provider=s.model_provider,
             ),
             provenance=Provenance(
                 repo_label=ctx.repo_root.name, git_sha=ctx.git_sha, git_dirty=ctx.git_dirty, source_fingerprint=ctx.fingerprint,

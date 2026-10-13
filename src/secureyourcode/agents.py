@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from langchain.agents.middleware import AgentMiddleware, ModelCallLimitMiddleware
-from langchain.agents.structured_output import ToolStrategy
+from langchain.agents.structured_output import ProviderStrategy, ToolStrategy
 from langchain_core.messages import AIMessage, ToolMessage
 from langchain_core.tools import StructuredTool
 
@@ -37,9 +37,20 @@ def load_prompt(name: str) -> str:
     return resources.files("secureyourcode.prompts").joinpath(f"{name}.md").read_text(encoding="utf-8")
 
 
+# Non-streaming requests above ~21k max_tokens are refused by the Anthropic SDK (10-minute estimate); 16k is ample
+# for one structured review and keeps the call synchronous.
+ANTHROPIC_MAX_TOKENS = 16_000
+
+
 def build_chat_model(settings: Settings, timeout: float = 120.0) -> Any:
-    """Real Vertex AI Gemini via ADC. Raises ConfigError when not configured; never falls back to another provider."""
+    """The configured provider's chat model. Raises ConfigError when not configured; never falls back to another."""
     settings.require_model()
+    if settings.model_provider == "anthropic":
+        from langchain_anthropic import ChatAnthropic
+
+        # Claude Sonnet 5.5 / Opus 5.5: adaptive thinking is on by default; no budget_tokens, no forced tool_choice.
+        # The API key is read by the SDK from ANTHROPIC_API_KEY in the process environment.
+        return ChatAnthropic(model=settings.anthropic_model, max_tokens=ANTHROPIC_MAX_TOKENS, max_retries=2, timeout=timeout)
     from langchain_google_genai import ChatGoogleGenerativeAI
 
     return ChatGoogleGenerativeAI(
@@ -149,6 +160,22 @@ def register_reviewer_profile(model: Any) -> str:
     return key
 
 
+def is_anthropic_model(model: Any) -> bool:
+    from deepagents._models import get_model_provider
+
+    return get_model_provider(model) == "anthropic"
+
+
+def response_format_for(model: Any) -> ProviderStrategy | ToolStrategy:
+    """Structured-output strategy per provider.
+
+    create_agent forces `tool_choice="any"` for ToolStrategy, and Claude Sonnet 5.5 / Opus 5.5 reject forced tool
+    choice with a 400, so Anthropic models use the provider's native structured output (`output_config.format`),
+    which leaves tool_choice on auto. Gemini keeps the tool-call strategy.
+    """
+    return ProviderStrategy(ReviewerOutput) if is_anthropic_model(model) else ToolStrategy(ReviewerOutput)
+
+
 def build_reviewer_agent(name: str, model: Any, tools: list[Any], counters: ToolCounters) -> Any:
     from deepagents import create_deep_agent
 
@@ -161,7 +188,7 @@ def build_reviewer_agent(name: str, model: Any, tools: list[Any], counters: Tool
         system_prompt=load_prompt(prompt_name),
         middleware=[ToolGuardMiddleware(allowed, counters), ModelCallLimitMiddleware(run_limit=MAX_MODEL_CALLS, exit_behavior="end")],
         subagents=None,
-        response_format=ToolStrategy(ReviewerOutput),
+        response_format=response_format_for(model),
         name=name,
     )
 

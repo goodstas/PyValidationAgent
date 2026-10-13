@@ -13,7 +13,11 @@ APP_ROOT = Path(__file__).resolve().parents[2]
 PLACEHOLDER_TOKEN = "REPLACE_WITH_LONG_RANDOM_TOKEN"
 MIN_TOKEN_LENGTH = 32
 
+PROVIDERS = ("vertex", "anthropic")
+PLACEHOLDER_PREFIXES = ("REPLACE_", "YOUR_")
+
 DEFAULTS: dict[str, str] = {
+    "MODEL_PROVIDER": "vertex",
     "GOOGLE_CLOUD_LOCATION": "global",
     "GOOGLE_GENAI_USE_VERTEXAI": "true",
     "REPO_ROOT": "./demo/DemoShop",
@@ -40,6 +44,9 @@ class Settings:
     google_cloud_location: str
     gemini_model: str | None
     use_vertexai: bool
+    model_provider: str
+    anthropic_model: str | None
+    anthropic_key_present: bool
     scan_timeout_seconds: int
     max_review_candidates: int
     service_token: str | None = field(repr=False)
@@ -47,9 +54,26 @@ class Settings:
     analyzer_dll: Path
     app_root: Path = APP_ROOT
 
+    @property
+    def model_id(self) -> str | None:
+        """The configured model for the selected provider (None when unset)."""
+        return self.anthropic_model if self.model_provider == "anthropic" else self.gemini_model
+
+    @property
+    def model_location(self) -> str:
+        return "api.anthropic.com" if self.model_provider == "anthropic" else self.google_cloud_location
+
     def require_model(self) -> None:
-        """Live model calls need an explicit model, project and Vertex mode; fail clearly otherwise."""
-        if not self.gemini_model or self.gemini_model.startswith(("REPLACE_", "YOUR_")):
+        """Live model calls need an explicit, non-placeholder model and that provider's credentials; fail clearly."""
+        if self.model_provider not in PROVIDERS:
+            raise ConfigError(f"MODEL_PROVIDER must be one of {PROVIDERS}, got {self.model_provider!r}.")
+        if self.model_provider == "anthropic":
+            if not self.anthropic_model or self.anthropic_model.startswith(PLACEHOLDER_PREFIXES):
+                raise ConfigError("ANTHROPIC_MODEL is not configured (e.g. claude-sonnet-5-5; no default model is assumed).")
+            if not self.anthropic_key_present:
+                raise ConfigError("ANTHROPIC_API_KEY is not set in the process environment (it is never read from .env).")
+            return
+        if not self.gemini_model or self.gemini_model.startswith(PLACEHOLDER_PREFIXES):
             raise ConfigError("GEMINI_MODEL is not configured (it is mandatory; no default model is assumed).")
         if not self.google_cloud_project or self.google_cloud_project == "YOUR_PROJECT_ID":
             raise ConfigError("GOOGLE_CLOUD_PROJECT is not configured.")
@@ -103,6 +127,10 @@ def load_settings(env_file: Path | None = None, environ: dict[str, str] | None =
         google_cloud_location=get("GOOGLE_CLOUD_LOCATION") or "global",
         gemini_model=get("GEMINI_MODEL"),
         use_vertexai=_truthy(get("GOOGLE_GENAI_USE_VERTEXAI")),
+        model_provider=(get("MODEL_PROVIDER") or "vertex").strip().lower(),
+        anthropic_model=get("ANTHROPIC_MODEL"),
+        # The key itself is deliberately not stored in Settings; only the process environment (never .env) may carry it.
+        anthropic_key_present=bool(environ.get("ANTHROPIC_API_KEY")),
         scan_timeout_seconds=timeout,
         max_review_candidates=max_candidates,
         service_token=get("SERVICE_TOKEN"),

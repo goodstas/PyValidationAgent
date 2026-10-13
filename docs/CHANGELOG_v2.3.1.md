@@ -38,3 +38,14 @@
   are now refused, including relative/symlink aliases.
 - **P2** Token-usage `total` row showed `0` tokens / `partial` when no call carried usage metadata: totals are now
   `not reported` unless at least one session reported real provider metadata.
+
+## Operator-requested provider option (2026-10-13)
+
+- `MODEL_PROVIDER=anthropic` + `ANTHROPIC_MODEL` (e.g. `claude-sonnet-5-5`) run the two reviewers and the evaluator on
+  Claude via `langchain-anthropic` 1.7.6 / `anthropic` 1.13.0 instead of Gemini on Vertex AI (which stays the default
+  and the plan's provider). Reviewers use `ProviderStrategy` (native `output_config.format`) and the evaluator
+  `with_structured_output(method="json_schema")`, because `create_agent` forces `tool_choice="any"` for
+  `ToolStrategy` and langchain-anthropic's default structured-output method forces a tool — both are HTTP 400 on
+  Claude Sonnet 5.5 / Opus 5.5. `max_tokens` pinned to 16 000 (the SDK refuses larger non-streaming requests).
+  Deviation from the plan's "Vertex only" rule, made at the operator's explicit request; `.env.example` keeps
+  `MODEL_PROVIDER=vertex`.

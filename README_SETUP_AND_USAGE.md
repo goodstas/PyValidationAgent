@@ -64,6 +64,16 @@ SERVICE_TOKEN=REPLACE_WITH_LONG_RANDOM_TOKEN   # server refuses to start with th
 ALLOW_UNAUTHENTICATED_LOOPBACK=false
 ```
 
+### Using Claude (Anthropic API) instead of Gemini on Vertex AI
+
+The plan's provider is Vertex AI Gemini. As an operator-selected alternative, set `MODEL_PROVIDER=anthropic` and
+`ANTHROPIC_MODEL` (e.g. `claude-sonnet-5-5`) in `.env`, and export `ANTHROPIC_API_KEY` in the **process environment**
+(it is never read from `.env`, is removed from every `dotnet`/Graphify child process, and is never written to reports).
+Both reviewers then run as Deep Agents on Claude with the provider's native structured output, and the evaluator uses
+`method="json_schema"`; forced tool choice is avoided because Claude Sonnet 5.5 / Opus 5.5 reject it. Everything else
+(rules, Graphify, rubric, reports, CLI/REST/MCP) is unchanged. ⛔ Not yet exercised live by the coding agent (no key
+in the sandbox) — only offline wiring tests (`tests/test_anthropic_provider.py`).
+
 Optional: `ANALYZER_DLL` (defaults to the Release build path below), `MCP_ALLOWED_HOSTS` (extra `host:port` values for
 the MCP Host/Origin allowlist when clients reach the server under a non-loopback name).
 
