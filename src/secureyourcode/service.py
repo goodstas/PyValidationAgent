@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import concurrent.futures
 import hashlib
 import os
 import re
@@ -116,6 +117,7 @@ class ScanContext:
     evaluator_usage: Any = None
     budget_overflow: bool = False
     model_error: str | None = None
+    inflight: set[concurrent.futures.Future] = field(default_factory=set)  # worker-thread futures of this scan
 
     def remaining(self) -> float:
         return max(1.0, self.deadline - time.monotonic())
@@ -130,6 +132,9 @@ class ScanService:
         self.jobs = JobStore(self.state)
         self.lock_path = self.state / "scan.lock"
         self._active: str | None = None  # supplemental in-process gate; the file lock is authoritative
+        # Blocking stages run here (not in asyncio's default executor) so a timed-out scan can wait for them to
+        # finish before the lock is released: cancelling an awaiting coroutine never stops a running thread.
+        self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=4, thread_name_prefix="syc-scan")
         # Production uses real Vertex Gemini. Tests inject fakes here; there is no production flag for fakes.
         self._model_factory = model_factory or (lambda: build_chat_model(settings))
         self._invoker_factory = invoker_factory or make_vertex_invoker
@@ -234,6 +239,7 @@ class ScanService:
             ctx.reasons.append(f"timeout: scan exceeded SCAN_TIMEOUT_SECONDS={self.settings.scan_timeout_seconds}")
         except Exception as exc:  # noqa: BLE001 - truthful failed report rather than a crash
             ctx.fatal = ctx.fatal or f"unexpected error: {type(exc).__name__}: {exc}"
+        await self._drain_inflight(ctx)
 
         self._update(ctx, "running", "report")
         t0 = time.monotonic()
@@ -253,6 +259,22 @@ class ScanService:
 
     # ------------------------------------------------------------------ pipeline
 
+    async def _blocking(self, ctx: ScanContext, fn: Any, *args: Any) -> Any:
+        """Run a blocking stage in the scan executor, remembering its future so a timeout can wait for it."""
+        future = self._executor.submit(fn, *args)
+        ctx.inflight.add(future)
+        return await asyncio.wrap_future(future)
+
+    async def _drain_inflight(self, ctx: ScanContext) -> None:
+        """After cancellation, block until every worker thread of this scan has stopped (their subprocesses are
+        bounded by their own timeouts), so the shared snapshot/graph cache is quiet before the lock is released."""
+        pending = [f for f in ctx.inflight if not f.done()]
+        if not pending:
+            return
+        t0 = time.monotonic()
+        await asyncio.get_running_loop().run_in_executor(None, concurrent.futures.wait, pending)
+        ctx.notes.append(f"waited {time.monotonic() - t0:.1f}s for {len(pending)} in-flight worker(s) to stop before releasing the scan lock")
+
     async def _phase(self, ctx: ScanContext, name: str) -> float:
         self._update(ctx, "running", name)
         return time.monotonic()
@@ -269,7 +291,7 @@ class ScanService:
         try:
             validate_demo_layout(ctx.repo_root)
             ctx.source_dir = self.state / "workspaces" / rh / "source"
-            staged = await asyncio.to_thread(stage_source, ctx.repo_root, ctx.source_dir)
+            staged = await self._blocking(ctx, stage_source, ctx.repo_root, ctx.source_dir)
         except (LayoutError, WorkspaceError, OSError) as exc:
             ctx.fatal = f"stage failed: {exc}"
             self._done(ctx, "stage", t0)
@@ -278,14 +300,14 @@ class ScanService:
         ctx.staged_files = staged.files
         if staged.source_changed:
             ctx.reasons.append("source_changed: input repository changed while staging")
-        ctx.git_sha, ctx.git_dirty = await asyncio.to_thread(_git_info, ctx.repo_root)
+        ctx.git_sha, ctx.git_dirty = await self._blocking(ctx, _git_info, ctx.repo_root)
         self._done(ctx, "stage", t0)
 
         # 2. graph
         t0 = await self._phase(ctx, "graph")
         ctx.graph.graphify_version = graphify_version()
         try:
-            g = await asyncio.to_thread(
+            g = await self._blocking(ctx, 
                 build_or_update_graph, ctx.source_dir, self.state / "graphs" / rh, ctx.fingerprint, ctx.staged_files, min(ctx.remaining(), 180)
             )
         except Exception as exc:  # noqa: BLE001
@@ -306,8 +328,8 @@ class ScanService:
         build_root = self.state / "builds" / ctx.scan_id
         build_dir = build_root / "src"
         try:
-            await asyncio.to_thread(make_build_copy, ctx.source_dir, build_dir)
-            ctx.roslyn = await asyncio.to_thread(
+            await self._blocking(ctx, make_build_copy, ctx.source_dir, build_dir)
+            ctx.roslyn = await self._blocking(ctx, 
                 run_roslyn, ctx.source_dir, build_dir, s.analyzer_dll, s.app_root / "global.json", min(ctx.remaining(), 240)
             )
             sarif = build_root / "src.sarif"
@@ -407,7 +429,7 @@ class ScanService:
             if session is not None:
                 await session.__aexit__(None, None, None)
 
-        ctx.fingerprint_after = await asyncio.to_thread(compute_fingerprint, ctx.repo_root)
+        ctx.fingerprint_after = await self._blocking(ctx, compute_fingerprint, ctx.repo_root)
         if ctx.fingerprint_after != ctx.fingerprint:
             ctx.reasons.append("source_changed: input repository fingerprint changed during the scan")
 
@@ -462,6 +484,7 @@ class ScanService:
         usage_rows = []
         totals_in = totals_out = calls = 0
         all_complete = True
+        any_reported = False  # at least one session carried real provider usage metadata
         for name in ("SecurityReviewer", "PerformanceReviewer"):
             run = ctx.reviewer_runs.get(name)
             if run is None or run.model_calls == 0:
@@ -470,22 +493,27 @@ class ScanService:
                 continue
             usage_rows.append(UsageRow(session=name, model_calls=run.model_calls, input_tokens=run.input_tokens, output_tokens=run.output_tokens, coverage=run.usage_coverage))  # type: ignore[arg-type]
             calls += run.model_calls
-            totals_in += run.input_tokens or 0
-            totals_out += run.output_tokens or 0
+            if run.usage_coverage != "not reported":
+                any_reported = True
+                totals_in += run.input_tokens or 0
+                totals_out += run.output_tokens or 0
             all_complete &= run.usage_coverage == "complete"
         eu = ctx.evaluator_usage
         if eu is not None and eu.calls:
             cov = "complete" if eu.calls_with_usage == eu.calls else ("partial" if eu.calls_with_usage else "not reported")
             usage_rows.append(UsageRow(session="Evaluator", model_calls=eu.calls, input_tokens=eu.input_tokens if eu.calls_with_usage else None, output_tokens=eu.output_tokens if eu.calls_with_usage else None, coverage=cov))  # type: ignore[arg-type]
             calls += eu.calls
-            totals_in += eu.input_tokens
-            totals_out += eu.output_tokens
+            if eu.calls_with_usage:
+                any_reported = True
+                totals_in += eu.input_tokens
+                totals_out += eu.output_tokens
             all_complete &= cov == "complete"
         else:
             usage_rows.append(UsageRow(session="Evaluator"))
             all_complete = False
         usage_rows.append(
-            UsageRow(session="total", model_calls=calls or None, input_tokens=totals_in if calls else None, output_tokens=totals_out if calls else None, coverage="complete" if all_complete else ("partial" if calls else "not reported"))
+            # Zero tokens would imply measured usage; without provider metadata the total is "not reported".
+            UsageRow(session="total", model_calls=calls or None, input_tokens=totals_in if any_reported else None, output_tokens=totals_out if any_reported else None, coverage="complete" if (all_complete and any_reported) else ("partial" if any_reported else "not reported"))
         )
 
         reviewer_reports = ctx.reviewer_reports or [

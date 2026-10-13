@@ -27,3 +27,14 @@
   config time, instead of an unverified concrete model ID.
 - `demo/freeze_ground_truth.py`: `__main__` guard; `freeze_ground_truth()` takes parsed entries.
 - `Dockerfile`: one `with-ca` helper replaces four copies of the optional-CA preamble.
+
+## External review fixes (2026-10-13, Codex review of the branch)
+
+- **P1** Timeout released the scan lock while worker threads were still running (REST/MCP path): blocking stages now
+  run in a scan-owned thread pool whose futures are tracked per scan; after a timeout the worker waits for them to
+  stop (`_drain_inflight`) before the lock is released. Reproduced and covered by
+  `tests/test_review_regressions.py::test_timeout_keeps_lock_until_background_work_has_stopped`.
+- **P2** `demo-evaluate --out` pointing at the report (or ground-truth) file overwrote it with metrics: input paths
+  are now refused, including relative/symlink aliases.
+- **P2** Token-usage `total` row showed `0` tokens / `partial` when no call carried usage metadata: totals are now
+  `not reported` unless at least one session reported real provider metadata.

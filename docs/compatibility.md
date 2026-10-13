@@ -261,3 +261,10 @@ Not verified: ADC inside the container, Compute Engine, GKE (templates only).
   prints `HTTP 401 from … (check SERVICE_TOKEN / URL)`; exit code 1 in both cases.
 * Image rebuilt with the `with-ca` helper (`build exit=0`, analyzer tests 15/15 in the analyzer stage).
 * `python -c "import demo.freeze_ground_truth"` has no side effect; running it leaves `ground-truth.json` unchanged.
+
+## External review regressions (2026-10-13)
+
+Three bugs reported by a Codex review of the branch were reproduced with new tests in `tests/test_review_regressions.py`
+(all failed before the fix, pass after): timeout released the lock before worker threads stopped (server path only —
+the CLI path was masked because `asyncio.run()` joins the default executor on shutdown), `demo-evaluate --out` could
+overwrite its own input report, and usage totals reported `0` tokens instead of `not reported`.

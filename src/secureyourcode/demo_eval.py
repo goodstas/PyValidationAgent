@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Literal
 
@@ -143,7 +144,22 @@ def compute_metrics(report: Report, truth: GroundTruth) -> dict:
     }
 
 
+def _same_file(a: Path, b: Path) -> bool:
+    """True if the two paths name the same file, through relative paths, symlinks or hard links."""
+    try:
+        if a.exists() and b.exists():
+            return os.path.samefile(a, b)
+    except OSError:
+        pass
+    return a.resolve() == b.resolve()
+
+
 def run_demo_evaluate(report_path: Path, truth_path: Path, out_path: Path | None) -> dict:
+    report_path, truth_path = Path(report_path), Path(truth_path)
+    if out_path is not None:
+        for label, inp in (("report", report_path), ("ground-truth", truth_path)):
+            if _same_file(Path(out_path), inp):
+                raise DemoEvalError(f"--out must not be an input file: {out_path} is the {label} path (metrics would overwrite it)")
     report = Report.model_validate_json(Path(report_path).read_text(encoding="utf-8"))
     truth = GroundTruth.model_validate_json(Path(truth_path).read_text(encoding="utf-8"))
     metrics = compute_metrics(report, truth)
