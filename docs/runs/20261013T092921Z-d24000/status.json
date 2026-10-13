@@ -1,0 +1,23 @@
+{
+  "scan_id": "20261013T092921Z-d24000",
+  "status": "complete",
+  "phase": "done",
+  "trigger": "cli",
+  "phase_timings": {
+    "stage": 0.35,
+    "graph": 0.27,
+    "roslyn": 10.8,
+    "review": 38.64,
+    "evaluate": 34.33,
+    "report": 0.21
+  },
+  "error": null,
+  "status_reasons": [],
+  "created_at": "2026-10-13T09:29:21Z",
+  "updated_at": "2026-10-13T09:30:45Z",
+  "finished_at": "2026-10-13T09:30:45Z",
+  "report_ready": true,
+  "report_json": "/root/.secureyourcode-state/runs/20261013T092921Z-d24000/report/report.json",
+  "report_html": "/root/.secureyourcode-state/runs/20261013T092921Z-d24000/report/report.html",
+  "pid": 341
+}

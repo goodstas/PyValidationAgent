@@ -71,8 +71,8 @@ The plan's provider is Vertex AI Gemini. As an operator-selected alternative, se
 (it is never read from `.env`, is removed from every `dotnet`/Graphify child process, and is never written to reports).
 Both reviewers then run as Deep Agents on Claude with the provider's native structured output, and the evaluator uses
 `method="json_schema"`; forced tool choice is avoided because Claude Sonnet 5.5 / Opus 5.5 reject it. Everything else
-(rules, Graphify, rubric, reports, CLI/REST/MCP) is unchanged. ⛔ Not yet exercised live by the coding agent (no key
-in the sandbox) — only offline wiring tests (`tests/test_anthropic_provider.py`).
+(rules, Graphify, rubric, reports, CLI/REST/MCP) is unchanged. ✅ Exercised live on 2026-10-13: scan
+`20261013T092921Z-d24000` completed on `claude-sonnet-5-5` with precision 0.89 / recall 1.0 (see `demo/DEMO.md`).
 
 Optional: `ANALYZER_DLL` (defaults to the Release build path below), `MCP_ALLOWED_HOSTS` (extra `host:port` values for
 the MCP Host/Origin allowlist when clients reach the server under a non-loopback name).

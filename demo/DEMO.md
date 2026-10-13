@@ -46,7 +46,15 @@ perfect evaluator rejects N2/N6 with cited counter-evidence; if it keeps them th
 5. `uv run secureyourcode demo-evaluate --report <report.json> --truth demo/ground-truth.json` (only for `complete` runs).
 6. Graph refresh: README §6 (temporary copy, `built` → `updated`, new fingerprint).
 
-## What the coding agent actually observed (2026-10-12)
+## Live result (2026-10-13, Claude Sonnet 5.5 via `MODEL_PROVIDER=anthropic`)
+
+Scan `20261013T092921Z-d24000` — **complete** in 87 s, 8 model calls (67 289 in / 11 911 out tokens). All 8 seeded
+positives kept (72–100/100); both analyzer false positives (N2, N6) rejected by decisive, cited refutation; one AI-only
+finding (`AI-SEC-001`, ~31-bit session token) downgraded and counted as FP against the frozen truth.
+**`demo-evaluate`: TP 8 / FP 1 / FN 0 → precision 0.89, recall 1.00, F1 0.94.** Archived in `docs/runs/`.
+The Vertex Gemini path remains unexercised (no GCP credentials).
+
+## What the coding agent observed before credentials were available (2026-10-12)
 
 No Vertex credentials were available, so **no live Gemini review was run**; every real scan is `partial` with the
 reason recorded. All other stages ran for real:

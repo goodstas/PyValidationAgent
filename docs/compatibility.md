@@ -268,3 +268,28 @@ Three bugs reported by a Codex review of the branch were reproduced with new tes
 (all failed before the fix, pass after): timeout released the lock before worker threads stopped (server path only —
 the CLI path was masked because `asyncio.run()` joins the default executor on shutdown), `demo-evaluate --out` could
 overwrite its own input report, and usage totals reported `0` tokens instead of `not reported`.
+
+## LIVE model gate — PASSED with Claude Sonnet 5.5 (2026-10-13, operator-selected provider)
+
+Operator supplied an Anthropic API key and chose `MODEL_PROVIDER=anthropic`, `ANTHROPIC_MODEL=claude-sonnet-5-5`
+(the plan's Vertex Gemini gate itself remains unexercised — no GCP credentials). Key passed only via the process
+environment; verified absent from every archived file.
+
+```bash
+MODEL_PROVIDER=anthropic ANTHROPIC_MODEL=claude-sonnet-5-5 uv run secureyourcode scan --repo "$PWD/demo/DemoShop" --wait
+uv run secureyourcode demo-evaluate --report <run>/report/report.json --truth demo/ground-truth.json
+```
+
+| Item | Observed |
+|---|---|
+| Scan | `20261013T092921Z-d24000` — **`complete`**, no status reasons; wall 87 s (stage 0.35, graph 0.27 cached, roslyn 10.8, review 38.6, evaluate 34.3, report 0.2) |
+| Reviewers | both `completed`, 1 attempt each; `read_source`/`search_source` calls 8 + 8; Graphify reviewer calls 0 (optional); denied tool requests 0; canary not echoed |
+| Evaluator | 2 batches (Security 8/8, Performance 3/3), 1 attempt each |
+| Token usage (provider metadata, complete) | SecurityReviewer 3 calls 29 508/4 569; PerformanceReviewer 3 calls 23 961/2 301; Evaluator 2 calls 13 820/5 041; **total 8 calls, 67 289 in / 11 911 out** (≈ $0.25 at Sonnet 5.5 list price) |
+| Decisions | 8 keep (all 8 seeded positives, scores 72–100), 1 downgrade (AI-SEC-001), 2 reject — both analyzer false positives (N2 allowlisted CA3003, N6 UI `Random`) rejected by **decisive refutation with 3 and 2 host-validated counterexample citations** |
+| AI-only candidate | `AI-SEC-001` `TokenService.cs:14-18`: session token from a single `GetInt32` (~31 bits of entropy); evaluator partial refutation → score 47, downgrade. Counts as **FP** against the frozen truth (N5 labels that site negative *for CA5394*; the entropy point was never labelled). Truth left unchanged. |
+| `demo-evaluate` | **TP 8 / FP 1 / FN 0 → precision 0.8889, recall 1.0, F1 0.9412** (target ≥ 0.8 met) |
+| Artifacts | `docs/runs/20261013T092921Z-d24000/` (`report.json`, `report.html`, `status.json`, `demo_metrics.json`) |
+
+Claude-specific wiring confirmed live: `ProviderStrategy` native structured output with tools (no forced
+`tool_choice`), evaluator `method="json_schema"`, `max_tokens` 16 000, adaptive thinking default. No retries needed.
