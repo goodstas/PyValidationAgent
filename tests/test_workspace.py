@@ -123,6 +123,9 @@ def test_config_precedence_env_over_dotenv(tmp_outside: Path) -> None:
     assert s.gemini_model is None
     with pytest.raises(ConfigError, match="GEMINI_MODEL"):
         s.require_model()
+    placeholder = load_settings(env_file=tmp_outside / "missing", environ={"GEMINI_MODEL": "REPLACE_WITH_VERIFIED_MODEL_ID", "GOOGLE_CLOUD_PROJECT": "p"})
+    with pytest.raises(ConfigError, match="GEMINI_MODEL"):
+        placeholder.require_model()
 
 
 def test_server_auth_rules(tmp_outside: Path) -> None:

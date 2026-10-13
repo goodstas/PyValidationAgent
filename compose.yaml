@@ -1,11 +1,31 @@
-# Local single-container demo. Requires SERVICE_TOKEN (32+ chars), GOOGLE_CLOUD_PROJECT and GEMINI_MODEL in the
-# shell environment or .env, and Application Default Credentials at ADC_FILE (read-only mount).
+# Local single-container demo.
+#   export GOOGLE_CLOUD_PROJECT=... GEMINI_MODEL=... SERVICE_TOKEN=...   # or put them in .env
 #   export ADC_FILE="$HOME/.config/gcloud/application_default_credentials.json"
 #   docker compose up --build
+# The one-shot `init` service prepares what a non-root container cannot: it creates the host state directory
+# (default $HOME/.secureyourcode-state, outside this checkout) owned by the runtime UID 1654, and copies the ADC file
+# (gcloud writes it 0600 for your user) into a private volume readable by that UID. No manual chown/chmod needed.
 services:
-  secureyourcode:
-    build: .
+  init:
     image: secureyourcode:v2.3.1
+    build: .
+    user: root
+    entrypoint: ["sh", "-ec"]
+    command:
+      - |
+        mkdir -p /data && chown 1654:1654 /data
+        install -o 1654 -g 1654 -m 0400 /host/adc.json /run/secrets/adc.json
+    volumes:
+      - ${STATE_HOST_DIR:-${HOME}/.secureyourcode-state}:/data
+      - ${ADC_FILE:?set ADC_FILE to your ADC json}:/host/adc.json:ro
+      - adc:/run/secrets
+
+  secureyourcode:
+    image: secureyourcode:v2.3.1
+    build: .
+    depends_on:
+      init:
+        condition: service_completed_successfully
     ports:
       - "127.0.0.1:8000:8000"        # loopback only; use an SSH tunnel for remote access
     environment:
@@ -14,10 +34,13 @@ services:
       GOOGLE_GENAI_USE_VERTEXAI: "true"
       GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT:?set GOOGLE_CLOUD_PROJECT}
       GOOGLE_CLOUD_LOCATION: ${GOOGLE_CLOUD_LOCATION:-global}
-      GEMINI_MODEL: ${GEMINI_MODEL:?set GEMINI_MODEL}
+      GEMINI_MODEL: ${GEMINI_MODEL:?set GEMINI_MODEL to the exact Vertex model ID you verified}
       SERVICE_TOKEN: ${SERVICE_TOKEN:?set SERVICE_TOKEN (32+ random characters)}
       GOOGLE_APPLICATION_CREDENTIALS: /run/secrets/adc.json
     volumes:
       - ./demo/DemoShop:/workspace/repo:ro
-      - ${STATE_HOST_DIR:-./.secureyourcode-state}:/data
-      - ${ADC_FILE:?set ADC_FILE to your ADC json}:/run/secrets/adc.json:ro
+      - ${STATE_HOST_DIR:-${HOME}/.secureyourcode-state}:/data
+      - adc:/run/secrets:ro
+
+volumes:
+  adc:   # holds only the UID-1654-readable copy of the ADC file; `docker compose down -v` removes it

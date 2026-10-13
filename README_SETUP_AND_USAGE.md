@@ -55,7 +55,7 @@ an existing `.env` without changing verified values). `.env` is git-ignored.
 GOOGLE_CLOUD_PROJECT=YOUR_PROJECT_ID
 GOOGLE_CLOUD_LOCATION=global
 GOOGLE_GENAI_USE_VERTEXAI=true
-GEMINI_MODEL=gemini-3.5-flash            # mandatory; use the model your probe verified
+GEMINI_MODEL=REPLACE_WITH_VERIFIED_MODEL_ID   # mandatory; the exact ID your probe verified (plan proposes gemini-3.5-flash)
 REPO_ROOT=./demo/DemoShop                # server-side repo for REST/MCP (clients cannot pass paths)
 STATE_DIR=~/.secureyourcode-state        # must be outside the app repo and the analyzed repo
 SCAN_TIMEOUT_SECONDS=300
@@ -211,7 +211,10 @@ docker run --rm -p 127.0.0.1:8000:8000 --env-file .env `
   -e GOOGLE_APPLICATION_CREDENTIALS=/run/secrets/adc.json -e REPO_ROOT=/workspace/repo -e STATE_DIR=/data `
   secureyourcode:v2.3.1
 ```
-Or `docker compose up --build` with `SERVICE_TOKEN`, `GOOGLE_CLOUD_PROJECT`, `GEMINI_MODEL` and `ADC_FILE` exported.
+Or `docker compose up --build` with `SERVICE_TOKEN`, `GOOGLE_CLOUD_PROJECT`, `GEMINI_MODEL` and `ADC_FILE` exported. Compose runs
+a one-shot `init` service first that creates the state directory (default `$HOME/.secureyourcode-state`, override with
+`STATE_HOST_DIR`) with the container UID and copies the ADC file into a private volume readable by that UID, so no manual
+`chown`/`chmod` is needed.
 
 Image facts: Ubuntu 24.04 (Debian family) `mcr.microsoft.com/dotnet/sdk:10.0.103-noble`, Python 3.12, pinned `uv.lock`,
 analyzer built **and tested** during `docker build`, runs as non-root `app` (UID 1654), writes only `/data`; no repo,

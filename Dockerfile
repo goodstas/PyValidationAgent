@@ -9,36 +9,34 @@ ARG DOTNET_SDK_IMAGE=mcr.microsoft.com/dotnet/sdk:10.0.103-noble
 FROM ${DOTNET_SDK_IMAGE} AS analyzer
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1
 WORKDIR /src
+COPY scripts/docker-with-ca.sh /usr/local/bin/with-ca
 COPY global.json ./
 COPY roslyn/ ./roslyn/
-RUN --mount=type=secret,id=extra_ca,required=false \
-    if [ -s /run/secrets/extra_ca ]; then export SSL_CERT_FILE=/run/secrets/extra_ca; fi \
- && dotnet restore roslyn/SecureYourCode.PerformanceAnalyzer.Tests --locked-mode \
- && dotnet test roslyn/SecureYourCode.PerformanceAnalyzer.Tests -c Release --no-restore \
- && dotnet build roslyn/SecureYourCode.PerformanceAnalyzer -c Release --no-restore -o /out
+RUN --mount=type=secret,id=extra_ca,required=false with-ca sh -ec '\
+    dotnet restore roslyn/SecureYourCode.PerformanceAnalyzer.Tests --locked-mode; \
+    dotnet test roslyn/SecureYourCode.PerformanceAnalyzer.Tests -c Release --no-restore; \
+    dotnet build roslyn/SecureYourCode.PerformanceAnalyzer -c Release --no-restore -o /out'
+
 
 # ---- stage 2: runtime --------------------------------------------------------------------------------
 FROM ${DOTNET_SDK_IMAGE}
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1 DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 \
     PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 \
     UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=never UV_PROJECT_ENVIRONMENT=/app/.venv
-RUN --mount=type=secret,id=extra_ca,required=false \
-    if [ -s /run/secrets/extra_ca ]; then export SSL_CERT_FILE=/run/secrets/extra_ca PIP_CERT=/run/secrets/extra_ca; fi \
- && apt-get update \
- && apt-get install -y --no-install-recommends python3.12 python3.12-venv python3-pip git ca-certificates \
- && rm -rf /var/lib/apt/lists/* \
- && python3.12 -m pip install --no-cache-dir --break-system-packages uv==0.11.32
+COPY scripts/docker-with-ca.sh /usr/local/bin/with-ca
+RUN --mount=type=secret,id=extra_ca,required=false with-ca sh -ec '\
+    apt-get update; \
+    apt-get install -y --no-install-recommends python3.12 python3.12-venv python3-pip git ca-certificates; \
+    rm -rf /var/lib/apt/lists/*; \
+    python3.12 -m pip install --no-cache-dir --break-system-packages uv==0.11.32'
+
 
 WORKDIR /app
 COPY pyproject.toml uv.lock README.md ./
-RUN --mount=type=secret,id=extra_ca,required=false \
-    if [ -s /run/secrets/extra_ca ]; then export SSL_CERT_FILE=/run/secrets/extra_ca UV_NATIVE_TLS=1; fi \
- && uv sync --locked --no-dev --no-install-project --python /usr/bin/python3.12
+RUN --mount=type=secret,id=extra_ca,required=false with-ca uv sync --locked --no-dev --no-install-project --python /usr/bin/python3.12
 COPY global.json ./
 COPY src/ ./src/
-RUN --mount=type=secret,id=extra_ca,required=false \
-    if [ -s /run/secrets/extra_ca ]; then export SSL_CERT_FILE=/run/secrets/extra_ca UV_NATIVE_TLS=1; fi \
- && uv sync --locked --no-dev --python /usr/bin/python3.12
+RUN --mount=type=secret,id=extra_ca,required=false with-ca uv sync --locked --no-dev --python /usr/bin/python3.12
 COPY --from=analyzer /out/SecureYourCode.PerformanceAnalyzer.dll /app/analyzer/SecureYourCode.PerformanceAnalyzer.dll
 
 # Non-root runtime user (provided by the .NET image). Writable state only under /data.
@@ -54,6 +52,7 @@ ENV HOME=/home/app \
     GOOGLE_GENAI_USE_VERTEXAI=true
 
 # Warm the SDK for offline restore/build of a zero-PackageReference net10.0 web project (no repo copied in).
+# Needs no network (targeting packs ship in the SDK image), so no `with-ca` / secret mount here.
 RUN mkdir -p /tmp/warm && cd /tmp/warm \
  && printf '<Project Sdk="Microsoft.NET.Sdk.Web"><PropertyGroup><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings></PropertyGroup></Project>' > Warm.csproj \
  && printf 'var app = WebApplication.CreateBuilder(args).Build();\napp.Run();\n' > Program.cs \

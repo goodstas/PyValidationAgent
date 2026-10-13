@@ -49,7 +49,7 @@ class Settings:
 
     def require_model(self) -> None:
         """Live model calls need an explicit model, project and Vertex mode; fail clearly otherwise."""
-        if not self.gemini_model:
+        if not self.gemini_model or self.gemini_model.startswith(("REPLACE_", "YOUR_")):
             raise ConfigError("GEMINI_MODEL is not configured (it is mandatory; no default model is assumed).")
         if not self.google_cloud_project or self.google_cloud_project == "YOUR_PROJECT_ID":
             raise ConfigError("GOOGLE_CLOUD_PROJECT is not configured.")

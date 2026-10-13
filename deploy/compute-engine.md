@@ -32,13 +32,17 @@ Container-Optimized OS ships Docker. The VM metadata server provides ADC to the 
 
 ```bash
 gcloud compute ssh syc-demo --zone=$REGION-a
-# on the VM (COS: /home is writable; use a path you control)
-git clone https://YOUR_PUBLIC_GIT_HOST/YOU/DemoShop.git ~/demoshop     # or upload a ZIP with gcloud compute scp
-mkdir -p ~/syc-data && sudo chown 1654:1654 ~/syc-data
+# on the VM. Container-Optimized OS has Docker but NO git, so clone through a container:
+mkdir -p ~/demoshop ~/syc-data
+docker run --rm -v ~/demoshop:/repo alpine/git:2.47.2 clone --depth 1 https://YOUR_PUBLIC_GIT_HOST/YOU/DemoShop.git /repo/DemoShop
+#   alternative without a public Git URL — from your workstation:
+#   tar -C demo -czf DemoShop.tgz DemoShop && gcloud compute scp DemoShop.tgz syc-demo:~ --zone=$REGION-a
+#   then on the VM: tar -C ~/demoshop -xzf ~/DemoShop.tgz
+sudo chown 1654:1654 ~/syc-data
 docker-credential-gcr configure-docker --registries=$REGION-docker.pkg.dev
 TOKEN=$(head -c 48 /dev/urandom | base64 | tr -d '/+=' | head -c 48)
 docker run -d --name syc --restart unless-stopped -p 127.0.0.1:8000:8000 \
-  -v ~/demoshop:/workspace/repo:ro -v ~/syc-data:/data \
+  -v ~/demoshop/DemoShop:/workspace/repo:ro -v ~/syc-data:/data \
   -e REPO_ROOT=/workspace/repo -e STATE_DIR=/data \
   -e GOOGLE_CLOUD_PROJECT=$PROJECT -e GOOGLE_CLOUD_LOCATION=global -e GEMINI_MODEL=YOUR_VERIFIED_MODEL_ID \
   -e SERVICE_TOKEN="$TOKEN" \

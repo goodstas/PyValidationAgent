@@ -15,3 +15,15 @@
   `global.json` feature band (`10.0.100`, `rollForward: latestPatch`). The plain `10.0` tag is SDK 10.0.401.
 - CA3003 also fires on the strict-allowlist negative (`DocumentsController.Published`, `TryGetValue` from a
   fixed dictionary). That is a real analyzer false positive and is kept as an E1 evaluator challenge (ground truth N2).
+
+## Post-review fixes (2026-10-13)
+
+- `compose.yaml`: one-shot `init` service creates the state dir for UID 1654 and copies the 0600 ADC file into a
+  private volume readable by that UID; default `STATE_HOST_DIR` moved outside the checkout (`$HOME/.secureyourcode-state`).
+- `deploy/compute-engine.md`: Container-Optimized OS has no `git`; clone via `alpine/git` container or `scp` a tarball.
+- `scripts/smoke_client.py`: clear timeout message instead of a bare 409/`UnboundLocalError`; MCP `isError` results
+  surface the server's message. MCP connect/unwrap logic shared with tests via `secureyourcode.mcp_client`.
+- `.env.example` / `Settings.require_model`: `GEMINI_MODEL` ships as a `REPLACE_*` placeholder that is rejected at
+  config time, instead of an unverified concrete model ID.
+- `demo/freeze_ground_truth.py`: `__main__` guard; `freeze_ground_truth()` takes parsed entries.
+- `Dockerfile`: one `with-ca` helper replaces four copies of the optional-CA preamble.

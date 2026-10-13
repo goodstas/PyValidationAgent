@@ -6,18 +6,20 @@ Record every re-freeze and its reason in docs/compatibility.md. Never edit label
 
 import json
 import sys
-import tempfile
 from pathlib import Path
 
 from secureyourcode.demo_eval import freeze_ground_truth
 from secureyourcode.schemas import SCORING_VERSION
 
-here = Path(__file__).resolve().parent
-truth_path = here / "ground-truth.json"
-entries = json.loads(truth_path.read_text(encoding="utf-8"))["entries"]
-with tempfile.TemporaryDirectory() as tmp:
-    entries_file = Path(tmp) / "entries.json"
-    entries_file.write_text(json.dumps(entries), encoding="utf-8")
-    truth = freeze_ground_truth(entries_file, here / "DemoShop", truth_path, SCORING_VERSION)
-print(truth.fixture_fingerprint)
-sys.exit(0)
+
+def main() -> int:
+    here = Path(__file__).resolve().parent
+    truth_path = here / "ground-truth.json"
+    entries = json.loads(truth_path.read_text(encoding="utf-8"))["entries"]
+    truth = freeze_ground_truth(entries, here / "DemoShop", truth_path, SCORING_VERSION)
+    print(truth.fixture_fingerprint)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

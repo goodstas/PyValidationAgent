@@ -20,9 +20,9 @@ import httpx
 import pytest
 import uvicorn
 from mcp import ClientSession
-from mcp.client.streamable_http import streamable_http_client
 
 from secureyourcode.api import create_app
+from secureyourcode.mcp_client import open_session, tool_result
 from secureyourcode.service import ScanService
 
 from .conftest import APP_ROOT, DEMO, needs_dotnet
@@ -64,16 +64,11 @@ def token() -> str:
 
 
 async def _mcp(url: str, token: str | None, fn):
-    headers = {"Authorization": f"Bearer {token}"} if token else {}
-    async with httpx.AsyncClient(headers=headers, timeout=httpx.Timeout(30, read=300)) as http:
-        async with streamable_http_client(f"{url}/mcp", http_client=http) as (r, w, _):
-            async with ClientSession(r, w) as s:
-                await s.initialize()
-                return await fn(s)
+    async with open_session(url, token, read_timeout=300) as s:
+        return await fn(s)
 
 
-def _sc(result) -> dict:
-    return result.structuredContent.get("result", result.structuredContent) if result.structuredContent else {}
+_sc = tool_result
 
 
 def test_rest_auth_busy_409_and_report(settings_factory, token) -> None:

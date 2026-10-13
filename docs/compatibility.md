@@ -249,3 +249,15 @@ Not verified: ADC inside the container, Compute Engine, GKE (templates only).
    `complete`** and `demo-evaluate` has no valid input.
 2. **Windows** non-Docker run and Windows REST no-reload smoke test — not executed (Linux sandbox only).
 3. **Container ADC** and GCP deployments (Compute Engine, GKE) — not executed; examples only.
+
+## Post-review fixes verified (2026-10-13)
+
+* `docker compose up --no-build -d` with a **nonexistent** `STATE_HOST_DIR` and a **0600 root-owned** ADC file:
+  `init` exited 0; host state dir ended up `1654:1654`; inside the container `/run/secrets/adc.json` is `0400 1654:1654`
+  and readable; `/data` writable; `POST /scans` → scan `20261013T065313Z-8d10a1` ran (partial: fake ADC refresh token,
+  `TransportError` to `oauth2.googleapis.com` — the sandbox's containers have no internet). Previously this crashed with
+  `PermissionError` before the server started.
+* `scripts/smoke_client.py --timeout 0/1` prints a one-line `timed out after …` message (REST and MCP); a wrong token
+  prints `HTTP 401 from … (check SERVICE_TOKEN / URL)`; exit code 1 in both cases.
+* Image rebuilt with the `with-ca` helper (`build exit=0`, analyzer tests 15/15 in the analyzer stage).
+* `python -c "import demo.freeze_ground_truth"` has no side effect; running it leaves `ground-truth.json` unchanged.

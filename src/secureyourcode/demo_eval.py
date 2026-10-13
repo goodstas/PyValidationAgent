@@ -33,9 +33,10 @@ class DemoEvalError(RuntimeError):
     pass
 
 
-def freeze_ground_truth(entries_path: Path, fixture_root: Path, out_path: Path, scoring_version: str) -> GroundTruth:
-    entries = [TruthEntry.model_validate(e) for e in json.loads(entries_path.read_text(encoding="utf-8"))]
-    truth = GroundTruth(fixture_fingerprint=compute_fingerprint(fixture_root), scoring_version=scoring_version, entries=entries)
+def freeze_ground_truth(entries: list[dict] | list[TruthEntry], fixture_root: Path, out_path: Path, scoring_version: str) -> GroundTruth:
+    """Write ground truth with the fixture's current fingerprint. `entries` are validated TruthEntry rows or dicts."""
+    rows = [e if isinstance(e, TruthEntry) else TruthEntry.model_validate(e) for e in entries]
+    truth = GroundTruth(fixture_fingerprint=compute_fingerprint(fixture_root), scoring_version=scoring_version, entries=rows)
     out_path.write_text(truth.model_dump_json(indent=2) + "\n", encoding="utf-8", newline="\n")
     return truth
 
