@@ -1,5 +1,16 @@
 # SecureYourCode — Python / Deep Agents MVP implementation plan v2.3.1
 
+## User-requested container delivery addendum (2026-10-14)
+
+For the bundled `code-review-agent:v1.0` delivery, the user's explicit requirements override the older
+deployment restrictions below: include the trusted, unchanged DemoShop fixture in the image; allow public
+anonymous MCP/REST only when `ALLOW_UNAUTHENTICATED_PUBLIC=true` is explicitly set. A configured
+`SERVICE_TOKEN` still takes precedence. Preserve MCP Host/Origin validation and support HTTPS origins.
+Use persistent external `/data`, Vertex ADC through the runtime identity, and a runtime-selectable
+`GEMINI_MODEL`. Build locally, export an image archive, and provide Windows/Podman and Compute Engine
+instructions for workload project `hack-team-7-0ecb`; never deploy workloads to `eng-network`.
+See `deploy/IMAGE_RUNBOOK.md`. Other analysis, source-integrity and evidence requirements still apply.
+
 **Date:** 2026-10-12  
 **Status:** authoritative, self-contained instructions for Codex / Claude Code / Antigravity in unattended (YOLO) implementation.  
 **Priority:** working, honest demo > sophistication. Target **under five minutes for a warm scan**, not a guaranteed SLA.  

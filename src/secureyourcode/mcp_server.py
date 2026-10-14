@@ -18,7 +18,7 @@ def _transport_security() -> TransportSecuritySettings:
     origins = ["http://127.0.0.1:*", "http://localhost:*", "http://[::1]:*"]
     for h in filter(None, (x.strip() for x in os.environ.get("MCP_ALLOWED_HOSTS", "").split(","))):
         hosts.append(h)
-        origins.append(f"http://{h}")
+        origins.extend((f"http://{h}", f"https://{h}"))
     return TransportSecuritySettings(enable_dns_rebinding_protection=True, allowed_hosts=hosts, allowed_origins=origins)
 
 

@@ -25,6 +25,7 @@ DEFAULTS: dict[str, str] = {
     "SCAN_TIMEOUT_SECONDS": "300",
     "MAX_REVIEW_CANDIDATES": "16",
     "ALLOW_UNAUTHENTICATED_LOOPBACK": "false",
+    "ALLOW_UNAUTHENTICATED_PUBLIC": "false",
 }
 
 
@@ -52,6 +53,7 @@ class Settings:
     service_token: str | None = field(repr=False)
     allow_unauthenticated_loopback: bool
     analyzer_dll: Path
+    allow_unauthenticated_public: bool = False
     app_root: Path = APP_ROOT
 
     @property
@@ -136,6 +138,7 @@ def load_settings(env_file: Path | None = None, environ: dict[str, str] | None =
         service_token=get("SERVICE_TOKEN"),
         allow_unauthenticated_loopback=_truthy(get("ALLOW_UNAUTHENTICATED_LOOPBACK")),
         analyzer_dll=_resolve_path(analyzer, APP_ROOT),
+        allow_unauthenticated_public=_truthy(get("ALLOW_UNAUTHENTICATED_PUBLIC")),
     )
 
 
@@ -165,6 +168,8 @@ def validate_server_auth(settings: Settings, host: str) -> None:
             raise ConfigError("SERVICE_TOKEN is still the placeholder value; generate a random token of 32+ characters.")
         if len(token) < MIN_TOKEN_LENGTH:
             raise ConfigError(f"SERVICE_TOKEN must be at least {MIN_TOKEN_LENGTH} characters.")
+        return
+    if settings.allow_unauthenticated_public:
         return
     if not is_loopback(host):
         raise ConfigError("Refusing to bind a non-loopback address without SERVICE_TOKEN.")

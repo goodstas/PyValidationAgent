@@ -7,9 +7,15 @@
 **/obj
 **/__pycache__
 .pytest_cache
-demo/
+demo/*
+!demo/DemoShop/
+!demo/ground-truth.json
 docs/
 deploy/
 tests/
 *.sarif
 graphify-out/
+*.tar
+*.tar.gz
+*.zip
+artifacts/

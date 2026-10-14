@@ -1,5 +1,8 @@
 # Compute Engine (single VM, Docker) — example, not verified by a deployment
 
+For the bundled image and the requested public anonymous MCP deployment in `hack-team-7-0ecb`, follow
+[`IMAGE_RUNBOOK.md`](IMAGE_RUNBOOK.md). This older guide shows the alternative external-repository mount workflow.
+
 Status: these steps were **not executed** from the coding sandbox (no GCP identity was available). The image itself was
 built and scanned locally with Docker (see `docs/compatibility.md`).
 

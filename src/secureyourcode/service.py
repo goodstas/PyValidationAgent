@@ -260,10 +260,25 @@ class ScanService:
     # ------------------------------------------------------------------ pipeline
 
     async def _blocking(self, ctx: ScanContext, fn: Any, *args: Any) -> Any:
-        """Run a blocking stage in the scan executor, remembering its future so a timeout can wait for it."""
+        """Finish a worker before cancellation reaches filesystem cleanup or releases the lock."""
         future = self._executor.submit(fn, *args)
         ctx.inflight.add(future)
-        return await asyncio.wrap_future(future)
+        worker = asyncio.wrap_future(future)
+        try:
+            return await asyncio.shield(worker)
+        except asyncio.CancelledError:
+            # Applies both to scan timeouts and server shutdown. Cancelling an
+            # asyncio wrapper does not stop the thread (or its subprocess).
+            while not worker.done():
+                try:
+                    await asyncio.shield(worker)
+                except asyncio.CancelledError:
+                    continue
+                except Exception:
+                    break
+            if not worker.cancelled():
+                worker.exception()  # retrieve failures without masking cancellation
+            raise
 
     async def _drain_inflight(self, ctx: ScanContext) -> None:
         """After cancellation, block until every worker thread of this scan has stopped (their subprocesses are

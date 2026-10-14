@@ -140,3 +140,12 @@ def test_server_auth_rules(tmp_outside: Path) -> None:
         validate_server_auth(load_settings(none, {}), "127.0.0.1")
     validate_server_auth(load_settings(none, {"ALLOW_UNAUTHENTICATED_LOOPBACK": "true"}), "127.0.0.1")
     validate_server_auth(load_settings(none, {"SERVICE_TOKEN": "x" * 40}), "0.0.0.0")
+
+
+def test_public_anonymous_access_requires_explicit_opt_in(tmp_outside: Path) -> None:
+    none = tmp_outside / "none"
+    validate_server_auth(load_settings(none, {"ALLOW_UNAUTHENTICATED_PUBLIC": "true"}), "0.0.0.0")
+    with pytest.raises(ConfigError, match="non-loopback"):
+        validate_server_auth(load_settings(none, {"ALLOW_UNAUTHENTICATED_PUBLIC": "false"}), "0.0.0.0")
+    with pytest.raises(ConfigError, match="32"):
+        validate_server_auth(load_settings(none, {"ALLOW_UNAUTHENTICATED_PUBLIC": "true", "SERVICE_TOKEN": "short"}), "0.0.0.0")

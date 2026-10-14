@@ -1,5 +1,10 @@
 # SecureYourCode v2.3.1 — Setup, operation and demo runbook
 
+For the downloadable **bundled DemoShop image**, Windows/Podman ADC and public anonymous MCP on
+Compute Engine, use [`deploy/IMAGE_RUNBOOK.md`](deploy/IMAGE_RUNBOOK.md). The original mount-based
+examples below remain supported; the new image also includes DemoShop by default. Anonymous public
+binding requires the explicit `ALLOW_UNAUTHENTICATED_PUBLIC=true` option; tokens still take precedence.
+
 `IMPLEMENTATION_PLAN.md` (v2.3.1) is the authoritative specification. This runbook describes the **implemented**
 application. Each section says where its commands were actually executed (see `docs/compatibility.md` for the raw
 record). Supported demo: a trusted, seeded one-project .NET 10 C# repository; not a universal untrusted-code scanner.
@@ -226,12 +231,12 @@ a one-shot `init` service first that creates the state directory (default `$HOME
 `STATE_HOST_DIR`) with the container UID and copies the ADC file into a private volume readable by that UID, so no manual
 `chown`/`chmod` is needed.
 
-Image facts: Ubuntu 24.04 (Debian family) `mcr.microsoft.com/dotnet/sdk:10.0.103-noble`, Python 3.12, pinned `uv.lock`,
-analyzer built **and tested** during `docker build`, runs as non-root `app` (UID 1654), writes only `/data`; no repo,
-`.env` or keys baked in. Fixture restore/build works offline (`--network none` verified). The ADC file must be readable
+Image facts: Ubuntu 24.04 (Debian family), checksum-verified Microsoft .NET SDK 10.0.103, Python 3.12, pinned `uv.lock`,
+analyzer built **and tested** during `docker build`, runs as non-root `app` (UID 1654), stores scan state in `/data`;
+no `.env` or keys baked in; the current image includes the unchanged DemoShop fixture. Fixture restore/build works offline (`--network none` verified). The ADC file must be readable
 by UID 1654. `GOOGLE_APPLICATION_CREDENTIALS` is removed from the `dotnet`/Graphify child environments (hygiene only —
 MSBuild still executes project logic, so only scan trusted repositories). The listener binds `0.0.0.0` inside the
-container, so `SERVICE_TOKEN` is mandatory there.
+container, so provide `SERVICE_TOKEN` or explicitly opt into `ALLOW_UNAUTHENTICATED_PUBLIC=true`.
 
 ## 8. Compute Engine VM (⛔ example only)
 

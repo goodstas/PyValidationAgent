@@ -293,3 +293,82 @@ uv run secureyourcode demo-evaluate --report <run>/report/report.json --truth de
 
 Claude-specific wiring confirmed live: `ProviderStrategy` native structured output with tools (no forced
 `tool_choice`), evaluator `method="json_schema"`, `max_tokens` 16 000, adaptive thinking default. No retries needed.
+
+## Cloud code-review probes (2026-10-13)
+
+Reviewed `claude/focused-mayer-w705q4` at `877e2b043514128f60487c908f657dee6c413aa5`.
+`git ls-remote origin refs/heads/main` returned `57b1ec64730ea8e10ada59a3d40199607545f4df`;
+the comparison against that empty base covers the application implementation. No implementation fixes were applied.
+
+From `/workspace/PyValidationAgent`, after sourcing `/workspace/onboarding/PyValidationAgent/activate.sh`:
+
+```bash
+PYTHONPATH=/workspace/PyValidationAgent uv run --locked pytest -q --tb=short -o asyncio_mode=auto /tmp/syc-review/tests/test_review_regressions.py
+```
+
+Observed exit code 1, three targeted regression assertions failed in 3.01 seconds, confirming:
+
+* A one-second scan timeout releases the scan lock while a deliberately blocked staging worker still runs;
+  another service instance can acquire the same lock before that worker finishes. The probe releases and joins
+  its worker during cleanup. This uses the real scan lifecycle, with delayed staging confined to a test fixture.
+* Calling `run_demo_evaluate(report_path, truth_path, report_path)` replaces the original report with metrics JSON.
+  All input files in this probe are disposable test fixtures.
+* Two reviewer calls with absent usage metadata produce a total of zero input/output tokens and `partial`
+  coverage, although neither call reported token counts. Expected totals are absent with `not reported` coverage.
+
+Reproduction tests and output are local artifacts under `/tmp/syc-review/`; no production fake or runtime flag was added.
+The existing suites were not rerun during this review. Live Vertex behavior remains unverified because credentials
+and model/project configuration are unavailable.
+
+## Bundled container delivery (2026-10-14)
+
+Work remained on `claude/focused-mayer-w705q4`; incorporated upstream `3843d62` before final validation,
+including the upstream review fixes and optional Anthropic provider. The delivered image defaults to Vertex.
+The container includes the unchanged DemoShop fixture and requires an explicit public anonymous access opt-in.
+
+Commands and observed results:
+
+* `source /workspace/onboarding/PyValidationAgent/activate.sh; uv run --locked pytest -q -ra --tb=short`:
+  **67 passed in 191.98 seconds**. Added coverage for explicit public opt-in/token precedence, configured HTTPS
+  MCP origins (unconfigured Host still returns 421), input aliases and unknown token usage. A focused run after
+  integrating upstream initially reported 1 failure / 28 passes: shutdown cancellation could release scan
+  ownership before its worker finished. `_blocking` now shields and awaits that worker; the final suite passes
+  both timeout and shutdown ownership tests.
+* `bash -n scripts/export-image.sh` and Bash blocks extracted from `deploy/IMAGE_RUNBOOK.md`: passed syntax checks.
+  `git diff --check`: passed. Windows PowerShell/Podman commands were reviewed, not executed here.
+* The original MCR-based build was blocked by a forbidden regional blob host. The Dockerfile now uses digest-pinned
+  Ubuntu 24.04 and Microsoft's official SDK 10.0.103 archive, verified against its published SHA-512. Build networking
+  required the environment's proxy build arguments and a host mapping for its proxy hostname. TLS verification stayed
+  enabled; the supplied CA bundle was mounted as an ephemeral BuildKit secret. No proxy credentials were printed.
+* An intermediate build exhausted this environment's 32 GB disk because Docker uses the copy-based `vfs` driver.
+  Removed only this task's unused build cache (`docker builder prune --all --force`, with no existing images,
+  containers or volumes) and consolidated the Dockerfile into fewer layers. A later build exposed owner-only
+  checkout permissions on `/app/global.json`; packaging now grants read/traverse access to the runtime user while
+  retaining root ownership of application and fixture files.
+* Final build invoked `docker build --network=host --platform linux/amd64`, environment-provided proxy host/argument
+  options, `--secret id=extra_ca,src=<environment CA bundle> -t code-review-agent:v1.0 .` through the local driver
+  `/workspace/onboarding/PyValidationAgent/build-container.py`: **exit 0**. Locked dependency installation,
+  **15/15 analyzer tests**, Release analyzer build, non-root SDK warmup and runtime imports all passed.
+  Image: `sha256:2c08575f80df75ef013115c92af98549f3073f028969581529b2c426fa37afdf` (1,270,325,012 bytes).
+* `bash scripts/export-image.sh code-review-agent:v1.0 /workspace/artifacts`, then `sha256sum -c SHA256SUMS`
+  and `docker load -i code-review-agent-v1.0-linux-amd64.tar.gz`: all passed; Docker loaded the original tag.
+  Archive SHA-256: `3c71235cebca78e8469c1b77b11a53df412469c1338897cc414c6b441fc73490`.
+* `python3 /workspace/onboarding/PyValidationAgent/validate-image.py`: **exit 0**. Verified Linux/amd64,
+  UID 1654, non-writable bundled fixture matching frozen ground truth, no injected credential/proxy environment,
+  no `.env`, CA secret or generated development certificate. Default external bind refuses anonymous access
+  (exit 2); explicit `ALLOW_UNAUTHENTICATED_PUBLIC=true` serves health, REST and MCP.
+  With `--network none`, CLI scan `20261014T080202Z-905334` and MCP scan `20261014T080336Z-30a93b` each emitted
+  all eight expected rule IDs, made real Graphify MCP host queries and preserved the source fingerprint.
+  Graph status was `built` for CLI and `cached` for MCP. Both reports honestly say `partial` with unreviewed
+  findings because no model is configured. MCP initialize/list/trigger/poll/report succeeded; the queued report
+  returned `not_ready`. Both persisted reports were retrieved unchanged through REST before and after
+  `docker restart --time 30`. Task-owned validation containers and volume were removed after success.
+* `gh repo view` / `gh release list` and their REST API equivalents were denied by the environment's GitHub API
+  network access (`Forbidden`). This does not imply a repository permission or visibility setting. Git transport
+  remains available; downloadable image files are kept outside Git under `/workspace/artifacts`.
+
+Logs and validation scripts live outside the repository in `/workspace/onboarding/PyValidationAgent/`.
+The environment did not provide usable Google ADC (`google.auth.default()` raised `DefaultCredentialsError`).
+No live Vertex request, Windows/Podman execution, GCP deployment, registry push, or GHCR publication is claimed.
+`gemini-3.8-flash` is the user's runtime model choice, not a verified model availability claim; the supplied
+`scripts/vertex_probe.py` makes a real request with the chosen ADC identity, project, location and model.

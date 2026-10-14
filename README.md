@@ -8,6 +8,7 @@ offline `report.html`, exposed through a CLI, a REST API and an MCP server at `/
 | Read | For |
 |---|---|
 | [`README_SETUP_AND_USAGE.md`](README_SETUP_AND_USAGE.md) | setup, CLI/REST/MCP, Docker, GCP, troubleshooting |
+| [`deploy/IMAGE_RUNBOOK.md`](deploy/IMAGE_RUNBOOK.md) | bundled image archive, Windows/Podman ADC, Gemini and public MCP on Compute Engine |
 | [`demo/DEMO.md`](demo/DEMO.md) | five-minute demo script and seeded fixture map |
 | [`docs/compatibility.md`](docs/compatibility.md) | exact versions, probe commands, observed results, blockers |
 | [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_PLAN.md) | authoritative v2.3.1 specification |
