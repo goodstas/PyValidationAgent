@@ -11,6 +11,7 @@ offline `report.html`, exposed through a CLI, a REST API and an MCP server at `/
 | [`deploy/IMAGE_RUNBOOK.md`](deploy/IMAGE_RUNBOOK.md) | bundled image archive, Windows/Podman ADC, Gemini and public MCP on Compute Engine |
 | [`demo/DEMO.md`](demo/DEMO.md) | five-minute demo script and seeded fixture map |
 | [`docs/compatibility.md`](docs/compatibility.md) | exact versions, probe commands, observed results, blockers |
+| [`docs/media/SecureYourCode-demo.mp4`](docs/media/SecureYourCode-demo.mp4) | 20-second overview video of a real scan ([how it was made](docs/media/README.md)) |
 | [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_PLAN.md) | authoritative v2.3.1 specification |
 | [`AGENTS.md`](AGENTS.md) | rules for coding agents working on this repo |
 

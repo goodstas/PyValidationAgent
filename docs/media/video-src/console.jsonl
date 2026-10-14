@@ -1,0 +1,13 @@
+{"t": 0.0, "kind": "cmd", "line": "$ secureyourcode scan  ->  DemoShop (C# / .NET 10 web shop)"}
+{"t": 0.2, "kind": "ok", "line": "Scan started  20261014T161215Z-39d067"}
+{"t": 0.21, "kind": "phase:stage", "line": "> Taking a read-only snapshot of the code"}
+{"t": 0.47, "kind": "phase:graph", "line": "> Mapping the code structure (knowledge graph)"}
+{"t": 2.3, "kind": "phase:roslyn", "line": "> Static analysis: 5 security + 3 performance rules"}
+{"t": 30.76, "kind": "phase:review", "line": "> AI reviewers investigating each finding in the source"}
+{"t": 63.39, "kind": "phase:evaluate", "line": "> Independent AI evaluator challenging every finding"}
+{"t": 103.64, "kind": "status", "line": "Status: COMPLETE"}
+{"t": 103.64, "kind": "result", "line": "Confirmed issues: 8  (5 security, 3 performance)"}
+{"t": 103.64, "kind": "result", "line": "False alarms rejected with evidence: 2"}
+{"t": 103.64, "kind": "result", "line": "Lower-priority leads for a human to check: 2"}
+{"t": 103.64, "kind": "result", "line": "Time: 104s   Model cost: $0.28"}
+{"t": 103.64, "kind": "result", "line": "Report: runs/20261014T161215Z-39d067/report/report.html"}
