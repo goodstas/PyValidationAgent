@@ -9,3 +9,5 @@ Gemini review. `secureyourcode demo-evaluate` correctly refuses it (`Report stat
 
 `20261013T092921Z-d24000/` is a **real, complete** CLI scan on **Claude Sonnet 5.5** (`MODEL_PROVIDER=anthropic`),
 including the out-of-band `demo_metrics.json` (TP 8 / FP 1 / FN 0, precision 0.8889, recall 1.0, F1 0.9412).
+
+`20261014T085942Z-9af4ba/` is a **real, complete** scan run **inside the bundled image `code-review-agent:v1.0`** on Claude Sonnet 5.5, with its in-image `demo_metrics.json` (TP 8 / FP 2 / FN 0, precision 0.8, recall 1.0, F1 0.8889).

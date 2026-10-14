@@ -372,3 +372,33 @@ The environment did not provide usable Google ADC (`google.auth.default()` raise
 No live Vertex request, Windows/Podman execution, GCP deployment, registry push, or GHCR publication is claimed.
 `gemini-3.8-flash` is the user's runtime model choice, not a verified model availability claim; the supplied
 `scripts/vertex_probe.py` makes a real request with the chosen ADC identity, project, location and model.
+
+## LIVE gate inside the bundled image `code-review-agent:v1.0` — PASSED (2026-10-14, Claude Sonnet 5.5)
+
+Image from branch `artifacts/code-review-agent-v1.0` (13 parts → `code-review-agent-v1.0-linux-amd64.tar.gz`, every
+part and the archive SHA-256 verified against `manifest.json`/`SHA256SUMS`, `docker load` OK, source commit `6bb8d46`).
+Run from the sandbox with the key and workspace passed only through the process environment:
+
+```bash
+docker run --rm -v "$STATE:/data" -e ANTHROPIC_API_KEY -e ANTHROPIC_CUSTOM_HEADERS="anthropic-workspace-id: <id>" \
+  -e MODEL_PROVIDER=anthropic -e ANTHROPIC_MODEL=claude-sonnet-5-5 code-review-agent:v1.0 scan --repo /workspace/repo --wait
+docker run --rm -v "$STATE:/data" code-review-agent:v1.0 demo-evaluate --report /data/runs/<id>/report/report.json --truth /app/demo/ground-truth.json
+```
+(Sandbox-only extras, not needed elsewhere: the sandbox's TLS-intercepting egress CA mounted and `SSL_CERT_FILE` pointed at it;
+`ANTHROPIC_CUSTOM_HEADERS` because the operator's key was user-scoped and the org requires a workspace id.)
+
+| Item | Observed |
+|---|---|
+| Scan | `20261014T085942Z-9af4ba` — **`complete`**, wall 90 s (stage 0.03, graph 2.15 built, roslyn 11.63, review 32.99, evaluate 38.78) |
+| Reviewers | both `completed` first attempt; source-tool calls 7 + 8; Graphify reviewer calls 0; denied 0; canary not echoed |
+| Evaluator | Security 7/7, Performance 5/5, 1 attempt each |
+| Tokens (provider metadata, complete) | total 7 calls, 56452 in / 13354 out (≈ $0.25) |
+| Decisions | 8 keep (all seeded positives, 72–100), 2 downgrade (AI-only, below), 2 reject (analyzer false positives N2/N6, decisive cited refutation) |
+| AI-only candidates | * `AI-PERF-001` `Services/SessionStore.cs:7`: Sessions is a static ConcurrentDictionary. Touch adds a session ID with TryAdd and never updates or expires it. Entries are removed only if… → evaluator partial refutation, score 47, downgrade
+  * `AI-PERF-002` `Services/JobLauncher.cs:14`: QueuedJobLauncher adds each ProcessStartInfo to a ConcurrentQueue and never dequeues. The class has no consumer, and the queue has no capaci… → evaluator partial refutation, score 47, downgrade |
+| `demo-evaluate` (in-image, bundled truth) | **TP 8 / FP 2 / FN 0 → precision 0.8, recall 1.0, F1 0.8889** (target ≥ 0.8 met) |
+| Leak check | no key / workspace id in any state or report file |
+
+Run-to-run variance vs the host run (`20261013T092921Z-d24000`, precision 0.89): the E1 decisions are identical; only the
+AI-only candidate set differs (one security-entropy observation there, two performance observations here). Both are
+counted as FP by the frozen truth, which is left unchanged.
