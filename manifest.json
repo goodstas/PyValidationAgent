@@ -1,0 +1,72 @@
+{
+  "archive": "code-review-agent-v1.0-linux-amd64.tar.gz",
+  "bytes": 505338001,
+  "sha256": "3c71235cebca78e8469c1b77b11a53df412469c1338897cc414c6b441fc73490",
+  "parts": [
+    {
+      "file": "parts/image.part-000",
+      "bytes": 41943040,
+      "sha256": "19a73e7871b504cb8ed67d09c46b78ed1db9b2cfbc415335d29937bdd5d6410e"
+    },
+    {
+      "file": "parts/image.part-001",
+      "bytes": 41943040,
+      "sha256": "4ebe6514582901148ad1b9e63da974bf1755d271d393bcd93abeb0b7a0eb20bf"
+    },
+    {
+      "file": "parts/image.part-002",
+      "bytes": 41943040,
+      "sha256": "5a7046a2ae5e84031aa2176c75a88f835854afdfcb15fcb747065304cb42030d"
+    },
+    {
+      "file": "parts/image.part-003",
+      "bytes": 41943040,
+      "sha256": "1e0e3fc077dac8e9118c77801832152330d2437ff423ef7944cfe75d9a115a22"
+    },
+    {
+      "file": "parts/image.part-004",
+      "bytes": 41943040,
+      "sha256": "d9f52be92373c582c64e17e0f1d8e7c73f3013a9abe1ec66fa5f9a2453a556ae"
+    },
+    {
+      "file": "parts/image.part-005",
+      "bytes": 41943040,
+      "sha256": "546eddd3331c2200b9390adf5976fe50b1e44bb1e86f93b59e4b89a714ffc5bd"
+    },
+    {
+      "file": "parts/image.part-006",
+      "bytes": 41943040,
+      "sha256": "64c3d43988dcd8b06dcbb126fed84db43a5eca4b8966c1acc5f0ca90e495339e"
+    },
+    {
+      "file": "parts/image.part-007",
+      "bytes": 41943040,
+      "sha256": "b6aa75210313ea79458781fb8f93c7391438fdeef651592767b676b7bb2b4eb6"
+    },
+    {
+      "file": "parts/image.part-008",
+      "bytes": 41943040,
+      "sha256": "ef330949f35b0857e501d42fdad033f9db49bab3b9760f44f9681b971148c319"
+    },
+    {
+      "file": "parts/image.part-009",
+      "bytes": 41943040,
+      "sha256": "ba86a38475e00fc7f46bf5d1b6aca01ed74a77702908a68f44b9cb53aa79464f"
+    },
+    {
+      "file": "parts/image.part-010",
+      "bytes": 41943040,
+      "sha256": "309587431faaabae8beeb1e3da85a1c418605990e047e5f522823ae16f95c25d"
+    },
+    {
+      "file": "parts/image.part-011",
+      "bytes": 41943040,
+      "sha256": "54a29b80549de2e1eab2e78ee1aef635f2aa2a69c9a36854353aea7e473a2489"
+    },
+    {
+      "file": "parts/image.part-012",
+      "bytes": 2021521,
+      "sha256": "fcfe5142d0fb2915ef0feae9ad99bb0b224beeeacad08280c520a9dbc0b5ec3f"
+    }
+  ]
+}

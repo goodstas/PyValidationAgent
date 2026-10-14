@@ -1,0 +1,24 @@
+{
+  "image": "code-review-agent:v1.0",
+  "platform": "linux/amd64",
+  "image_id": "sha256:2c08575f80df75ef013115c92af98549f3073f028969581529b2c426fa37afdf",
+  "source_repository": "https://github.com/goodstas/PyValidationAgent",
+  "source_branch": "claude/focused-mayer-w705q4",
+  "source_commit": "6bb8d4683ce6b8858c614f1848869c44f1267665",
+  "archive": "code-review-agent-v1.0-linux-amd64.tar.gz",
+  "archive_bytes": 505338001,
+  "archive_sha256": "3c71235cebca78e8469c1b77b11a53df412469c1338897cc414c6b441fc73490",
+  "validation": {
+    "python_tests_passed": 67,
+    "analyzer_tests_passed": 15,
+    "container_cli_and_mcp": "passed, expected partial without model",
+    "report_persistence_after_restart": "passed",
+    "archive_checksum_and_docker_load": "passed",
+    "live_vertex_gemini": "not tested; requires usable ADC and verified model availability",
+    "windows_podman": "instructions supplied, not executed",
+    "gcp_deployment": "not performed"
+  },
+  "runtime_model_variable": "GEMINI_MODEL",
+  "gcp_project": "hack-team-7-0ecb",
+  "target_registry_image": "me-west1-docker.pkg.dev/hack-team-7-0ecb/hack-team-7-docker-repo/code-review-agent:v1.0"
+}
