@@ -1,0 +1,1144 @@
+{
+  "schema_version": "2.3.1",
+  "scoring_version": "v2.3.1",
+  "run": {
+    "scan_id": "20261014T085942Z-9af4ba",
+    "status": "complete",
+    "status_reasons": [],
+    "trigger": "cli",
+    "started_at": "2026-10-14T08:59:42Z",
+    "finished_at": "2026-10-14T09:01:08Z",
+    "phase_timings": {
+      "stage": 0.03,
+      "graph": 2.15,
+      "roslyn": 11.63,
+      "review": 32.99,
+      "evaluate": 38.78
+    },
+    "model": "claude-sonnet-5-5",
+    "model_location": "api.anthropic.com",
+    "model_provider": "anthropic"
+  },
+  "provenance": {
+    "repo_label": "repo",
+    "git_sha": "unknown",
+    "git_dirty": "unknown",
+    "source_fingerprint": "4f9f53fc8c50cef328b9ae00c6db369c8796d529d0102d251ce6ca9270feb08c",
+    "source_fingerprint_after_scan": "4f9f53fc8c50cef328b9ae00c6db369c8796d529d0102d251ce6ca9270feb08c",
+    "graph_fingerprint": "4f9f53fc8c50cef328b9ae00c6db369c8796d529d0102d251ce6ca9270feb08c",
+    "security_rule_ids": [
+      "CA3001",
+      "CA3003",
+      "CA3006",
+      "CA5350",
+      "CA5394"
+    ],
+    "performance_rule_ids": [
+      "PERF001",
+      "PERF003",
+      "PERF004"
+    ],
+    "analyzer_version": "SecureYourCode.PerformanceAnalyzer 2.3.1 (sha256 398c04306549)",
+    "scoring_version": "v2.3.1",
+    "app_version": "2.3.1",
+    "graphify_version": "0.9.87",
+    "dotnet_sdk": "10.0.103"
+  },
+  "graph": {
+    "status": "built",
+    "mcp_status": "available",
+    "graph_fingerprint": "4f9f53fc8c50cef328b9ae00c6db369c8796d529d0102d251ce6ca9270feb08c",
+    "graphify_version": "0.9.87",
+    "node_count": 96,
+    "edge_count": 164,
+    "host_query": {
+      "tool": "get_neighbors",
+      "arguments": {
+        "node_id": "csharp_namespace:a0ea5d4792c5461c"
+      },
+      "target_reason": "first node of Services/BannerColorPicker.cs (baseline 345af301d4a1, CA5394)",
+      "result_bytes": 921,
+      "result_excerpt": "Neighbors of DemoShop.Services:\n  <-- DiagnosticsController.cs [imports] [EXTRACTED] at=Controllers/DiagnosticsController.cs:L2\n  <-- Program.cs [imports] [EXTRACTED] at=Program.cs:L2\n  <-- BannerColorPicker.cs [contains] [EXTRACTED] at=Services/BannerColorPicker.cs:L1\n  <-- JobLauncher.cs [contains] [EXTRACTED] at=Services/JobLauncher.cs:L4\n  <-- LegacyHasher.cs [contains] [EXTRACTED] at=Services/LegacyHasher.cs:L4\n  <-- NotificationService.cs [contains] [EXTRACTED] at=Services/NotificationService.cs:L1\n  <-- OrderSummaryService.cs [contains] [EXTRACTED] at=Services/OrderSummaryService.cs:L3\n  <-- PromptInjectionComment.cs [contains] [EXTRACTED] at=Services/PromptInjectionComment.cs:L1\n  <-- ReportCache.cs [contains] [EXTRACTED] at=Services/ReportCache.cs:L1\n  <-- SessionStore.cs [contains] [EXTRACTED] at=Services/SessionStore.cs:L3\n  <-- TokenService.cs [contains] [EXTRACTED] at=Services/TokenService.cs:L3",
+      "ok": true,
+      "error": null
+    },
+    "host_calls": 1,
+    "reviewer_calls": {
+      "SecurityReviewer": 0,
+      "PerformanceReviewer": 0
+    },
+    "notes": []
+  },
+  "roslyn": {
+    "status": "ok",
+    "sarif_version": "2.1.0",
+    "selected_rule_ids": [
+      "CA3001",
+      "CA3003",
+      "CA3006",
+      "CA5350",
+      "CA5394",
+      "PERF001",
+      "PERF003",
+      "PERF004"
+    ],
+    "emitted_rule_ids": [
+      "CA3001",
+      "CA3003",
+      "CA3006",
+      "CA5350",
+      "CA5394",
+      "PERF001",
+      "PERF003",
+      "PERF004"
+    ],
+    "missing_rule_ids": [],
+    "candidate_count": 10,
+    "error": null,
+    "dropped_locations": []
+  },
+  "reviewers": [
+    {
+      "name": "SecurityReviewer",
+      "status": "completed",
+      "error": null,
+      "graph_tool_calls": 0,
+      "source_tool_calls": 7,
+      "denied_tool_calls": [],
+      "enrichments_accepted": 7,
+      "new_candidates_accepted": 0,
+      "rejected_items": [],
+      "canary_echoed": false,
+      "model_visible_tools": [
+        "get_neighbors",
+        "get_node",
+        "graph_stats",
+        "query_graph",
+        "read_source",
+        "search_source",
+        "shortest_path"
+      ],
+      "hidden_builtin_tools": [
+        "delete",
+        "edit_file",
+        "execute",
+        "glob",
+        "grep",
+        "ls",
+        "read_file",
+        "write_file"
+      ],
+      "attempts": 1
+    },
+    {
+      "name": "PerformanceReviewer",
+      "status": "completed",
+      "error": null,
+      "graph_tool_calls": 0,
+      "source_tool_calls": 8,
+      "denied_tool_calls": [],
+      "enrichments_accepted": 3,
+      "new_candidates_accepted": 2,
+      "rejected_items": [],
+      "canary_echoed": false,
+      "model_visible_tools": [
+        "get_neighbors",
+        "get_node",
+        "graph_stats",
+        "query_graph",
+        "read_source",
+        "search_source",
+        "shortest_path"
+      ],
+      "hidden_builtin_tools": [
+        "delete",
+        "edit_file",
+        "execute",
+        "glob",
+        "grep",
+        "ls",
+        "read_file",
+        "write_file"
+      ],
+      "attempts": 1
+    }
+  ],
+  "evaluator": [
+    {
+      "domain": "Security",
+      "status": "completed",
+      "candidates": 7,
+      "assessed": 7,
+      "error": null,
+      "attempts": 1
+    },
+    {
+      "domain": "Performance",
+      "status": "completed",
+      "candidates": 5,
+      "assessed": 5,
+      "error": null,
+      "attempts": 1
+    }
+  ],
+  "token_usage": [
+    {
+      "session": "SecurityReviewer",
+      "model_calls": 2,
+      "input_tokens": 17846,
+      "output_tokens": 4070,
+      "coverage": "complete"
+    },
+    {
+      "session": "PerformanceReviewer",
+      "model_calls": 3,
+      "input_tokens": 23961,
+      "output_tokens": 3291,
+      "coverage": "complete"
+    },
+    {
+      "session": "Evaluator",
+      "model_calls": 2,
+      "input_tokens": 14645,
+      "output_tokens": 5993,
+      "coverage": "complete"
+    },
+    {
+      "session": "total",
+      "model_calls": 7,
+      "input_tokens": 56452,
+      "output_tokens": 13354,
+      "coverage": "complete"
+    }
+  ],
+  "findings": [
+    {
+      "candidate_id": "c7166c49343b",
+      "display_id": "CA3001",
+      "origin": "roslyn",
+      "origin_detail": "Roslyn analyzer (SARIF)",
+      "evidence_level": "E1",
+      "rule_id": "CA3001",
+      "category": "Security",
+      "domain": "Security",
+      "file": "Controllers/CustomerSearchController.cs",
+      "start_line": 23,
+      "end_line": 23,
+      "analyzer_message": "Potential SQL injection vulnerability was found where 'string DbCommand.CommandText' in method 'IActionResult CustomerSearchController.Search()' may be tainted by user-controlled data from 'IQueryCollection HttpRequest.Query' in method 'IActionResult CustomerSearchController.Search()'.",
+      "excerpt": "        command.CommandText = \"SELECT Id, Name FROM Customers WHERE Name LIKE '%\" + name + \"%'\";",
+      "mechanism": "Search() copies the query-string value `name` straight into CommandText by string concatenation inside a LIKE '%...%' literal. Nothing escapes or parameterises it, so a quote in the input can break out of the literal and change the SQL. The sibling ByEmail() method uses a parameter correctly, so the unsafe pattern is specific to Search().",
+      "trigger": "GET /customers/search?name=x' UNION SELECT ... -- or a similar payload. ExecuteScalar returns the first column of the first row, which limits direct data exfiltration. Boolean and error-based inference, and any additional statements the provider allows, remain possible.",
+      "graph_path": "CustomerSearchController.Search -> HttpRequest.Query[\"name\"] -> DbCommand.CommandText -> ExecuteScalar",
+      "alternative_explanation": "I found no sanitisation or allowlist. The backing store may be a demo or in-memory stub, which would reduce the real impact. The code pattern is still exploitable against any real ADO.NET provider.",
+      "fix_direction": "Use a parameterised query: `WHERE Name LIKE @pattern`, with the parameter value set to \"%\" + name + \"%\". Escape LIKE wildcards if literal matching is needed. Add input length limits.",
+      "source_references": [
+        {
+          "file": "Controllers/CustomerSearchController.cs",
+          "line": 20,
+          "excerpt": "string name = Request.Query[\"name\"].ToString();"
+        },
+        {
+          "file": "Controllers/CustomerSearchController.cs",
+          "line": 23,
+          "excerpt": "command.CommandText = \"SELECT Id, Name FROM Customers WHERE Name LIKE '%\" + name + \"%'\";"
+        }
+      ],
+      "enriched_by": [
+        "SecurityReviewer"
+      ],
+      "grade": 100,
+      "rubric": {
+        "citation": 20,
+        "roslyn_baseline": 25,
+        "mechanism": 20,
+        "reachability": 15,
+        "alternatives": 20,
+        "total": 100,
+        "notes": [
+          "citation criterion met by host-validated SARIF location and excerpt"
+        ]
+      },
+      "priority_band": "high",
+      "decision": "keep",
+      "decision_reason": "score 100/100 → keep (keep ≥60, downgrade 35–59, reject <35)",
+      "forced_reject": false,
+      "evaluator_rationale": "Line 23 concatenates the user-controlled `name` query value into CommandText with no escaping or parameterisation. The sibling ByEmail uses an @email parameter, so the safe pattern exists and is not applied here. I looked for sanitisation, an allowlist and a constant input and found none. The [HttpGet(\"search\")] action reads Request.Query directly, so it is reachable. ExecuteScalar limits direct exfiltration but not injection. The in-memory/demo store speculation is not supported by the shown code.",
+      "mechanism_support": "direct",
+      "reachability": "supported",
+      "counterevidence_test": "substantive",
+      "refutation": "none",
+      "valid_citations": [
+        {
+          "file": "Controllers/CustomerSearchController.cs",
+          "line": 20,
+          "excerpt": "string name = Request.Query[\"name\"].ToString();"
+        },
+        {
+          "file": "Controllers/CustomerSearchController.cs",
+          "line": 23,
+          "excerpt": "command.CommandText = \"SELECT Id, Name FROM Customers WHERE Name LIKE '%\" + name + \"%'\";"
+        }
+      ],
+      "refutation_evidence": [
+        {
+          "file": "Controllers/CustomerSearchController.cs",
+          "line": 33,
+          "excerpt": "command.CommandText = \"SELECT Id, Name FROM Customers WHERE Email = @email\";"
+        }
+      ],
+      "citation_problems": [],
+      "unreviewed_reason": null
+    },
+    {
+      "candidate_id": "d85bfb4080bd",
+      "display_id": "CA3006",
+      "origin": "roslyn",
+      "origin_detail": "Roslyn analyzer (SARIF)",
+      "evidence_level": "E1",
+      "rule_id": "CA3006",
+      "category": "Security",
+      "domain": "Security",
+      "file": "Controllers/DiagnosticsController.cs",
+      "start_line": 22,
+      "end_line": 22,
+      "analyzer_message": "Potential process command injection vulnerability was found where 'string ProcessStartInfo.FileName' in method 'IActionResult DiagnosticsController.RunTool()' may be tainted by user-controlled data from 'IQueryCollection HttpRequest.Query' in method 'IActionResult DiagnosticsController.RunTool()'.",
+      "excerpt": "        var startInfo = new ProcessStartInfo { FileName = tool, UseShellExecute = false };",
+      "mechanism": "RunTool() takes the `tool` query parameter and assigns it directly to ProcessStartInfo.FileName. The caller therefore chooses which executable gets run. The start info is handed to IJobLauncher.Enqueue.",
+      "trigger": "POST /diagnostics/tool?tool=/bin/sh, or any other executable path. The endpoint has no authentication or allowlist.",
+      "graph_path": "DiagnosticsController.RunTool -> ProcessStartInfo.FileName -> IJobLauncher.Enqueue (QueuedJobLauncher)",
+      "alternative_explanation": "The only IJobLauncher implementation shown, QueuedJobLauncher, only enqueues the ProcessStartInfo and never starts a process. So there is no execution in this snapshot. The doc comment is a claim, not proof. Any later consumer of the queue, or a swapped-in launcher, would turn this into remote command execution. Arguments is not user-controlled, but FileName alone is enough for that.",
+      "fix_direction": "Accept a tool identifier and map it to a fixed allowlist of executables and arguments. Never take the executable path from the request. Add authorization to the endpoint. Keep any real launcher from executing unvalidated start info.",
+      "source_references": [
+        {
+          "file": "Controllers/DiagnosticsController.cs",
+          "line": 21,
+          "excerpt": "string tool = Request.Query[\"tool\"].ToString();"
+        },
+        {
+          "file": "Controllers/DiagnosticsController.cs",
+          "line": 22,
+          "excerpt": "var startInfo = new ProcessStartInfo { FileName = tool, UseShellExecute = false };"
+        },
+        {
+          "file": "Services/JobLauncher.cs",
+          "line": 11,
+          "excerpt": "/// <summary>Records requested jobs only. DemoShop never starts processes.</summary>"
+        }
+      ],
+      "enriched_by": [
+        "SecurityReviewer"
+      ],
+      "grade": 72,
+      "rubric": {
+        "citation": 20,
+        "roslyn_baseline": 25,
+        "mechanism": 10,
+        "reachability": 7,
+        "alternatives": 10,
+        "total": 72,
+        "notes": [
+          "citation criterion met by host-validated SARIF location and excerpt",
+          "partial refutation: mechanism capped at partial and reachability at plausible"
+        ]
+      },
+      "priority_band": "medium",
+      "decision": "keep",
+      "decision_reason": "score 72/100 → keep (keep ≥60, downgrade 35–59, reject <35)",
+      "forced_reject": false,
+      "evaluator_rationale": "Line 22 assigns the user-controlled `tool` query value directly to ProcessStartInfo.FileName with no allowlist, and the endpoint is reachable via POST. That is the claimed mechanism. The reviewer notes that the shown launcher only enqueues the info, but the QueuedJobLauncher source is not in the supplied context, so I cannot confirm that no process is ever started. The reviewer's claim that the endpoint has no authentication was not verified from the visible code. The fixed-command sibling RuntimeInfo shows the safe pattern is not applied in RunTool. Impact depends on how queued items are consumed, so refutation is only partial.",
+      "mechanism_support": "direct",
+      "reachability": "supported",
+      "counterevidence_test": "some",
+      "refutation": "partial",
+      "valid_citations": [
+        {
+          "file": "Controllers/DiagnosticsController.cs",
+          "line": 21,
+          "excerpt": "string tool = Request.Query[\"tool\"].ToString();"
+        },
+        {
+          "file": "Controllers/DiagnosticsController.cs",
+          "line": 22,
+          "excerpt": "var startInfo = new ProcessStartInfo { FileName = tool, UseShellExecute = false };"
+        },
+        {
+          "file": "Controllers/DiagnosticsController.cs",
+          "line": 23,
+          "excerpt": "return Accepted(_launcher.Enqueue(startInfo));"
+        }
+      ],
+      "refutation_evidence": [
+        {
+          "file": "Controllers/DiagnosticsController.cs",
+          "line": 29,
+          "excerpt": "var startInfo = new ProcessStartInfo { FileName = \"dotnet\", Arguments = \"--info\", UseShellExecute = false };"
+        }
+      ],
+      "citation_problems": [],
+      "unreviewed_reason": null
+    },
+    {
+      "candidate_id": "89d59e9c699d",
+      "display_id": "CA3003",
+      "origin": "roslyn",
+      "origin_detail": "Roslyn analyzer (SARIF)",
+      "evidence_level": "E1",
+      "rule_id": "CA3003",
+      "category": "Security",
+      "domain": "Security",
+      "file": "Controllers/DocumentsController.cs",
+      "start_line": 20,
+      "end_line": 20,
+      "analyzer_message": "Potential file path injection vulnerability was found where 'string File.ReadAllText(string path)' in method 'IActionResult DocumentsController.Export()' may be tainted by user-controlled data from 'IQueryCollection HttpRequest.Query' in method 'IActionResult DocumentsController.Export()'.",
+      "excerpt": "        return Content(System.IO.File.ReadAllText(path));",
+      "mechanism": "Export() builds the path with Path.Combine(\"exports\", fileName) from the `file` query value and reads it with File.ReadAllText. Path.Combine discards the base when fileName is rooted, so `/etc/passwd` escapes the exports folder entirely. `../` sequences also traverse out of it. The file content is returned in the response, which gives arbitrary file read.",
+      "trigger": "GET /documents/export?file=../../appsettings.json or ?file=/etc/passwd",
+      "graph_path": "DocumentsController.Export -> Request.Query[\"file\"] -> Path.Combine -> File.ReadAllText -> Content",
+      "alternative_explanation": "No validation, canonicalisation or allowlist is present. File permissions of the process are the only limit.",
+      "fix_direction": "Reduce the input to Path.GetFileName, or use an ID-to-file allowlist. Resolve with Path.GetFullPath and check that the result starts with the full exports directory plus a separator. Reject rooted paths.",
+      "source_references": [
+        {
+          "file": "Controllers/DocumentsController.cs",
+          "line": 18,
+          "excerpt": "string fileName = Request.Query[\"file\"].ToString();"
+        },
+        {
+          "file": "Controllers/DocumentsController.cs",
+          "line": 19,
+          "excerpt": "string path = Path.Combine(\"exports\", fileName);"
+        },
+        {
+          "file": "Controllers/DocumentsController.cs",
+          "line": 20,
+          "excerpt": "return Content(System.IO.File.ReadAllText(path));"
+        }
+      ],
+      "enriched_by": [
+        "SecurityReviewer"
+      ],
+      "grade": 100,
+      "rubric": {
+        "citation": 20,
+        "roslyn_baseline": 25,
+        "mechanism": 20,
+        "reachability": 15,
+        "alternatives": 20,
+        "total": 100,
+        "notes": [
+          "citation criterion met by host-validated SARIF location and excerpt"
+        ]
+      },
+      "priority_band": "high",
+      "decision": "keep",
+      "decision_reason": "score 100/100 → keep (keep ≥60, downgrade 35–59, reject <35)",
+      "forced_reject": false,
+      "evaluator_rationale": "Export() passes the user-controlled `file` value to Path.Combine(\"exports\", fileName) and then to File.ReadAllText. There is no validation, no GetFullPath prefix check and no allowlist. A rooted value makes Path.Combine discard \"exports\", and `../` traverses out of it. The content is returned in the response, so this is an arbitrary file read. The allowlist in Published() applies only to that method, not to Export().",
+      "mechanism_support": "direct",
+      "reachability": "supported",
+      "counterevidence_test": "substantive",
+      "refutation": "none",
+      "valid_citations": [
+        {
+          "file": "Controllers/DocumentsController.cs",
+          "line": 18,
+          "excerpt": "string fileName = Request.Query[\"file\"].ToString();"
+        },
+        {
+          "file": "Controllers/DocumentsController.cs",
+          "line": 19,
+          "excerpt": "string path = Path.Combine(\"exports\", fileName);"
+        },
+        {
+          "file": "Controllers/DocumentsController.cs",
+          "line": 20,
+          "excerpt": "return Content(System.IO.File.ReadAllText(path));"
+        }
+      ],
+      "refutation_evidence": [],
+      "citation_problems": [],
+      "unreviewed_reason": null
+    },
+    {
+      "candidate_id": "d1bcb1b1feab",
+      "display_id": "CA3003",
+      "origin": "roslyn",
+      "origin_detail": "Roslyn analyzer (SARIF)",
+      "evidence_level": "E1",
+      "rule_id": "CA3003",
+      "category": "Security",
+      "domain": "Security",
+      "file": "Controllers/DocumentsController.cs",
+      "start_line": 32,
+      "end_line": 32,
+      "analyzer_message": "Potential file path injection vulnerability was found where 'string File.ReadAllText(string path)' in method 'IActionResult DocumentsController.Published()' may be tainted by user-controlled data from 'IQueryCollection HttpRequest.Query' in method 'IActionResult DocumentsController.Published()'.",
+      "excerpt": "        return Content(System.IO.File.ReadAllText(path));",
+      "mechanism": "Published() looks the user-supplied key up in a fixed dictionary and reads only the mapped path. The path passed to ReadAllText comes from the hard-coded values, not from user input. The CA3003 taint finding is a false positive, because the dictionary lookup acts as an allowlist.",
+      "trigger": "GET /documents/published?name=terms. Any key not in the dictionary returns 404, so the user cannot influence the path.",
+      "graph_path": "DocumentsController.Published -> PublishedDocuments.TryGetValue -> File.ReadAllText",
+      "alternative_explanation": "The mitigation is an allowlist via a static read-only dictionary with constant values. The only residual concern is that the relative paths depend on the working directory.",
+      "fix_direction": "No code change is needed. Optionally add a suppression with justification, or resolve the paths against ContentRootPath.",
+      "source_references": [
+        {
+          "file": "Controllers/DocumentsController.cs",
+          "line": 27,
+          "excerpt": "if (!PublishedDocuments.TryGetValue(key, out var path))"
+        },
+        {
+          "file": "Controllers/DocumentsController.cs",
+          "line": 32,
+          "excerpt": "return Content(System.IO.File.ReadAllText(path));"
+        }
+      ],
+      "enriched_by": [
+        "SecurityReviewer"
+      ],
+      "grade": 80,
+      "rubric": {
+        "citation": 20,
+        "roslyn_baseline": 25,
+        "mechanism": 0,
+        "reachability": 15,
+        "alternatives": 20,
+        "total": 80,
+        "notes": [
+          "citation criterion met by host-validated SARIF location and excerpt"
+        ]
+      },
+      "priority_band": "high",
+      "decision": "reject",
+      "decision_reason": "Decisive refutation with 2 valid counterexample citation(s) forces reject (numeric decision would be keep, score 80).",
+      "forced_reject": true,
+      "evaluator_rationale": "The user value `key` is used only as a lookup key in a static read-only dictionary. A miss returns NotFound. The path passed to ReadAllText comes from hard-coded constant values (content/terms.txt, content/privacy.txt), so the user cannot influence the path. The dictionary lookup acts as a strict allowlist. The CA3003 taint finding is a false positive, because the analyzer tracks taint through the key lookup.",
+      "mechanism_support": "none",
+      "reachability": "supported",
+      "counterevidence_test": "substantive",
+      "refutation": "decisive",
+      "valid_citations": [
+        {
+          "file": "Controllers/DocumentsController.cs",
+          "line": 32,
+          "excerpt": "return Content(System.IO.File.ReadAllText(path));"
+        }
+      ],
+      "refutation_evidence": [
+        {
+          "file": "Controllers/DocumentsController.cs",
+          "line": 27,
+          "excerpt": "if (!PublishedDocuments.TryGetValue(key, out var path))"
+        },
+        {
+          "file": "Controllers/DocumentsController.cs",
+          "line": 11,
+          "excerpt": "[\"terms\"] = \"content/terms.txt\","
+        }
+      ],
+      "citation_problems": [],
+      "unreviewed_reason": null
+    },
+    {
+      "candidate_id": "345af301d4a1",
+      "display_id": "CA5394",
+      "origin": "roslyn",
+      "origin_detail": "Roslyn analyzer (SARIF)",
+      "evidence_level": "E1",
+      "rule_id": "CA5394",
+      "category": "Security",
+      "domain": "Security",
+      "file": "Services/BannerColorPicker.cs",
+      "start_line": 9,
+      "end_line": 9,
+      "analyzer_message": "Random is an insecure random number generator. Use cryptographically secure random number generators when randomness is required for security.",
+      "excerpt": "        int index = Random.Shared.Next(Palette.Length);",
+      "mechanism": "BannerColorPicker uses Random.Shared to pick a colour from a fixed palette. This is UI decoration and the value is not secret.",
+      "trigger": "Calling NextColor(). No security-sensitive value is derived from the result.",
+      "graph_path": null,
+      "alternative_explanation": "This is a benign, non-security use. Predictability has no impact, so this is a false positive.",
+      "fix_direction": "Suppress CA5394 with a justification, or leave it as is. No cryptographic RNG is needed.",
+      "source_references": [
+        {
+          "file": "Services/BannerColorPicker.cs",
+          "line": 9,
+          "excerpt": "int index = Random.Shared.Next(Palette.Length);"
+        }
+      ],
+      "enriched_by": [
+        "SecurityReviewer"
+      ],
+      "grade": 90,
+      "rubric": {
+        "citation": 20,
+        "roslyn_baseline": 25,
+        "mechanism": 10,
+        "reachability": 15,
+        "alternatives": 20,
+        "total": 90,
+        "notes": [
+          "citation criterion met by host-validated SARIF location and excerpt"
+        ]
+      },
+      "priority_band": "high",
+      "decision": "reject",
+      "decision_reason": "Decisive refutation with 1 valid counterexample citation(s) forces reject (numeric decision would be keep, score 90).",
+      "forced_reject": true,
+      "evaluator_rationale": "Random.Shared is used only to pick an index into a fixed array of UI colour constants. The result is not secret, is not used as a token, key or identifier, and does not gate any authorisation. Predictability has no security impact. The mechanism (insecure RNG) is literally present, but this is a non-security use. The traced code shows no security-sensitive consumer.",
+      "mechanism_support": "partial",
+      "reachability": "supported",
+      "counterevidence_test": "substantive",
+      "refutation": "decisive",
+      "valid_citations": [
+        {
+          "file": "Services/BannerColorPicker.cs",
+          "line": 9,
+          "excerpt": "int index = Random.Shared.Next(Palette.Length);"
+        }
+      ],
+      "refutation_evidence": [
+        {
+          "file": "Services/BannerColorPicker.cs",
+          "line": 5,
+          "excerpt": "private static readonly string[] Palette = [\"#2563eb\", \"#16a34a\", \"#f59e0b\", \"#db2777\"];"
+        }
+      ],
+      "citation_problems": [],
+      "unreviewed_reason": null
+    },
+    {
+      "candidate_id": "6c9ce709e2dc",
+      "display_id": "CA5350",
+      "origin": "roslyn",
+      "origin_detail": "Roslyn analyzer (SARIF)",
+      "evidence_level": "E1",
+      "rule_id": "CA5350",
+      "category": "Security",
+      "domain": "Security",
+      "file": "Services/LegacyHasher.cs",
+      "start_line": 10,
+      "end_line": 10,
+      "analyzer_message": "FingerprintPassword uses a weak cryptographic algorithm SHA1",
+      "excerpt": "        using var sha1 = SHA1.Create();",
+      "mechanism": "FingerprintPassword computes an unsalted, fast SHA-1 hash of a password and returns it as hex. SHA-1 is collision-weak. It is also unsuitable for password storage because it is fast, has no salt, and can be brute-forced or looked up in rainbow tables.",
+      "trigger": "Any caller storing or comparing password fingerprints. I did not trace callers, so actual usage is unconfirmed.",
+      "graph_path": null,
+      "alternative_explanation": "The name suggests a legacy fingerprint, perhaps for compatibility. If it is not used for authentication storage, the real risk is lower. The method still takes a password argument. FingerprintDocument already uses SHA-256 for non-password content.",
+      "fix_direction": "Use a password hashing scheme with a per-user salt, such as PasswordHasher<T>, Argon2, bcrypt or Rfc2898DeriveBytes.Pbkdf2 with a high iteration count. Migrate legacy hashes on login and remove SHA-1.",
+      "source_references": [
+        {
+          "file": "Services/LegacyHasher.cs",
+          "line": 10,
+          "excerpt": "using var sha1 = SHA1.Create();"
+        },
+        {
+          "file": "Services/LegacyHasher.cs",
+          "line": 11,
+          "excerpt": "byte[] digest = sha1.ComputeHash(Encoding.UTF8.GetBytes(password));"
+        }
+      ],
+      "enriched_by": [
+        "SecurityReviewer"
+      ],
+      "grade": 72,
+      "rubric": {
+        "citation": 20,
+        "roslyn_baseline": 25,
+        "mechanism": 10,
+        "reachability": 7,
+        "alternatives": 10,
+        "total": 72,
+        "notes": [
+          "citation criterion met by host-validated SARIF location and excerpt",
+          "partial refutation: mechanism capped at partial and reachability at plausible"
+        ]
+      },
+      "priority_band": "medium",
+      "decision": "keep",
+      "decision_reason": "score 72/100 → keep (keep ≥60, downgrade 35–59, reject <35)",
+      "forced_reject": false,
+      "evaluator_rationale": "FingerprintPassword computes an unsalted SHA-1 digest of a password, which is a weak and fast hash that is unsuitable for password storage. The code directly shows this. Callers are not shown, so I cannot confirm that the output is stored or compared for authentication. The method might be a legacy compatibility fingerprint, hence only plausible reachability and a partial refutation. FingerprintDocument already uses SHA-256 for non-password content, so SHA-1 is used only for the password path.",
+      "mechanism_support": "direct",
+      "reachability": "plausible",
+      "counterevidence_test": "some",
+      "refutation": "partial",
+      "valid_citations": [
+        {
+          "file": "Services/LegacyHasher.cs",
+          "line": 10,
+          "excerpt": "using var sha1 = SHA1.Create();"
+        },
+        {
+          "file": "Services/LegacyHasher.cs",
+          "line": 11,
+          "excerpt": "byte[] digest = sha1.ComputeHash(Encoding.UTF8.GetBytes(password));"
+        }
+      ],
+      "refutation_evidence": [
+        {
+          "file": "Services/LegacyHasher.cs",
+          "line": 17,
+          "excerpt": "using var sha256 = SHA256.Create();"
+        }
+      ],
+      "citation_problems": [],
+      "unreviewed_reason": null
+    },
+    {
+      "candidate_id": "84ae562af560",
+      "display_id": "PERF003",
+      "origin": "roslyn",
+      "origin_detail": "Roslyn analyzer (SARIF)",
+      "evidence_level": "E1",
+      "rule_id": "PERF003",
+      "category": "Concurrency",
+      "domain": "Performance",
+      "file": "Services/NotificationService.cs",
+      "start_line": 35,
+      "end_line": 35,
+      "analyzer_message": "Task.WhenAll creates potentially input-sized concurrency: review fan-out limits",
+      "excerpt": "        return Task.WhenAll(recipients.Select(recipient => _sender.SendAsync(recipient, message)));",
+      "mechanism": "NotifyAllAsync starts one SendAsync task per recipient and awaits them all with Task.WhenAll. Nothing limits concurrency, so the number of in-flight operations equals recipients.Count. With a real sender (SMTP, HTTP or push), this could exhaust sockets or the thread pool, or trip downstream rate limits. The class already has NotifyInBatchesAsync, which uses Chunk(25), so the bounded pattern exists but this method doesn't use it.",
+      "trigger": "A large recipient list passed to NotifyAllAsync. A search found no caller in the snapshot, so reachability from user input is not shown.",
+      "graph_path": null,
+      "alternative_explanation": "The only INotificationSender in the snapshot, LoggingNotificationSender, returns Task.CompletedTask, so today the fan-out costs almost nothing. NotifyAllAsync has no callers in the snapshot, and the batched variant exists. The risk only appears if a real I/O-bound sender is registered and callers pass unbounded lists.",
+      "fix_direction": "Remove NotifyAllAsync, or make it delegate to the batched version. Alternatively use Parallel.ForEachAsync with a MaxDegreeOfParallelism, or a SemaphoreSlim. Also cap the recipient list size at the API boundary.",
+      "source_references": [
+        {
+          "file": "Services/NotificationService.cs",
+          "line": 35,
+          "excerpt": "return Task.WhenAll(recipients.Select(recipient => _sender.SendAsync(recipient, message)));"
+        },
+        {
+          "file": "Services/NotificationService.cs",
+          "line": 40,
+          "excerpt": "foreach (var batch in recipients.Chunk(25))"
+        }
+      ],
+      "enriched_by": [
+        "PerformanceReviewer"
+      ],
+      "grade": 82,
+      "rubric": {
+        "citation": 20,
+        "roslyn_baseline": 25,
+        "mechanism": 10,
+        "reachability": 7,
+        "alternatives": 20,
+        "total": 82,
+        "notes": [
+          "citation criterion met by host-validated SARIF location and excerpt",
+          "partial refutation: mechanism capped at partial and reachability at plausible"
+        ]
+      },
+      "priority_band": "high",
+      "decision": "keep",
+      "decision_reason": "score 82/100 → keep (keep ≥60, downgrade 35–59, reject <35)",
+      "forced_reject": false,
+      "evaluator_rationale": "Line 35 projects every recipient into a SendAsync task and awaits them all with Task.WhenAll. Nothing caps concurrency, so in-flight operations equal recipients.Count. I looked for a limiter, semaphore, or chunking inside NotifyAllAsync and found none. The sibling NotifyInBatchesAsync uses Chunk(25), which shows the bounded pattern exists but is not applied here. The cost depends on the INotificationSender. The reviewer says the only implementation returns Task.CompletedTask, but that sender is not in the supplied source, so I could not check it. No callers are shown, so the input size and source are unknown. This is a real but latent design weakness, not a refutation. It matters only with an I/O-bound sender and large lists.",
+      "mechanism_support": "direct",
+      "reachability": "plausible",
+      "counterevidence_test": "substantive",
+      "refutation": "partial",
+      "valid_citations": [
+        {
+          "file": "Services/NotificationService.cs",
+          "line": 35,
+          "excerpt": "return Task.WhenAll(recipients.Select(recipient => _sender.SendAsync(recipient, message)));"
+        }
+      ],
+      "refutation_evidence": [
+        {
+          "file": "Services/NotificationService.cs",
+          "line": 40,
+          "excerpt": "foreach (var batch in recipients.Chunk(25))"
+        }
+      ],
+      "citation_problems": [],
+      "unreviewed_reason": null
+    },
+    {
+      "candidate_id": "8bbf464e2af2",
+      "display_id": "PERF001",
+      "origin": "roslyn",
+      "origin_detail": "Roslyn analyzer (SARIF)",
+      "evidence_level": "E1",
+      "rule_id": "PERF001",
+      "category": "CPU & Amplification",
+      "domain": "Performance",
+      "file": "Services/OrderSummaryService.cs",
+      "start_line": 19,
+      "end_line": 19,
+      "analyzer_message": "'GetByIdAsync' is invoked inside a loop: potential database/repository call amplification",
+      "excerpt": "            var customer = await _customers.GetByIdAsync(order.CustomerId);",
+      "mechanism": "BuildSummariesAsync awaits _customers.GetByIdAsync once per order inside a foreach loop. This is an N+1 pattern. It makes one repository or database round trip per order, run one after another, so latency grows linearly with the number of orders.",
+      "trigger": "A large `orders` sequence passed to BuildSummariesAsync. A search found no caller in the snapshot, so the input size source is unknown.",
+      "graph_path": null,
+      "alternative_explanation": "The repository in the snapshot is in-memory (InMemoryCustomerRepository), so each call is cheap now. BuildSummariesBatchedAsync already does the batched lookup, with Distinct IDs and a dictionary. The method has no callers in the snapshot. It only matters with a real database-backed repository and large order sets.",
+      "fix_direction": "Use the batched implementation in place of the per-order loop. Collect distinct customer IDs, call GetByIdsAsync once, and look names up in a dictionary. Then delete or redirect the N+1 method.",
+      "source_references": [
+        {
+          "file": "Services/OrderSummaryService.cs",
+          "line": 19,
+          "excerpt": "var customer = await _customers.GetByIdAsync(order.CustomerId);"
+        },
+        {
+          "file": "Services/OrderSummaryService.cs",
+          "line": 28,
+          "excerpt": "var customers = await _customers.GetByIdsAsync(orders.Select(o => o.CustomerId).Distinct());"
+        }
+      ],
+      "enriched_by": [
+        "PerformanceReviewer"
+      ],
+      "grade": 82,
+      "rubric": {
+        "citation": 20,
+        "roslyn_baseline": 25,
+        "mechanism": 10,
+        "reachability": 7,
+        "alternatives": 20,
+        "total": 82,
+        "notes": [
+          "citation criterion met by host-validated SARIF location and excerpt",
+          "partial refutation: mechanism capped at partial and reachability at plausible"
+        ]
+      },
+      "priority_band": "high",
+      "decision": "keep",
+      "decision_reason": "score 82/100 → keep (keep ≥60, downgrade 35–59, reject <35)",
+      "forced_reject": false,
+      "evaluator_rationale": "Line 19 awaits _customers.GetByIdAsync once per order inside a foreach. That is a sequential N+1, with one round trip per order and latency growing linearly. I checked for caching, batching, or de-duplication inside this method and found none. BuildSummariesBatchedAsync (line 28) does a Distinct plus GetByIdsAsync, so an efficient alternative exists, but it does not make this method safe. The reviewer says the repository is in-memory, but that implementation is not in the supplied source. Callers are not shown, so reachability and input size are unknown. This is a genuine but conditional amplification risk, not decisively refuted.",
+      "mechanism_support": "direct",
+      "reachability": "plausible",
+      "counterevidence_test": "substantive",
+      "refutation": "partial",
+      "valid_citations": [
+        {
+          "file": "Services/OrderSummaryService.cs",
+          "line": 19,
+          "excerpt": "var customer = await _customers.GetByIdAsync(order.CustomerId);"
+        }
+      ],
+      "refutation_evidence": [
+        {
+          "file": "Services/OrderSummaryService.cs",
+          "line": 28,
+          "excerpt": "var customers = await _customers.GetByIdsAsync(orders.Select(o => o.CustomerId).Distinct());"
+        }
+      ],
+      "citation_problems": [],
+      "unreviewed_reason": null
+    },
+    {
+      "candidate_id": "88e78f74bd8e",
+      "display_id": "PERF004",
+      "origin": "roslyn",
+      "origin_detail": "Roslyn analyzer (SARIF)",
+      "evidence_level": "E1",
+      "rule_id": "PERF004",
+      "category": "Memory & Allocation",
+      "domain": "Performance",
+      "file": "Services/ReportCache.cs",
+      "start_line": 15,
+      "end_line": 15,
+      "analyzer_message": "Static collection 'Reports' grows without observed removal/clear in 'ReportCache': potential memory retention",
+      "excerpt": "                Reports.Add(key, report);",
+      "mechanism": "ReportCache keeps its entries in a static Dictionary<string,string>. GetOrAdd adds an entry for every new key. No code removes entries, expires them, or caps the count. The cache key comes straight from the URL route in /reports/{key}. Each unique key adds a permanent entry for the life of the process. A single global lock also serializes every caller.",
+      "trigger": "Repeated requests to GET /reports/{key} with many distinct or attacker-chosen keys, including very long keys.",
+      "graph_path": "Program.cs MapGet /reports/{key} -> ReportCache.GetOrAdd -> Reports.Add",
+      "alternative_explanation": "The demo may expect a small, fixed set of keys. The generated values are short strings, and the lock keeps the Dictionary thread-safe. Neither of these limits growth. I saw no eviction or size limit in the snapshot.",
+      "fix_direction": "Replace the static Dictionary with IMemoryCache, using SizeLimit and an expiration. Alternatively cap the entry count and evict old entries. Validate the key against an allow-list or a maximum length. Use ConcurrentDictionary or Lazy values to avoid holding the global lock while the report is generated.",
+      "source_references": [
+        {
+          "file": "Services/ReportCache.cs",
+          "line": 15,
+          "excerpt": "Reports.Add(key, report);"
+        },
+        {
+          "file": "Program.cs",
+          "line": 22,
+          "excerpt": "app.MapGet(\"/reports/{key}\", (string key, ReportCache cache) => cache.GetOrAdd(key));"
+        },
+        {
+          "file": "Services/ReportCache.cs",
+          "line": 5,
+          "excerpt": "private static readonly Dictionary<string, string> Reports = new();"
+        }
+      ],
+      "enriched_by": [
+        "PerformanceReviewer"
+      ],
+      "grade": 92,
+      "rubric": {
+        "citation": 20,
+        "roslyn_baseline": 25,
+        "mechanism": 20,
+        "reachability": 7,
+        "alternatives": 20,
+        "total": 92,
+        "notes": [
+          "citation criterion met by host-validated SARIF location and excerpt"
+        ]
+      },
+      "priority_band": "high",
+      "decision": "keep",
+      "decision_reason": "score 92/100 → keep (keep ≥60, downgrade 35–59, reject <35)",
+      "forced_reject": false,
+      "evaluator_rationale": "The static Dictionary Reports (line 5) gets an entry through Reports.Add on every cache miss (line 15). I found no removal, expiry, or size cap anywhere in the class, so growth is bounded only by the number of distinct keys. The generated string embeds the key and a timestamp (line 14), so each entry's memory also scales with key length. The lock at line 10 keeps the dictionary thread-safe and serializes callers, but it does nothing to limit growth. The route /reports/{key} is named in the graph path, but Program.cs was not supplied, so I did not see the key flow from the request. I therefore rate reachability plausible, not supported. Nothing in the cited code refutes the leak.",
+      "mechanism_support": "direct",
+      "reachability": "plausible",
+      "counterevidence_test": "substantive",
+      "refutation": "none",
+      "valid_citations": [
+        {
+          "file": "Services/ReportCache.cs",
+          "line": 5,
+          "excerpt": "private static readonly Dictionary<string, string> Reports = new();"
+        },
+        {
+          "file": "Services/ReportCache.cs",
+          "line": 14,
+          "excerpt": "report = $\"Report for {key} generated at {DateTimeOffset.UtcNow:O}\";"
+        },
+        {
+          "file": "Services/ReportCache.cs",
+          "line": 15,
+          "excerpt": "Reports.Add(key, report);"
+        }
+      ],
+      "refutation_evidence": [],
+      "citation_problems": [],
+      "unreviewed_reason": null
+    },
+    {
+      "candidate_id": "9b1f65a206d1",
+      "display_id": "CA5394",
+      "origin": "roslyn",
+      "origin_detail": "Roslyn analyzer (SARIF)",
+      "evidence_level": "E1",
+      "rule_id": "CA5394",
+      "category": "Security",
+      "domain": "Security",
+      "file": "Services/TokenService.cs",
+      "start_line": 10,
+      "end_line": 10,
+      "analyzer_message": "Random is an insecure random number generator. Use cryptographically secure random number generators when randomness is required for security.",
+      "excerpt": "        int value = random.Next();",
+      "mechanism": "CreatePasswordResetToken uses a new System.Random, which is not cryptographically secure, to produce the token. The 31-bit value is predictable if the seed or output is inferred. Because the value is only 31 bits, it is also brute-forceable. This is a real security token. The sibling CreateSessionToken correctly uses RandomNumberGenerator.",
+      "trigger": "A password reset request generates a token. An attacker who can request tokens or guess the time-based seed can predict or brute-force a victim's reset token and take over the account.",
+      "graph_path": null,
+      "alternative_explanation": "No mitigation was seen in this method. Even CreateSessionToken has only about 31 bits of entropy, which is weak.",
+      "fix_direction": "Generate at least 128 bits using RandomNumberGenerator.GetBytes(32) and encode as Base64Url or hex. Store only a hash of the token, set an expiry, and make it single-use.",
+      "source_references": [
+        {
+          "file": "Services/TokenService.cs",
+          "line": 9,
+          "excerpt": "var random = new Random();"
+        },
+        {
+          "file": "Services/TokenService.cs",
+          "line": 10,
+          "excerpt": "int value = random.Next();"
+        }
+      ],
+      "enriched_by": [
+        "SecurityReviewer"
+      ],
+      "grade": 92,
+      "rubric": {
+        "citation": 20,
+        "roslyn_baseline": 25,
+        "mechanism": 20,
+        "reachability": 7,
+        "alternatives": 20,
+        "total": 92,
+        "notes": [
+          "citation criterion met by host-validated SARIF location and excerpt"
+        ]
+      },
+      "priority_band": "high",
+      "decision": "keep",
+      "decision_reason": "score 92/100 → keep (keep ≥60, downgrade 35–59, reject <35)",
+      "forced_reject": false,
+      "evaluator_rationale": "CreatePasswordResetToken builds a security token from System.Random, which is not cryptographically secure. random.Next() yields at most 31 bits, so the token is both predictable and brute-forceable. The sibling CreateSessionToken uses RandomNumberGenerator, so a secure alternative exists and is not used here. I found no mitigation in the method. The reviewer's claim that CreateSessionToken also has about 31 bits is correct, since GetInt32(int.MaxValue) gives 31 bits, but that is a separate weakness and does not refute this one. Callers of the token service are not shown, so reachability is plausible rather than supported.",
+      "mechanism_support": "direct",
+      "reachability": "plausible",
+      "counterevidence_test": "substantive",
+      "refutation": "none",
+      "valid_citations": [
+        {
+          "file": "Services/TokenService.cs",
+          "line": 9,
+          "excerpt": "var random = new Random();"
+        },
+        {
+          "file": "Services/TokenService.cs",
+          "line": 10,
+          "excerpt": "int value = random.Next();"
+        },
+        {
+          "file": "Services/TokenService.cs",
+          "line": 11,
+          "excerpt": "return value.ToString(\"x8\");"
+        }
+      ],
+      "refutation_evidence": [],
+      "citation_problems": [],
+      "unreviewed_reason": null
+    },
+    {
+      "candidate_id": "ca46ba581d35",
+      "display_id": "AI-PERF-001",
+      "origin": "ai",
+      "origin_detail": "AI-only (PerformanceReviewer)",
+      "evidence_level": "E0",
+      "rule_id": null,
+      "category": "Memory & Allocation",
+      "domain": "Performance",
+      "file": "Services/SessionStore.cs",
+      "start_line": 7,
+      "end_line": 12,
+      "analyzer_message": null,
+      "excerpt": "    private static readonly ConcurrentDictionary<string, DateTimeOffset> Sessions = new();\n\n    public void Touch(string sessionId)\n    {\n        Sessions.TryAdd(sessionId, DateTimeOffset.UtcNow);\n    }",
+      "mechanism": "Sessions is a static ConcurrentDictionary. Touch adds a session ID with TryAdd and never updates or expires it. Entries are removed only if End is called explicitly. Abandoned sessions, and any attacker-supplied IDs, stay in memory for the life of the process.",
+      "trigger": "Many Touch calls with distinct session IDs and no matching End calls.",
+      "graph_path": null,
+      "alternative_explanation": "End does remove entries, so this is not strictly unbounded if clients always end sessions. Real clients often don't. I did not check where Touch is called from.",
+      "fix_direction": "Add TTL-based eviction, for example a background sweeper that uses the stored timestamp. Alternatively use IMemoryCache with sliding expiration, and cap the number of sessions.",
+      "source_references": [
+        {
+          "file": "Services/SessionStore.cs",
+          "line": 11,
+          "excerpt": "Sessions.TryAdd(sessionId, DateTimeOffset.UtcNow);"
+        },
+        {
+          "file": "Services/SessionStore.cs",
+          "line": 7,
+          "excerpt": "private static readonly ConcurrentDictionary<string, DateTimeOffset> Sessions = new();"
+        }
+      ],
+      "enriched_by": [
+        "PerformanceReviewer"
+      ],
+      "grade": 47,
+      "rubric": {
+        "citation": 20,
+        "roslyn_baseline": 0,
+        "mechanism": 10,
+        "reachability": 7,
+        "alternatives": 10,
+        "total": 47,
+        "notes": [
+          "citation criterion met by host-validated evaluator quote",
+          "partial refutation: mechanism capped at partial and reachability at plausible"
+        ]
+      },
+      "priority_band": "low",
+      "decision": "downgrade",
+      "decision_reason": "score 47/100 → downgrade (keep ≥60, downgrade 35–59, reject <35)",
+      "forced_reject": false,
+      "evaluator_rationale": "Sessions is a static ConcurrentDictionary (line 7). Touch only calls TryAdd (line 11), which never refreshes the timestamp and never expires entries. The only removal is End via TryRemove (line 16), so a session that is never ended stays for the life of the process. If clients always call End, growth is bounded, so the claim is partly mitigated. There is no TTL or size limit as a backstop. Callers of Touch and End are not in the supplied source, so I could not confirm that session IDs are client-supplied or how often sessions go un-ended.",
+      "mechanism_support": "direct",
+      "reachability": "plausible",
+      "counterevidence_test": "some",
+      "refutation": "partial",
+      "valid_citations": [
+        {
+          "file": "Services/SessionStore.cs",
+          "line": 7,
+          "excerpt": "private static readonly ConcurrentDictionary<string, DateTimeOffset> Sessions = new();"
+        },
+        {
+          "file": "Services/SessionStore.cs",
+          "line": 11,
+          "excerpt": "Sessions.TryAdd(sessionId, DateTimeOffset.UtcNow);"
+        }
+      ],
+      "refutation_evidence": [
+        {
+          "file": "Services/SessionStore.cs",
+          "line": 16,
+          "excerpt": "Sessions.TryRemove(sessionId, out _);"
+        }
+      ],
+      "citation_problems": [],
+      "unreviewed_reason": null
+    },
+    {
+      "candidate_id": "50fcdbff915a",
+      "display_id": "AI-PERF-002",
+      "origin": "ai",
+      "origin_detail": "AI-only (PerformanceReviewer)",
+      "evidence_level": "E0",
+      "rule_id": null,
+      "category": "Memory & Allocation",
+      "domain": "Performance",
+      "file": "Services/JobLauncher.cs",
+      "start_line": 14,
+      "end_line": 20,
+      "analyzer_message": null,
+      "excerpt": "    private readonly ConcurrentQueue<ProcessStartInfo> _pending = new();\n\n    public string Enqueue(ProcessStartInfo startInfo)\n    {\n        _pending.Enqueue(startInfo);\n        return $\"queued:{_pending.Count}\";\n    }",
+      "mechanism": "QueuedJobLauncher adds each ProcessStartInfo to a ConcurrentQueue and never dequeues. The class has no consumer, and the queue has no capacity limit. The queue holds every enqueued job for as long as the launcher instance lives. It would live for the whole process if registered as a singleton.",
+      "trigger": "Many Enqueue calls over time, for example from an endpoint that accepts job requests.",
+      "graph_path": null,
+      "alternative_explanation": "The class is described as a demo that only records jobs and never starts processes. The retention may be intentional, and it depends on how the launcher is registered and how often Enqueue is called. I did not check either.",
+      "fix_direction": "Use a bounded Channel<T> with a consumer. Alternatively cap the queue length and reject new items when it is full, or drain it regularly.",
+      "source_references": [
+        {
+          "file": "Services/JobLauncher.cs",
+          "line": 18,
+          "excerpt": "_pending.Enqueue(startInfo);"
+        },
+        {
+          "file": "Services/JobLauncher.cs",
+          "line": 14,
+          "excerpt": "private readonly ConcurrentQueue<ProcessStartInfo> _pending = new();"
+        }
+      ],
+      "enriched_by": [
+        "PerformanceReviewer"
+      ],
+      "grade": 47,
+      "rubric": {
+        "citation": 20,
+        "roslyn_baseline": 0,
+        "mechanism": 10,
+        "reachability": 7,
+        "alternatives": 10,
+        "total": 47,
+        "notes": [
+          "citation criterion met by host-validated evaluator quote",
+          "partial refutation: mechanism capped at partial and reachability at plausible"
+        ]
+      },
+      "priority_band": "low",
+      "decision": "downgrade",
+      "decision_reason": "score 47/100 → downgrade (keep ≥60, downgrade 35–59, reject <35)",
+      "forced_reject": false,
+      "evaluator_rationale": "Enqueue adds every ProcessStartInfo to _pending (line 18). The class has no Dequeue, TryDequeue, clear, or capacity limit, so items accumulate for the life of the instance. Line 19 also reads _pending.Count on every call, which is a minor extra cost on ConcurrentQueue. The class doc comment says it only records jobs, which suggests a demo with intentional retention. That is a partial mitigation only, because it does not bound growth. Callers and the DI lifetime are not in the supplied source, so I could not confirm a singleton registration or any call frequency. Reachability is therefore plausible only.",
+      "mechanism_support": "direct",
+      "reachability": "plausible",
+      "counterevidence_test": "some",
+      "refutation": "partial",
+      "valid_citations": [
+        {
+          "file": "Services/JobLauncher.cs",
+          "line": 14,
+          "excerpt": "private readonly ConcurrentQueue<ProcessStartInfo> _pending = new();"
+        },
+        {
+          "file": "Services/JobLauncher.cs",
+          "line": 18,
+          "excerpt": "_pending.Enqueue(startInfo);"
+        }
+      ],
+      "refutation_evidence": [
+        {
+          "file": "Services/JobLauncher.cs",
+          "line": 11,
+          "excerpt": "/// <summary>Records requested jobs only. DemoShop never starts processes.</summary>"
+        }
+      ],
+      "citation_problems": [],
+      "unreviewed_reason": null
+    }
+  ],
+  "notes": []
+}

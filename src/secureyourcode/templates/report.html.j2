@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>SecureYourCode report {{ r.run.scan_id }}</title><style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;padding:24px;max-width:1100px;margin-inline:auto;color:#1f2937;background:#fff;line-height:1.45}
+h1{font-size:1.5rem;margin:0 0 4px}h2{font-size:1.2rem;margin:28px 0 8px;border-bottom:1px solid #e5e7eb;padding-bottom:4px}h3{font-size:1.05rem;margin:18px 0 6px}
+.muted{color:#6b7280}.banner{padding:10px 14px;border-radius:6px;margin:10px 0;font-weight:600}
+.banner.complete{background:#dcfce7;border:1px solid #16a34a}.banner.partial{background:#fef3c7;border:1px solid #f59e0b}.banner.failed{background:#fee2e2;border:1px solid #ef4444}
+table{border-collapse:collapse;width:100%;margin:6px 0}th,td{border:1px solid #e5e7eb;padding:6px 8px;text-align:left;vertical-align:top;overflow-wrap:anywhere}
+th{background:#f9fafb}.badge{display:inline-block;padding:1px 8px;border-radius:10px;font-size:.8rem;font-weight:600;color:#fff;margin-right:4px}
+.e0{background:#6b7280}.e1{background:#2563eb}.label{display:inline-block;padding:1px 8px;border-radius:10px;font-size:.8rem;border:1px solid #9ca3af;margin-right:4px}
+.high{border-color:#dc2626;color:#991b1b}.medium{border-color:#d97706;color:#92400e}.low{border-color:#9ca3af;color:#374151}
+details.finding{border:1px solid #e5e7eb;border-radius:6px;margin:8px 0;padding:6px 10px}details.finding>summary{cursor:pointer}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 12px;margin:8px 0}dt{font-weight:600;color:#374151}dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+pre{background:#f3f4f6;padding:6px 8px;border-radius:4px;overflow-x:auto;margin:0;white-space:pre-wrap}code{background:#f3f4f6;padding:0 4px;border-radius:4px;word-break:break-all}
+@media (max-width:640px){body{padding:12px}dl{grid-template-columns:1fr}}</style></head><body>
+<h1>SecureYourCode security &amp; performance report</h1><div class="muted">Run <code>{{ r.run.scan_id }}</code> · scoring {{ r.scoring_version }}</div>
+<div class="banner {{ r.run.status }}">Run status: {{ r.run.status }}{% if r.run.status_reasons %} — {{ r.run.status_reasons | join('; ') }}{% endif %}</div>
+
+<h2>Run</h2><table>
+<tr><th>Run status</th><td>{{ r.run.status }}</td></tr>
+<tr><th>Status reasons</th><td>{% if r.run.status_reasons %}<ul>{% for s in r.run.status_reasons %}<li>{{ s }}</li>{% endfor %}</ul>{% else %}none{% endif %}</td></tr>
+<tr><th>Triggered via</th><td>{{ r.run.trigger }}</td></tr>
+<tr><th>Started / finished</th><td>{{ r.run.started_at }} / {{ r.run.finished_at }}</td></tr>
+<tr><th>Phase timings (s)</th><td>{% for k, v in r.run.phase_timings.items() %}{{ k }}: {{ '%.1f' | format(v) }}{% if not loop.last %} · {% endif %}{% endfor %}</td></tr>
+<tr><th>Graph status</th><td>{{ r.graph.status or 'not run' }}</td></tr>
+<tr><th>Graphify MCP</th><td>{{ r.graph.mcp_status or 'not run' }} (host calls: {{ r.graph.host_calls }})</td></tr>
+<tr><th>Model</th><td>{{ r.run.model or 'not configured' }}{% if r.run.model_location %} @ {{ r.run.model_location }}{% endif %}{% if r.run.model_provider %} ({{ r.run.model_provider }}){% endif %}</td></tr>
+</table>
+
+<h2>Provenance</h2><table>
+<tr><th>Repository</th><td>{{ r.provenance.repo_label }}</td></tr>
+<tr><th>Git commit / dirty</th><td>{{ r.provenance.git_sha }} / {{ r.provenance.git_dirty }}</td></tr>
+<tr><th>Source fingerprint</th><td><code>{{ r.provenance.source_fingerprint or 'unknown' }}</code></td></tr>
+<tr><th>Graph built from fingerprint</th><td><code>{{ r.provenance.graph_fingerprint or 'no current graph' }}</code></td></tr>
+<tr><th>Security rules (Microsoft)</th><td>{{ r.provenance.security_rule_ids | join(', ') }}</td></tr>
+<tr><th>Performance rules (custom)</th><td>{{ r.provenance.performance_rule_ids | join(', ') }} · analyzer {{ r.provenance.analyzer_version }}</td></tr>
+<tr><th>Rules emitted by this build</th><td>{{ r.roslyn.emitted_rule_ids | join(', ') or 'none' }}{% if r.roslyn.missing_rule_ids %} · <strong>missing: {{ r.roslyn.missing_rule_ids | join(', ') }}</strong>{% endif %}</td></tr>
+<tr><th>Tool versions</th><td>app {{ r.provenance.app_version }} · graphifyy {{ r.provenance.graphify_version or '?' }} · .NET SDK {{ r.provenance.dotnet_sdk or '?' }}</td></tr>
+<tr><th>Scoring rubric</th><td>{{ r.provenance.scoring_version }}</td></tr>
+</table>
+
+<h2>Token usage</h2><table><tr><th>Session</th><th>Model calls</th><th>Input tokens</th><th>Output tokens</th><th>Coverage</th></tr>
+{% for u in r.token_usage %}<tr><td>{{ u.session }}</td><td>{{ u.model_calls if u.model_calls is not none else 'not reported' }}</td><td>{{ u.input_tokens if u.input_tokens is not none else 'not reported' }}</td><td>{{ u.output_tokens if u.output_tokens is not none else 'not reported' }}</td><td>{{ u.coverage }}</td></tr>{% endfor %}
+</table>
+
+<h2>Reviewers</h2><table><tr><th>Reviewer</th><th>Status</th><th>Graphify</th><th>Source tool calls</th><th>Denied tool requests</th><th>Accepted</th><th>Notes</th></tr>
+{% for v in r.reviewers %}<tr><td>{{ v.name }}</td><td>{{ v.status }}</td><td>{{ r.graph.mcp_status or 'unavailable' }}, {{ v.graph_tool_calls }} calls</td><td>{{ v.source_tool_calls }}</td><td>{{ v.denied_tool_calls | length }}{% if v.denied_tool_calls %} ({{ v.denied_tool_calls | join(', ') }}){% endif %}</td><td>{{ v.enrichments_accepted }} enrichments, {{ v.new_candidates_accepted }} new</td><td>{% if v.error %}{{ v.error }}{% endif %}{% if v.model_visible_tools %}<div class="muted">model-visible tools: {{ v.model_visible_tools | join(', ') }}{% if v.hidden_builtin_tools %}; hidden+refused built-ins: {{ v.hidden_builtin_tools | join(', ') }}{% endif %}</div>{% endif %}{% if v.canary_echoed %} <strong>prompt-injection canary appeared in reviewer prose</strong>{% endif %}{% if v.rejected_items %}<details><summary>{{ v.rejected_items | length }} rejected/merged item(s)</summary><ul>{% for x in v.rejected_items %}<li>{{ x }}</li>{% endfor %}</ul></details>{% endif %}</td></tr>{% endfor %}
+</table>
+{% if r.graph.host_query %}<p class="muted">Host Graphify MCP query: <code>{{ r.graph.host_query.tool }}({{ r.graph.host_query.arguments }})</code> — {{ r.graph.host_query.target_reason }} — {{ 'ok' if r.graph.host_query.ok else 'failed: ' ~ (r.graph.host_query.error or '') }}, {{ r.graph.host_query.result_bytes }} bytes.</p>{% endif %}
+
+{% macro finding(f, open=False) -%}
+<details class="finding" id="candidate-{{ f.candidate_id }}"{% if open %} open{% endif %}><summary><span class="badge {{ f.evidence_level | lower }}" title="{{ 'E1: actual Roslyn diagnostic from fingerprint-consistent SARIF' if f.evidence_level == 'E1' else 'E0: AI-only source-grounded hypothesis' }}">{{ f.evidence_level }}</span><span class="label">{{ 'Roslyn' if f.origin == 'roslyn' else 'AI' }}</span>{% if f.grade is not none %}<span class="label {{ f.priority_band }}">manual investigation {{ f.grade }}/100 · {{ f.priority_band }}</span>{% else %}<span class="label">not assessed</span>{% endif %} <code>{{ f.display_id }}</code> {{ f.file }}:{{ f.start_line }}</summary><dl>
+<dt>Finding ID</dt><dd>{{ f.candidate_id }}</dd>
+<dt>Category</dt><dd>{{ f.category }} ({{ f.domain }} evaluator domain)</dd>
+<dt>Origin</dt><dd>{{ f.origin_detail }}{% if f.enriched_by %}; enriched by {{ f.enriched_by | join(', ') }}{% endif %}</dd>
+<dt>Location</dt><dd>{{ f.file }}:{{ f.start_line }}{% if f.end_line != f.start_line %}-{{ f.end_line }}{% endif %}</dd>
+{% if f.analyzer_message %}<dt>Analyzer message</dt><dd>{{ f.analyzer_message }}</dd>{% endif %}
+<dt>Source excerpt</dt><dd><pre>{{ f.excerpt }}</pre></dd>
+<dt>Mechanism</dt><dd>{{ f.mechanism or 'not provided' }}</dd>
+<dt>Reachability / trigger</dt><dd>{{ f.trigger or 'not provided' }}{% if f.reachability %} (evaluator: {{ f.reachability }}){% endif %}</dd>
+{% if f.graph_path %}<dt>Graphify path</dt><dd>{{ f.graph_path }}</dd>{% endif %}
+<dt>Alternatives / counterevidence</dt><dd>{{ f.alternative_explanation or 'not provided' }}{% if f.counterevidence_test %} (evaluator examined: {{ f.counterevidence_test }}){% endif %}</dd>
+<dt>Refutation</dt><dd>{{ f.refutation or 'not assessed' }}{% for c in f.refutation_evidence %}
+{{ c.file }}:{{ c.line }} — {{ c.excerpt }}{% endfor %}</dd>
+{% if f.valid_citations %}<dt>Cited evidence</dt><dd>{% for c in f.valid_citations %}{{ c.file }}:{{ c.line }} — {{ c.excerpt }}
+{% endfor %}</dd>{% endif %}
+{% if f.citation_problems %}<dt>Rejected citations</dt><dd>{% for p in f.citation_problems %}{{ p }}
+{% endfor %}</dd>{% endif %}
+{% if f.rubric %}<dt>Rubric</dt><dd>citation {{ f.rubric.citation }}/20 · Roslyn E1 {{ f.rubric.roslyn_baseline }}/25 · mechanism {{ f.rubric.mechanism }}/20 · reachability {{ f.rubric.reachability }}/15 · alternatives {{ f.rubric.alternatives }}/20 = {{ f.rubric.total }}/100{% for n in f.rubric.notes %}
+· {{ n }}{% endfor %}</dd>{% endif %}
+<dt>Evaluator decision</dt><dd>{{ f.decision }} — {{ f.decision_reason }}</dd>
+{% if f.evaluator_rationale %}<dt>Evaluator reasoning</dt><dd>{{ f.evaluator_rationale }}</dd>{% endif %}
+<dt>Suggested fix</dt><dd>{{ f.fix_direction or 'not provided' }}</dd>
+</dl></details>
+{%- endmacro %}
+
+{% for cat in categories %}<h2>{{ cat }} <span class="muted">({{ kept[cat] | length }} kept)</span></h2>
+{% for f in kept[cat] %}{{ finding(f) }}{% else %}<p class="muted">No kept findings in this category.</p>{% endfor %}{% endfor %}
+
+<h2>Downgraded candidates <span class="muted">({{ downgraded | length }})</span></h2>
+{% for f in downgraded %}{{ finding(f) }}{% else %}<p class="muted">No candidates were downgraded by the evaluator.</p>{% endfor %}
+
+<h2>Rejected candidates <span class="muted">({{ rejected | length }})</span></h2>
+<details><summary>Show rejected candidates</summary>{% for f in rejected %}{{ finding(f) }}{% else %}<p class="muted">The evaluator rejected no candidates.</p>{% endfor %}</details>
+
+<h2>Unreviewed / budget skipped <span class="muted">({{ unreviewed | length }})</span></h2>
+{% for f in unreviewed %}{{ finding(f) }}{% else %}<p class="muted">Every candidate was assessed.</p>{% endfor %}
+
+<h2>Notes and limitations</h2><ul>
+{% for n in r.notes %}<li>{{ n }}</li>{% endfor %}
+{% for n in r.graph.notes %}<li>Graph: {{ n }}</li>{% endfor %}
+{% for d in r.roslyn.dropped_locations %}<li>SARIF location dropped: {{ d }}</li>{% endfor %}
+<li>E0 = AI-only source-grounded hypothesis; E1 = actual Roslyn diagnostic from fingerprint-consistent SARIF. No E2 runtime verification is performed by this MVP.</li>
+<li>Scores are manual-investigation priorities computed by host Python from evaluator fields; they are not probabilities. Graphify edges are navigation aids, not proof.</li>
+</ul></body></html>

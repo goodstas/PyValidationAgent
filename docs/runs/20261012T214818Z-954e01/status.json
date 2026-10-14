@@ -1,0 +1,29 @@
+{
+  "scan_id": "20261012T214818Z-954e01",
+  "status": "partial",
+  "phase": "done",
+  "trigger": "cli",
+  "phase_timings": {
+    "stage": 0.02,
+    "graph": 0.01,
+    "roslyn": 7.98,
+    "review": 1.14,
+    "evaluate": 0.0,
+    "report": 0.21
+  },
+  "error": null,
+  "status_reasons": [
+    "SecurityReviewer did not return a valid structured review: model unavailable: GOOGLE_CLOUD_PROJECT is not configured.",
+    "PerformanceReviewer did not return a valid structured review: model unavailable: GOOGLE_CLOUD_PROJECT is not configured.",
+    "Security evaluator batch failed: GOOGLE_CLOUD_PROJECT is not configured.",
+    "Performance evaluator batch failed: GOOGLE_CLOUD_PROJECT is not configured.",
+    "some candidates are unreviewed"
+  ],
+  "created_at": "2026-10-12T21:48:18Z",
+  "updated_at": "2026-10-12T21:48:28Z",
+  "finished_at": "2026-10-12T21:48:28Z",
+  "report_ready": true,
+  "report_json": "/root/.secureyourcode-state/runs/20261012T214818Z-954e01/report/report.json",
+  "report_html": "/root/.secureyourcode-state/runs/20261012T214818Z-954e01/report/report.html",
+  "pid": 15603
+}

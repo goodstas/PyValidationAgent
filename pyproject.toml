@@ -1,0 +1,37 @@
+[project]
+name = "secureyourcode"
+version = "2.3.1"
+description = "SecureYourCode v2.3.1 - C#/Roslyn security & performance review demo (Deep Agents + Graphify MCP + Vertex Gemini)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "deepagents",
+    "langchain-google-genai",
+    "langchain-mcp-adapters",
+    "graphifyy[mcp]",
+    "mcp",
+    "fastapi",
+    "uvicorn",
+    "jinja2",
+    "pydantic",
+    "filelock",
+    "python-dotenv",
+    "httpx",
+]
+
+[project.scripts]
+secureyourcode = "secureyourcode.cli:main"
+
+[dependency-groups]
+dev = ["pytest", "pytest-asyncio"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/secureyourcode"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

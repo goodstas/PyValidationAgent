@@ -1,0 +1,319 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>SecureYourCode report 20261013T092921Z-d24000</title><style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;padding:24px;max-width:1100px;margin-inline:auto;color:#1f2937;background:#fff;line-height:1.45}
+h1{font-size:1.5rem;margin:0 0 4px}h2{font-size:1.2rem;margin:28px 0 8px;border-bottom:1px solid #e5e7eb;padding-bottom:4px}h3{font-size:1.05rem;margin:18px 0 6px}
+.muted{color:#6b7280}.banner{padding:10px 14px;border-radius:6px;margin:10px 0;font-weight:600}
+.banner.complete{background:#dcfce7;border:1px solid #16a34a}.banner.partial{background:#fef3c7;border:1px solid #f59e0b}.banner.failed{background:#fee2e2;border:1px solid #ef4444}
+table{border-collapse:collapse;width:100%;margin:6px 0}th,td{border:1px solid #e5e7eb;padding:6px 8px;text-align:left;vertical-align:top;overflow-wrap:anywhere}
+th{background:#f9fafb}.badge{display:inline-block;padding:1px 8px;border-radius:10px;font-size:.8rem;font-weight:600;color:#fff;margin-right:4px}
+.e0{background:#6b7280}.e1{background:#2563eb}.label{display:inline-block;padding:1px 8px;border-radius:10px;font-size:.8rem;border:1px solid #9ca3af;margin-right:4px}
+.high{border-color:#dc2626;color:#991b1b}.medium{border-color:#d97706;color:#92400e}.low{border-color:#9ca3af;color:#374151}
+details.finding{border:1px solid #e5e7eb;border-radius:6px;margin:8px 0;padding:6px 10px}details.finding>summary{cursor:pointer}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 12px;margin:8px 0}dt{font-weight:600;color:#374151}dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+pre{background:#f3f4f6;padding:6px 8px;border-radius:4px;overflow-x:auto;margin:0;white-space:pre-wrap}code{background:#f3f4f6;padding:0 4px;border-radius:4px;word-break:break-all}
+@media (max-width:640px){body{padding:12px}dl{grid-template-columns:1fr}}</style></head><body>
+<h1>SecureYourCode security &amp; performance report</h1><div class="muted">Run <code>20261013T092921Z-d24000</code> · scoring v2.3.1</div>
+<div class="banner complete">Run status: complete</div>
+
+<h2>Run</h2><table>
+<tr><th>Run status</th><td>complete</td></tr>
+<tr><th>Status reasons</th><td>none</td></tr>
+<tr><th>Triggered via</th><td>cli</td></tr>
+<tr><th>Started / finished</th><td>2026-10-13T09:29:21Z / 2026-10-13T09:30:45Z</td></tr>
+<tr><th>Phase timings (s)</th><td>stage: 0.3 · graph: 0.3 · roslyn: 10.8 · review: 38.6 · evaluate: 34.3</td></tr>
+<tr><th>Graph status</th><td>cached</td></tr>
+<tr><th>Graphify MCP</th><td>available (host calls: 1)</td></tr>
+<tr><th>Model</th><td>claude-sonnet-5-5 @ api.anthropic.com (anthropic)</td></tr>
+</table>
+
+<h2>Provenance</h2><table>
+<tr><th>Repository</th><td>DemoShop</td></tr>
+<tr><th>Git commit / dirty</th><td>01ffc660187e0503841bc6dd6bc437d5bf66161b / no</td></tr>
+<tr><th>Source fingerprint</th><td><code>4f9f53fc8c50cef328b9ae00c6db369c8796d529d0102d251ce6ca9270feb08c</code></td></tr>
+<tr><th>Graph built from fingerprint</th><td><code>4f9f53fc8c50cef328b9ae00c6db369c8796d529d0102d251ce6ca9270feb08c</code></td></tr>
+<tr><th>Security rules (Microsoft)</th><td>CA3001, CA3003, CA3006, CA5350, CA5394</td></tr>
+<tr><th>Performance rules (custom)</th><td>PERF001, PERF003, PERF004 · analyzer SecureYourCode.PerformanceAnalyzer 2.3.1 (sha256 2f4d98a18cf9)</td></tr>
+<tr><th>Rules emitted by this build</th><td>CA3001, CA3003, CA3006, CA5350, CA5394, PERF001, PERF003, PERF004</td></tr>
+<tr><th>Tool versions</th><td>app 2.3.1 · graphifyy 0.9.87 · .NET SDK 10.0.112</td></tr>
+<tr><th>Scoring rubric</th><td>v2.3.1</td></tr>
+</table>
+
+<h2>Token usage</h2><table><tr><th>Session</th><th>Model calls</th><th>Input tokens</th><th>Output tokens</th><th>Coverage</th></tr>
+<tr><td>SecurityReviewer</td><td>3</td><td>29508</td><td>4569</td><td>complete</td></tr><tr><td>PerformanceReviewer</td><td>3</td><td>23961</td><td>2301</td><td>complete</td></tr><tr><td>Evaluator</td><td>2</td><td>13820</td><td>5041</td><td>complete</td></tr><tr><td>total</td><td>8</td><td>67289</td><td>11911</td><td>complete</td></tr>
+</table>
+
+<h2>Reviewers</h2><table><tr><th>Reviewer</th><th>Status</th><th>Graphify</th><th>Source tool calls</th><th>Denied tool requests</th><th>Accepted</th><th>Notes</th></tr>
+<tr><td>SecurityReviewer</td><td>completed</td><td>available, 0 calls</td><td>8</td><td>0</td><td>7 enrichments, 1 new</td><td><div class="muted">model-visible tools: get_neighbors, get_node, graph_stats, query_graph, read_source, search_source, shortest_path; hidden+refused built-ins: delete, edit_file, execute, glob, grep, ls, read_file, write_file</div></td></tr><tr><td>PerformanceReviewer</td><td>completed</td><td>available, 0 calls</td><td>8</td><td>0</td><td>3 enrichments, 0 new</td><td><div class="muted">model-visible tools: get_neighbors, get_node, graph_stats, query_graph, read_source, search_source, shortest_path; hidden+refused built-ins: delete, edit_file, execute, glob, grep, ls, read_file, write_file</div></td></tr>
+</table>
+<p class="muted">Host Graphify MCP query: <code>get_neighbors({&#39;node_id&#39;: &#39;csharp_namespace:a0ea5d4792c5461c&#39;})</code> — first node of Services/BannerColorPicker.cs (baseline 345af301d4a1, CA5394) — ok, 921 bytes.</p>
+
+
+
+<h2>Security <span class="muted">(5 kept)</span></h2>
+<details class="finding" id="candidate-c7166c49343b"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label high">manual investigation 100/100 · high</span> <code>CA3001</code> Controllers/CustomerSearchController.cs:23</summary><dl>
+<dt>Finding ID</dt><dd>c7166c49343b</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF); enriched by SecurityReviewer</dd>
+<dt>Location</dt><dd>Controllers/CustomerSearchController.cs:23</dd>
+<dt>Analyzer message</dt><dd>Potential SQL injection vulnerability was found where &#39;string DbCommand.CommandText&#39; in method &#39;IActionResult CustomerSearchController.Search()&#39; may be tainted by user-controlled data from &#39;IQueryCollection HttpRequest.Query&#39; in method &#39;IActionResult CustomerSearchController.Search()&#39;.</dd>
+<dt>Source excerpt</dt><dd><pre>        command.CommandText = &#34;SELECT Id, Name FROM Customers WHERE Name LIKE &#39;%&#34; + name + &#34;%&#39;&#34;;</pre></dd>
+<dt>Mechanism</dt><dd>The `name` query parameter is concatenated directly into the SQL text, inside a LIKE &#39;%...%&#39; literal. The command is not parameterized, so a single quote in the input breaks out of the string literal and changes the query. The sibling `ByEmail` action shows the safe pattern, using an `@email` parameter.</dd>
+<dt>Reachability / trigger</dt><dd>GET /customers/search?name=&#39; UNION SELECT ... -- or name=%&#39; OR &#39;1&#39;=&#39;1. There is no authentication or input validation. (evaluator: supported)</dd>
+<dt>Graphify path</dt><dd>CustomerSearchController.Search -&gt; HttpRequest.Query -&gt; DbCommand.CommandText -&gt; ExecuteScalar</dd>
+<dt>Alternatives / counterevidence</dt><dd>The registered IDbConnectionFactory is `UnconfiguredConnectionFactory`, so the demo may not reach a real database. The code pattern is still exploitable once a real connection is wired in. `ExecuteScalar` returns only one value, but that still allows data exfiltration and boolean/blind injection. (evaluator examined: substantive)</dd>
+<dt>Refutation</dt><dd>none</dd>
+<dt>Cited evidence</dt><dd>Controllers/CustomerSearchController.cs:20 — string name = Request.Query[&#34;name&#34;].ToString();
+Controllers/CustomerSearchController.cs:23 — command.CommandText = &#34;SELECT Id, Name FROM Customers WHERE Name LIKE &#39;%&#34; + name + &#34;%&#39;&#34;;
+</dd>
+
+<dt>Rubric</dt><dd>citation 20/20 · Roslyn E1 25/25 · mechanism 20/20 · reachability 15/15 · alternatives 20/20 = 100/100
+· citation criterion met by host-validated SARIF location and excerpt</dd>
+<dt>Evaluator decision</dt><dd>keep — score 100/100 → keep (keep ≥60, downgrade 35–59, reject &lt;35)</dd>
+<dt>Evaluator reasoning</dt><dd>Line 23 concatenates the user-controlled `name` from Request.Query into CommandText with no parameterization or escaping. The sibling ByEmail uses an @email parameter, so the safe pattern is available but not applied here. The action is an HttpGet endpoint reading Request.Query directly. I found no allowlist or validation. The UnconfiguredConnectionFactory claim is outside the supplied source, so I could not verify it; it would only limit demo impact, not the code flaw.</dd>
+<dt>Suggested fix</dt><dd>Use a parameterized query: `WHERE Name LIKE @name`, with parameter value `&#34;%&#34; + name + &#34;%&#34;`, as in `ByEmail`. Escape LIKE wildcards if needed, and use an ORM or Dapper with parameters.</dd>
+</dl></details><details class="finding" id="candidate-89d59e9c699d"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label high">manual investigation 100/100 · high</span> <code>CA3003</code> Controllers/DocumentsController.cs:20</summary><dl>
+<dt>Finding ID</dt><dd>89d59e9c699d</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF); enriched by SecurityReviewer</dd>
+<dt>Location</dt><dd>Controllers/DocumentsController.cs:20</dd>
+<dt>Analyzer message</dt><dd>Potential file path injection vulnerability was found where &#39;string File.ReadAllText(string path)&#39; in method &#39;IActionResult DocumentsController.Export()&#39; may be tainted by user-controlled data from &#39;IQueryCollection HttpRequest.Query&#39; in method &#39;IActionResult DocumentsController.Export()&#39;.</dd>
+<dt>Source excerpt</dt><dd><pre>        return Content(System.IO.File.ReadAllText(path));</pre></dd>
+<dt>Mechanism</dt><dd>The `file` query value is combined with &#34;exports&#34; using Path.Combine and read with File.ReadAllText. Path.Combine does not constrain the result. An absolute path in `fileName` discards the &#34;exports&#34; prefix, and `..` segments traverse out of it. This gives arbitrary file read, and the file contents are returned in the response.</dd>
+<dt>Reachability / trigger</dt><dd>GET /documents/export?file=/etc/passwd or file=../appsettings.json. There is no authentication. (evaluator: supported)</dd>
+<dt>Graphify path</dt><dd>DocumentsController.Export -&gt; Path.Combine -&gt; File.ReadAllText -&gt; Content()</dd>
+<dt>Alternatives / counterevidence</dt><dd>No mitigation is present: there is no canonicalisation, no root check and no extension allowlist. (evaluator examined: substantive)</dd>
+<dt>Refutation</dt><dd>none</dd>
+<dt>Cited evidence</dt><dd>Controllers/DocumentsController.cs:18 — string fileName = Request.Query[&#34;file&#34;].ToString();
+Controllers/DocumentsController.cs:19 — string path = Path.Combine(&#34;exports&#34;, fileName);
+Controllers/DocumentsController.cs:20 — return Content(System.IO.File.ReadAllText(path));
+</dd>
+
+<dt>Rubric</dt><dd>citation 20/20 · Roslyn E1 25/25 · mechanism 20/20 · reachability 15/15 · alternatives 20/20 = 100/100
+· citation criterion met by host-validated SARIF location and excerpt</dd>
+<dt>Evaluator decision</dt><dd>keep — score 100/100 → keep (keep ≥60, downgrade 35–59, reject &lt;35)</dd>
+<dt>Evaluator reasoning</dt><dd>The user-supplied `file` is passed to Path.Combine(&#34;exports&#34;, fileName) and then to File.ReadAllText, with the contents returned in the response. Path.Combine discards the prefix when the second argument is rooted, and does not block `..` traversal. There is no canonicalisation, root check, or allowlist in the method, so it is arbitrary file read. The endpoint is an HttpGet reading Request.Query directly.</dd>
+<dt>Suggested fix</dt><dd>Take only `Path.GetFileName(fileName)`, then resolve with Path.GetFullPath and verify the result starts with the full exports root directory. Reject rooted paths and `..`. Better, use an ID-to-file allowlist as in `Published`. Add authorization.</dd>
+</dl></details><details class="finding" id="candidate-9b1f65a206d1"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label high">manual investigation 92/100 · high</span> <code>CA5394</code> Services/TokenService.cs:10</summary><dl>
+<dt>Finding ID</dt><dd>9b1f65a206d1</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF); enriched by SecurityReviewer</dd>
+<dt>Location</dt><dd>Services/TokenService.cs:10</dd>
+<dt>Analyzer message</dt><dd>Random is an insecure random number generator. Use cryptographically secure random number generators when randomness is required for security.</dd>
+<dt>Source excerpt</dt><dd><pre>        int value = random.Next();</pre></dd>
+<dt>Mechanism</dt><dd>`CreatePasswordResetToken` generates a security token from System.Random. That generator is seeded non-cryptographically and its output is predictable. `Next()` returns at most 31 bits, so the token also has limited entropy and is easy to brute-force. In contrast, `CreateSessionToken` correctly uses RandomNumberGenerator.</dd>
+<dt>Reachability / trigger</dt><dd>Any password reset request that calls TokenService.CreatePasswordResetToken. An attacker can guess or predict tokens and take over accounts. (evaluator: plausible)</dd>
+<dt>Graphify path</dt><dd>TokenService.CreatePasswordResetToken -&gt; new Random().Next</dd>
+<dt>Alternatives / counterevidence</dt><dd>There is no benign explanation, because a reset token is security-sensitive. No caller is visible in the snapshot, though, so actual exposure depends on how the service is used. (evaluator examined: substantive)</dd>
+<dt>Refutation</dt><dd>none</dd>
+<dt>Cited evidence</dt><dd>Services/TokenService.cs:7 — public string CreatePasswordResetToken()
+Services/TokenService.cs:9 — var random = new Random();
+Services/TokenService.cs:10 — int value = random.Next();
+Services/TokenService.cs:11 — return value.ToString(&#34;x8&#34;);
+</dd>
+
+<dt>Rubric</dt><dd>citation 20/20 · Roslyn E1 25/25 · mechanism 20/20 · reachability 7/15 · alternatives 20/20 = 92/100
+· citation criterion met by host-validated SARIF location and excerpt</dd>
+<dt>Evaluator decision</dt><dd>keep — score 92/100 → keep (keep ≥60, downgrade 35–59, reject &lt;35)</dd>
+<dt>Evaluator reasoning</dt><dd>CreatePasswordResetToken builds a security token from System.Random, which is not cryptographically secure. The value is also a single 31-bit int formatted as hex, so the search space is small. The method name states a security purpose, so there is no benign use. The sibling CreateSessionToken uses RandomNumberGenerator, which shows the secure alternative was available. No caller is visible, so exposure depends on use, but the method is public and clearly intended for reset flows.</dd>
+<dt>Suggested fix</dt><dd>Generate at least 128 bits with RandomNumberGenerator.GetBytes(32) and encode as Base64Url or hex. Store only a hash of the token, set an expiry and make it single-use. `CreateSessionToken` is also weak: it returns only 31 bits, so also use GetBytes there.</dd>
+</dl></details><details class="finding" id="candidate-d85bfb4080bd"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label high">manual investigation 82/100 · high</span> <code>CA3006</code> Controllers/DiagnosticsController.cs:22</summary><dl>
+<dt>Finding ID</dt><dd>d85bfb4080bd</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF); enriched by SecurityReviewer</dd>
+<dt>Location</dt><dd>Controllers/DiagnosticsController.cs:22</dd>
+<dt>Analyzer message</dt><dd>Potential process command injection vulnerability was found where &#39;string ProcessStartInfo.FileName&#39; in method &#39;IActionResult DiagnosticsController.RunTool()&#39; may be tainted by user-controlled data from &#39;IQueryCollection HttpRequest.Query&#39; in method &#39;IActionResult DiagnosticsController.RunTool()&#39;.</dd>
+<dt>Source excerpt</dt><dd><pre>        var startInfo = new ProcessStartInfo { FileName = tool, UseShellExecute = false };</pre></dd>
+<dt>Mechanism</dt><dd>The `tool` query value is used verbatim as `ProcessStartInfo.FileName`. A caller therefore chooses which executable is run. The info is passed to `IJobLauncher.Enqueue`.</dd>
+<dt>Reachability / trigger</dt><dd>POST /diagnostics/tool?tool=/bin/sh (or any executable path). There is no authentication or allowlist. (evaluator: plausible)</dd>
+<dt>Graphify path</dt><dd>DiagnosticsController.RunTool -&gt; ProcessStartInfo.FileName -&gt; IJobLauncher.Enqueue -&gt; QueuedJobLauncher</dd>
+<dt>Alternatives / counterevidence</dt><dd>The only IJobLauncher implementation, `QueuedJobLauncher`, merely enqueues the ProcessStartInfo and its doc comment says it never starts processes. Today it is therefore not exploitable. The sink becomes real as soon as a consumer executes the queue. Another launcher implementation could also start the process. (evaluator examined: substantive)</dd>
+<dt>Refutation</dt><dd>partial</dd>
+<dt>Cited evidence</dt><dd>Controllers/DiagnosticsController.cs:21 — string tool = Request.Query[&#34;tool&#34;].ToString();
+Controllers/DiagnosticsController.cs:22 — var startInfo = new ProcessStartInfo { FileName = tool, UseShellExecute = false };
+Controllers/DiagnosticsController.cs:23 — return Accepted(_launcher.Enqueue(startInfo));
+</dd>
+
+<dt>Rubric</dt><dd>citation 20/20 · Roslyn E1 25/25 · mechanism 10/20 · reachability 7/15 · alternatives 20/20 = 82/100
+· citation criterion met by host-validated SARIF location and excerpt
+· partial refutation: mechanism capped at partial and reachability at plausible</dd>
+<dt>Evaluator decision</dt><dd>keep — score 82/100 → keep (keep ≥60, downgrade 35–59, reject &lt;35)</dd>
+<dt>Evaluator reasoning</dt><dd>The query value `tool` is used verbatim as ProcessStartInfo.FileName (line 22) with no allowlist, and the ProcessStartInfo is passed to IJobLauncher.Enqueue. The code shown contains no process start; execution depends on a launcher or queue consumer outside the supplied context. The reviewer says QueuedJobLauncher only enqueues and never starts processes, which I could not verify from the supplied files. That makes exploitability today uncertain, so this is a partial refutation. The tainted executable path is still an unsafe design that becomes command execution if the queue is consumed. The safe sibling action uses a constant, which highlights the missing validation.</dd>
+<dt>Suggested fix</dt><dd>Do not accept executable names from clients. Map a fixed set of tool identifiers to hard-coded commands (allowlist). Require authorization on the endpoint. Never let user input control FileName or Arguments.</dd>
+</dl></details><details class="finding" id="candidate-6c9ce709e2dc"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label high">manual investigation 82/100 · high</span> <code>CA5350</code> Services/LegacyHasher.cs:10</summary><dl>
+<dt>Finding ID</dt><dd>6c9ce709e2dc</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF); enriched by SecurityReviewer</dd>
+<dt>Location</dt><dd>Services/LegacyHasher.cs:10</dd>
+<dt>Analyzer message</dt><dd>FingerprintPassword uses a weak cryptographic algorithm SHA1</dd>
+<dt>Source excerpt</dt><dd><pre>        using var sha1 = SHA1.Create();</pre></dd>
+<dt>Mechanism</dt><dd>`FingerprintPassword` hashes a password with unsalted SHA-1, a fast and collision-weak hash. Stolen digests can be cracked quickly with rainbow tables or GPUs. Identical passwords give identical digests.</dd>
+<dt>Reachability / trigger</dt><dd>Any call to LegacyHasher.FingerprintPassword. In the snapshot, the DI registration in Program.cs is the only reference found, so no caller is visible. (evaluator: plausible)</dd>
+<dt>Graphify path</dt><dd>Program.cs AddSingleton&lt;LegacyHasher&gt; -&gt; LegacyHasher.FingerprintPassword -&gt; SHA1.Create</dd>
+<dt>Alternatives / counterevidence</dt><dd>The method name says &#34;fingerprint&#34;, and it may be for legacy compatibility rather than credential storage. No caller was observed in the snapshot. The sibling method uses SHA-256 for documents. (evaluator examined: substantive)</dd>
+<dt>Refutation</dt><dd>partial</dd>
+<dt>Cited evidence</dt><dd>Services/LegacyHasher.cs:8 — public string FingerprintPassword(string password)
+Services/LegacyHasher.cs:10 — using var sha1 = SHA1.Create();
+Services/LegacyHasher.cs:11 — byte[] digest = sha1.ComputeHash(Encoding.UTF8.GetBytes(password));
+</dd>
+
+<dt>Rubric</dt><dd>citation 20/20 · Roslyn E1 25/25 · mechanism 10/20 · reachability 7/15 · alternatives 20/20 = 82/100
+· citation criterion met by host-validated SARIF location and excerpt
+· partial refutation: mechanism capped at partial and reachability at plausible</dd>
+<dt>Evaluator decision</dt><dd>keep — score 82/100 → keep (keep ≥60, downgrade 35–59, reject &lt;35)</dd>
+<dt>Evaluator reasoning</dt><dd>FingerprintPassword computes an unsalted SHA-1 digest of a password, a weak and fast hash that is unsuitable for credential storage. The code shows this mechanism directly. The method is public on a DI-registered class, but no caller is visible, and the &#34;fingerprint&#34; naming suggests a legacy comparison use. Neither the real usage nor a storage context is evident, so the refutation is partial. If used for password storage, it is a real weakness. There is no salt or work factor in the method.</dd>
+<dt>Suggested fix</dt><dd>Do not use SHA-1 for passwords. Use a password hashing function, such as PBKDF2 (Rfc2898DeriveBytes.Pbkdf2 with a salt and high iterations), Argon2 or bcrypt, or ASP.NET Core Identity&#39;s PasswordHasher. If a legacy hash must be verified, migrate users on login.</dd>
+</dl></details><h2>Memory &amp; Allocation <span class="muted">(1 kept)</span></h2>
+<details class="finding" id="candidate-88e78f74bd8e"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label high">manual investigation 82/100 · high</span> <code>PERF004</code> Services/ReportCache.cs:15</summary><dl>
+<dt>Finding ID</dt><dd>88e78f74bd8e</dd>
+<dt>Category</dt><dd>Memory &amp; Allocation (Performance evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF); enriched by PerformanceReviewer</dd>
+<dt>Location</dt><dd>Services/ReportCache.cs:15</dd>
+<dt>Analyzer message</dt><dd>Static collection &#39;Reports&#39; grows without observed removal/clear in &#39;ReportCache&#39;: potential memory retention</dd>
+<dt>Source excerpt</dt><dd><pre>                Reports.Add(key, report);</pre></dd>
+<dt>Mechanism</dt><dd>ReportCache keeps a static Dictionary&lt;string,string&gt; that only ever gains entries. GetOrAdd adds a new entry for every distinct key, and nothing removes, expires or bounds entries for the life of the process. The key comes straight from the URL route, so memory grows with the number of distinct keys requested. The single global lock also serializes all lookups.</dd>
+<dt>Reachability / trigger</dt><dd>Repeated GET /reports/{key} requests with many distinct keys, such as random or attacker-chosen strings. Very long keys make each entry larger. (evaluator: plausible)</dd>
+
+<dt>Alternatives / counterevidence</dt><dd>This may be intentional for a small, fixed set of report keys, and the demo may never see many distinct keys. The lock does keep the dictionary correct under concurrency. I found no eviction or size limit anywhere in the snapshot. (evaluator examined: some)</dd>
+<dt>Refutation</dt><dd>none</dd>
+<dt>Cited evidence</dt><dd>Services/ReportCache.cs:5 — private static readonly Dictionary&lt;string, string&gt; Reports = new();
+Services/ReportCache.cs:15 — Reports.Add(key, report);
+</dd>
+
+<dt>Rubric</dt><dd>citation 20/20 · Roslyn E1 25/25 · mechanism 20/20 · reachability 7/15 · alternatives 10/20 = 82/100
+· citation criterion met by host-validated SARIF location and excerpt</dd>
+<dt>Evaluator decision</dt><dd>keep — score 82/100 → keep (keep ≥60, downgrade 35–59, reject &lt;35)</dd>
+<dt>Evaluator reasoning</dt><dd>Reports is a static Dictionary, and line 15 adds an entry for each distinct key. Nothing in ReportCache removes, expires or bounds entries, so memory grows for the life of the process with the number of distinct keys. The key is a string of unbounded length, so entries can also be large. The lock keeps the dictionary correct under concurrency but does not limit growth. It also serializes every lookup behind one global gate. The claim that the key comes from the URL route is not shown in the supplied source. The graph only shows controllers importing the services namespace, and graph data is not proof. I therefore rate reachability as plausible, not supported. I found no allowlist, size limit or eviction in the visible code. Intentional use with a small fixed key set is possible but is not evidenced.</dd>
+<dt>Suggested fix</dt><dd>Use IMemoryCache with a SizeLimit and expiration, or add LRU eviction. Validate or whitelist the key and cap its length. Use ConcurrentDictionary or MemoryCache.GetOrCreate instead of one global lock.</dd>
+</dl></details><h2>CPU &amp; Amplification <span class="muted">(1 kept)</span></h2>
+<details class="finding" id="candidate-8bbf464e2af2"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label medium">manual investigation 72/100 · medium</span> <code>PERF001</code> Services/OrderSummaryService.cs:19</summary><dl>
+<dt>Finding ID</dt><dd>8bbf464e2af2</dd>
+<dt>Category</dt><dd>CPU &amp; Amplification (Performance evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF); enriched by PerformanceReviewer</dd>
+<dt>Location</dt><dd>Services/OrderSummaryService.cs:19</dd>
+<dt>Analyzer message</dt><dd>&#39;GetByIdAsync&#39; is invoked inside a loop: potential database/repository call amplification</dd>
+<dt>Source excerpt</dt><dd><pre>            var customer = await _customers.GetByIdAsync(order.CustomerId);</pre></dd>
+<dt>Mechanism</dt><dd>BuildSummariesAsync awaits _customers.GetByIdAsync once per order inside a foreach loop. That is an N+1 pattern: N sequential repository round-trips, with latency adding up and no deduplication of repeated CustomerIds. A batched alternative, BuildSummariesBatchedAsync, exists in the same class and uses GetByIdsAsync with Distinct().</dd>
+<dt>Reachability / trigger</dt><dd>Calling BuildSummariesAsync with many orders, especially when the repository is backed by a real database. (evaluator: plausible)</dd>
+
+<dt>Alternatives / counterevidence</dt><dd>The repository in the snapshot is InMemoryCustomerRepository, so each call is cheap today. BuildSummariesAsync has no callers in the snapshot, and the order count may be small and bounded in practice. Any caching would have to be inside the repository, and I did not see it. (evaluator examined: some)</dd>
+<dt>Refutation</dt><dd>partial
+Services/OrderSummaryService.cs:28 — var customers = await _customers.GetByIdsAsync(orders.Select(o =&gt; o.CustomerId).Distinct());</dd>
+<dt>Cited evidence</dt><dd>Services/OrderSummaryService.cs:19 — var customer = await _customers.GetByIdAsync(order.CustomerId);
+</dd>
+
+<dt>Rubric</dt><dd>citation 20/20 · Roslyn E1 25/25 · mechanism 10/20 · reachability 7/15 · alternatives 10/20 = 72/100
+· citation criterion met by host-validated SARIF location and excerpt
+· partial refutation: mechanism capped at partial and reachability at plausible</dd>
+<dt>Evaluator decision</dt><dd>keep — score 72/100 → keep (keep ≥60, downgrade 35–59, reject &lt;35)</dd>
+<dt>Evaluator reasoning</dt><dd>Line 19 awaits GetByIdAsync once per order inside a foreach loop. That is a sequential N+1 pattern with no deduplication of repeated CustomerIds and no local caching in this method. BuildSummariesBatchedAsync in the same class uses GetByIdsAsync with Distinct(), so a better path exists but is not used here. I saw no callers of BuildSummariesAsync, and the repository implementation is said to be in-memory. Any caching inside the repository is not visible in the snapshot. Impact is therefore real only if the method is called with many orders against a real database, which makes reachability plausible and the refutation partial. The code does not show a bound on the order count.</dd>
+<dt>Suggested fix</dt><dd>Replace the per-order lookup with the batched approach: collect distinct CustomerIds, make one GetByIdsAsync call, and look names up in a dictionary. Then remove or redirect the N+1 method.</dd>
+</dl></details><h2>Concurrency <span class="muted">(1 kept)</span></h2>
+<details class="finding" id="candidate-84ae562af560"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label medium">manual investigation 72/100 · medium</span> <code>PERF003</code> Services/NotificationService.cs:35</summary><dl>
+<dt>Finding ID</dt><dd>84ae562af560</dd>
+<dt>Category</dt><dd>Concurrency (Performance evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF); enriched by PerformanceReviewer</dd>
+<dt>Location</dt><dd>Services/NotificationService.cs:35</dd>
+<dt>Analyzer message</dt><dd>Task.WhenAll creates potentially input-sized concurrency: review fan-out limits</dd>
+<dt>Source excerpt</dt><dd><pre>        return Task.WhenAll(recipients.Select(recipient =&gt; _sender.SendAsync(recipient, message)));</pre></dd>
+<dt>Mechanism</dt><dd>NotifyAllAsync projects every recipient into a SendAsync task. Task.WhenAll then enumerates the whole sequence, so all calls start at once and the number in flight equals recipients.Count. There is no concurrency cap. With a real INotificationSender (SMTP, HTTP or push), a large list could exhaust sockets, the thread pool or provider rate limits. It also allocates one task per recipient.</dd>
+<dt>Reachability / trigger</dt><dd>A large recipients list passed to NotifyAllAsync. I found no caller in the snapshot, so the list size is not shown to be user-controlled. (evaluator: plausible)</dd>
+
+<dt>Alternatives / counterevidence</dt><dd>The only INotificationSender in the snapshot is LoggingNotificationSender, which returns Task.CompletedTask, so the cost today is small. The same class already has NotifyInBatchesAsync, which sends in chunks of 25. NotifyAllAsync has no callers here, so it may be dead code or only used with small lists. (evaluator examined: some)</dd>
+<dt>Refutation</dt><dd>partial
+Services/NotificationService.cs:40 — foreach (var batch in recipients.Chunk(25))</dd>
+<dt>Cited evidence</dt><dd>Services/NotificationService.cs:35 — return Task.WhenAll(recipients.Select(recipient =&gt; _sender.SendAsync(recipient, message)));
+</dd>
+
+<dt>Rubric</dt><dd>citation 20/20 · Roslyn E1 25/25 · mechanism 10/20 · reachability 7/15 · alternatives 10/20 = 72/100
+· citation criterion met by host-validated SARIF location and excerpt
+· partial refutation: mechanism capped at partial and reachability at plausible</dd>
+<dt>Evaluator decision</dt><dd>keep — score 72/100 → keep (keep ≥60, downgrade 35–59, reject &lt;35)</dd>
+<dt>Evaluator reasoning</dt><dd>Line 35 projects every recipient into a SendAsync task, and Task.WhenAll enumerates the sequence. All calls therefore start together, with no concurrency cap and one task allocated per recipient. The same class bounds this in NotifyInBatchesAsync with Chunk(25), which shows the unbounded variant is a deliberate contrast and not an accident of the framework. That does not remove the issue in NotifyAllAsync. I saw no caller of NotifyAllAsync, so the list size is not shown to be user-controlled. The only sender in the snapshot is reported to be a no-op logging sender, so the current cost is small. That is why I rate the issue as partly mitigated and reachability as plausible, not supported. The real cost depends on a future real sender and large lists.</dd>
+<dt>Suggested fix</dt><dd>Remove NotifyAllAsync or make it delegate to the batched path. Alternatively use Parallel.ForEachAsync with a MaxDegreeOfParallelism, or a SemaphoreSlim. Also cap the maximum recipient count.</dd>
+</dl></details>
+
+<h2>Downgraded candidates <span class="muted">(1)</span></h2>
+<details class="finding" id="candidate-2b8c641cf63e"><summary><span class="badge e0" title="E0: AI-only source-grounded hypothesis">E0</span><span class="label">AI</span><span class="label low">manual investigation 47/100 · low</span> <code>AI-SEC-001</code> Services/TokenService.cs:14</summary><dl>
+<dt>Finding ID</dt><dd>2b8c641cf63e</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>AI-only (SecurityReviewer); enriched by SecurityReviewer</dd>
+<dt>Location</dt><dd>Services/TokenService.cs:14-18</dd>
+
+<dt>Source excerpt</dt><dd><pre>    public string CreateSessionToken()
+    {
+        int value = RandomNumberGenerator.GetInt32(int.MaxValue);
+        return value.ToString(&#34;x8&#34;);
+    }</pre></dd>
+<dt>Mechanism</dt><dd>CreateSessionToken uses a CSPRNG but derives the token from a single GetInt32(int.MaxValue) call. That is at most 31 bits of entropy, rendered as an 8-hex-digit string. Session tokens can be brute-forced online or guessed within a feasible search space.</dd>
+<dt>Reachability / trigger</dt><dd>Any session created with this token. An attacker can enumerate roughly 2^31 values. (evaluator: plausible)</dd>
+
+<dt>Alternatives / counterevidence</dt><dd>The token may be used only as a non-authoritative identifier, or be paired with other secrets. No consumer was reviewed, so that could not be checked. (evaluator examined: some)</dd>
+<dt>Refutation</dt><dd>partial</dd>
+<dt>Cited evidence</dt><dd>Services/TokenService.cs:16 — int value = RandomNumberGenerator.GetInt32(int.MaxValue);
+Services/TokenService.cs:17 — return value.ToString(&#34;x8&#34;);
+</dd>
+
+<dt>Rubric</dt><dd>citation 20/20 · Roslyn E1 0/25 · mechanism 10/20 · reachability 7/15 · alternatives 10/20 = 47/100
+· citation criterion met by host-validated evaluator quote
+· partial refutation: mechanism capped at partial and reachability at plausible</dd>
+<dt>Evaluator decision</dt><dd>downgrade — score 47/100 → downgrade (keep ≥60, downgrade 35–59, reject &lt;35)</dd>
+<dt>Evaluator reasoning</dt><dd>CreateSessionToken uses a CSPRNG but derives only a single GetInt32(int.MaxValue) value, which is at most about 31 bits of entropy, formatted as 8 hex digits. This is a real entropy weakness if the token is the sole session authenticator, because 2^31 is an online-guessable space only with large request volume, and offline brute force does not apply. No consumer is visible, so I cannot confirm that it is used as a sole bearer secret, nor whether rate limiting or other secrets bind it. That leaves the impact only partly supported. The code does show the low-entropy generation.</dd>
+<dt>Suggested fix</dt><dd>Use RandomNumberGenerator.GetBytes(32) and encode with Base64Url, giving at least 128 bits of entropy.</dd>
+</dl></details>
+
+<h2>Rejected candidates <span class="muted">(2)</span></h2>
+<details><summary>Show rejected candidates</summary><details class="finding" id="candidate-d1bcb1b1feab"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label medium">manual investigation 65/100 · medium</span> <code>CA3003</code> Controllers/DocumentsController.cs:32</summary><dl>
+<dt>Finding ID</dt><dd>d1bcb1b1feab</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF); enriched by SecurityReviewer</dd>
+<dt>Location</dt><dd>Controllers/DocumentsController.cs:32</dd>
+<dt>Analyzer message</dt><dd>Potential file path injection vulnerability was found where &#39;string File.ReadAllText(string path)&#39; in method &#39;IActionResult DocumentsController.Published()&#39; may be tainted by user-controlled data from &#39;IQueryCollection HttpRequest.Query&#39; in method &#39;IActionResult DocumentsController.Published()&#39;.</dd>
+<dt>Source excerpt</dt><dd><pre>        return Content(System.IO.File.ReadAllText(path));</pre></dd>
+<dt>Mechanism</dt><dd>The sink reads a path, but the path comes from a server-side dictionary lookup. The user-supplied `name` is only a lookup key and is never used to build the path.</dd>
+<dt>Reachability / trigger</dt><dd>GET /documents/published?name=terms. Any key not in the dictionary returns 404. (evaluator: absent)</dd>
+<dt>Graphify path</dt><dd>DocumentsController.Published -&gt; PublishedDocuments.TryGetValue -&gt; File.ReadAllText</dd>
+<dt>Alternatives / counterevidence</dt><dd>This is very likely a false positive. The path value comes from a static allowlist (`terms`, `privacy`) with hard-coded relative paths. The analyzer does not model dictionary lookup as sanitization. The remaining risk is that the paths are relative to the working directory. (evaluator examined: substantive)</dd>
+<dt>Refutation</dt><dd>decisive
+Controllers/DocumentsController.cs:9 — private static readonly IReadOnlyDictionary&lt;string, string&gt; PublishedDocuments = new Dictionary&lt;string, string&gt;
+Controllers/DocumentsController.cs:27 — if (!PublishedDocuments.TryGetValue(key, out var path))
+Controllers/DocumentsController.cs:29 — return NotFound();</dd>
+<dt>Cited evidence</dt><dd>Controllers/DocumentsController.cs:32 — return Content(System.IO.File.ReadAllText(path));
+</dd>
+
+<dt>Rubric</dt><dd>citation 20/20 · Roslyn E1 25/25 · mechanism 0/20 · reachability 0/15 · alternatives 20/20 = 65/100
+· citation criterion met by host-validated SARIF location and excerpt</dd>
+<dt>Evaluator decision</dt><dd>reject — Decisive refutation with 3 valid counterexample citation(s) forces reject (numeric decision would be keep, score 65).</dd>
+<dt>Evaluator reasoning</dt><dd>The user-supplied `name` is only a dictionary key. The path passed to ReadAllText comes from TryGetValue on a static readonly dictionary with two hard-coded relative paths. A key not in the dictionary returns NotFound before the sink is reached, so no attacker-controlled path can reach File.ReadAllText. This is a false positive caused by the analyzer not modelling dictionary lookup as a sanitiser.</dd>
+<dt>Suggested fix</dt><dd>No vulnerability fix needed. Optionally suppress CA3003 here with a justification. Resolve the paths against a fixed content root.</dd>
+</dl></details><details class="finding" id="candidate-345af301d4a1"><summary><span class="badge e1" title="E1: actual Roslyn diagnostic from fingerprint-consistent SARIF">E1</span><span class="label">Roslyn</span><span class="label high">manual investigation 80/100 · high</span> <code>CA5394</code> Services/BannerColorPicker.cs:9</summary><dl>
+<dt>Finding ID</dt><dd>345af301d4a1</dd>
+<dt>Category</dt><dd>Security (Security evaluator domain)</dd>
+<dt>Origin</dt><dd>Roslyn analyzer (SARIF); enriched by SecurityReviewer</dd>
+<dt>Location</dt><dd>Services/BannerColorPicker.cs:9</dd>
+<dt>Analyzer message</dt><dd>Random is an insecure random number generator. Use cryptographically secure random number generators when randomness is required for security.</dd>
+<dt>Source excerpt</dt><dd><pre>        int index = Random.Shared.Next(Palette.Length);</pre></dd>
+<dt>Mechanism</dt><dd>Random.Shared.Next picks an index into a fixed palette of banner colours. The randomness is purely cosmetic, and nothing secret or security-relevant is derived from it.</dd>
+<dt>Reachability / trigger</dt><dd>GET /banner. (evaluator: supported)</dd>
+<dt>Graphify path</dt><dd>Program.cs /banner -&gt; BannerColorPicker.NextColor -&gt; Random.Shared.Next</dd>
+<dt>Alternatives / counterevidence</dt><dd>This is a benign UI decoration use. Predictability has no security impact, so it is a false positive for CA5394. (evaluator examined: substantive)</dd>
+<dt>Refutation</dt><dd>decisive
+Services/BannerColorPicker.cs:5 — private static readonly string[] Palette = [&#34;#2563eb&#34;, &#34;#16a34a&#34;, &#34;#f59e0b&#34;, &#34;#db2777&#34;];
+Services/BannerColorPicker.cs:10 — return Palette[index];</dd>
+<dt>Cited evidence</dt><dd>Services/BannerColorPicker.cs:9 — int index = Random.Shared.Next(Palette.Length);
+</dd>
+
+<dt>Rubric</dt><dd>citation 20/20 · Roslyn E1 25/25 · mechanism 0/20 · reachability 15/15 · alternatives 20/20 = 80/100
+· citation criterion met by host-validated SARIF location and excerpt</dd>
+<dt>Evaluator decision</dt><dd>reject — Decisive refutation with 2 valid counterexample citation(s) forces reject (numeric decision would be keep, score 80).</dd>
+<dt>Evaluator reasoning</dt><dd>Random.Shared.Next(Palette.Length) selects an index into a fixed palette of four hard-coded colour strings. The result is only used to return a UI colour. Nothing secret or security-relevant is derived from it, and predicting it has no security impact. The code is reachable, but the use is benign and non-security, so CA5394 is a false positive here.</dd>
+<dt>Suggested fix</dt><dd>No change is required. Suppress CA5394 with a justification comment.</dd>
+</dl></details></details>
+
+<h2>Unreviewed / budget skipped <span class="muted">(0)</span></h2>
+<p class="muted">Every candidate was assessed.</p>
+
+<h2>Notes and limitations</h2><ul>
+
+
+
+<li>E0 = AI-only source-grounded hypothesis; E1 = actual Roslyn diagnostic from fingerprint-consistent SARIF. No E2 runtime verification is performed by this MVP.</li>
+<li>Scores are manual-investigation priorities computed by host Python from evaluator fields; they are not probabilities. Graphify edges are navigation aids, not proof.</li>
+</ul></body></html>

@@ -1,0 +1,23 @@
+{
+  "scan_id": "20261014T085942Z-9af4ba",
+  "status": "complete",
+  "phase": "done",
+  "trigger": "cli",
+  "phase_timings": {
+    "stage": 0.03,
+    "graph": 2.15,
+    "roslyn": 11.63,
+    "review": 32.99,
+    "evaluate": 38.78,
+    "report": 0.21
+  },
+  "error": null,
+  "status_reasons": [],
+  "created_at": "2026-10-14T08:59:42Z",
+  "updated_at": "2026-10-14T09:01:08Z",
+  "finished_at": "2026-10-14T09:01:08Z",
+  "report_ready": true,
+  "report_json": "/data/runs/20261014T085942Z-9af4ba/report/report.json",
+  "report_html": "/data/runs/20261014T085942Z-9af4ba/report/report.html",
+  "pid": 1
+}
